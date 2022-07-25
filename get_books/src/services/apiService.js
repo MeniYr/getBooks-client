@@ -19,7 +19,7 @@ export const doApiGet = async(_url) => {
   
   export const doApiMethod = async(_url,_method,_body) => {
     try{
-      // console.log(_body)
+      console.log(_body)
       let resp = await axios({
         url:_url,
         method:_method,
