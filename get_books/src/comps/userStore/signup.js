@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { API_URL, doApiMethod } from '../services/apiService';
+import { API_URL, doApiMethod } from '../../services/apiService';
 
 export default function Signup() {
   const nav = useNavigate();

@@ -2,9 +2,9 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AllUsers from './admin_comps/allUsers';
-import EditUser from './userStore/editUser';
-import Login from './userStore/login';
-import Signup from './userStore/signup';
+import EditUser from './comps/userStore/editUser';
+import Login from './comps/userStore/login';
+import Signup from './comps/userStore/signup';
 import 'react-toastify/dist/ReactToastify.css';
 
 

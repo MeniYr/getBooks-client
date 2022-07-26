@@ -1,27 +1,26 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import UserItem from '../comps/userStore/userItem'
 import { getUsers } from '../features/usersSlice'
 
 
 export default function AllUsers() {
   const dispatch = useDispatch()
-
+  const getStatus = useSelector((state) => state.users.status)
   const arr = useSelector((state) => state.users.users)
+  console.log(getStatus)
   useEffect(() => {
+    if (getStatus === "idle")
+      dispatch(getUsers())
 
-    dispatch(getUsers())
-    if (arr.length > 1)
-      console.log(arr)
   }, [])
 
   return (
     <div className='container'>
-      <div className='row'>
-        {useSelector((state) => state.users.status) === "succeeded" && arr.map(user => {
+      <div className='row mx-auto col-md-6'>
+        {getStatus === "succeeded" && arr.map(user => {
           return (
-            <div key={user._id} className='border'>
-              <h2>{user.name}</h2>
-            </div>
+            < UserItem key item={user} />
           )
         })}
 

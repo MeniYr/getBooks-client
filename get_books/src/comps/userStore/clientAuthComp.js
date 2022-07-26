@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { API_URL, doApiGet } from '../services/apiService';
+import { API_URL, doApiGet } from '../../services/apiService';
 
 
 export default function ClientAuthComp() {
