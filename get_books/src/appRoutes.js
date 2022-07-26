@@ -5,6 +5,7 @@ import AllUsers from './admin_comps/allUsers';
 import EditUser from './userStore/editUser';
 import Login from './userStore/login';
 import Signup from './userStore/signup';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -20,6 +21,7 @@ export default function AppRoutes() {
         <Route path="/signup" element={<Signup />} />
          <Route path="/login" element={<Login />} />
          <Route path="/editUser/:id" element={<EditUser />} />
+
       {/*  <Route path="/logout" element={<Logout />} />
         <Route path="/userTickets" element={<UserTickets />} />
         <Route path="/addUserTicket" element={<AddUserTicket />} />

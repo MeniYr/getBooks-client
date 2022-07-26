@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ReactDom from 'react-dom'
-import App from '..'
+import usersSlice from "../features/usersSlice";
 
-export const store = configureStore({
-    reducer:{
-          
+
+export const myStore = configureStore({
+    reducer: {
+        users:usersSlice
     }
 })

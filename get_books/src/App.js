@@ -3,9 +3,9 @@ import AppRoutes from './appRoutes';
 
 function App() {
   return (
-    <>
+    <main className='App' >
       <AppRoutes />
-    </>
+    </main>
   );
 }
 
