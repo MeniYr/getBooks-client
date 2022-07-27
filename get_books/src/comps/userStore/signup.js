@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,13 +12,26 @@ export default function Signup() {
   const dispatch = useDispatch();
   const getStatus = useSelector((state) => state.users.status)
   const getEroor = useSelector((state) => state.users.error)
+  // const getUsers = useSelector((state) => state.users.users)
 
-  const onSub = (_dataBody) => {
+  useEffect(() => {
+    if (getStatus === "succeeded") {
+      toast.success("signup succsesfully, please sign in")
+      nav("/login")
+    }
+  }, [getStatus])
+
+  const onSub = async (_dataBody) => {
     delete _dataBody.password2;
-    dispatch(addUser(_dataBody)).unwrap()
-    console.log(getStatus);
-    console.log(getEroor)
-    // getStatus === "succeeded" && nav("/allUsers")
+    try {
+      let resp = await (await dispatch(addUser(_dataBody)).unwrap())
+      console.log(resp)
+      console.log(getStatus);
+      console.log(getEroor)
+    } catch (err) {
+      console.log(err)
+    }
+
   }
 
 

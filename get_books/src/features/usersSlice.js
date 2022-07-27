@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue } from "
 import { toast } from "react-toastify"
 
 const USERS_URL = `${API_URL}/users`
+
 export const getUsers = createAsyncThunk(
     'users/getUsers', async () => {
         try {
@@ -14,19 +15,20 @@ export const getUsers = createAsyncThunk(
     }
 )
 export const addUser = createAsyncThunk(
-    'users/addUser', async (data) => {
+    'users/addUser', async (dataBody, { rejectWithValue }) => {
         try {
-            let user = await (await doApiMethod(`${USERS_URL}/signUp`, "POST", data)).data
-            console.log(user)
-            return user
+            const { data } = await doApiMethod(`${USERS_URL}/signUp`, "POST", dataBody)
+            // console.log(data)
+            return data
+
         } catch (err) {
-            // console.log("thunk", err.response.data)
+            console.log("thunk", err)
             if (err.response.data.code === 11000) {
                 toast.error(err.response.data.err_msg)
-                return isRejectedWithValue(err)
+                return rejectWithValue(err.response.data)
             }
-            toast.error(err.response.data)
-            return isRejectedWithValue(err)
+            toast.error(err.response.data.details[0].message)
+            return rejectWithValue(err.response.data)
 
 
         }
@@ -68,24 +70,32 @@ const usersSlice = createSlice({
                 console.log("here", state.error)
 
             })
+
             .addCase(addUser.pending, (state, action) => {
                 state.status = 'loading'
                 console.log(state.status)
             })
             .addCase(addUser.fulfilled, (state, action) => {
-                state.status = 'succeeded'
-                state.users.push(action.payload)
+                console.log(action.payload)
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.status = "succeeded"
+                    console.log(state.status)
+
+                }
+
+
             })
             .addCase(addUser.rejected, (state, action) => {
                 state.error = action.error.message
                 console.log(state.error)
-                
+
             })
-            // .addMatcher(addUser.rejected, (state,action) =>{
-            //     state.status = 'failed'
-            //     console.log(state.status)
-            //     console.log("rej")
-            // }
+        // .addMatcher(addUser.rejected, (state,action) =>{
+        //     state.status = 'failed'
+        //     console.log(state.status)
+        //     console.log("rej")
+        // }
 
     }
 })
