@@ -2,6 +2,7 @@ import axios from "axios"
 import { API_URL, doApiGet, doApiMethod } from "../services/apiService"
 import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue } from "@reduxjs/toolkit"
 import { toast } from "react-toastify"
+import { AuthWithToken } from "./tokenSlice"
 
 const USERS_URL = `${API_URL}/users`
 
@@ -36,6 +37,7 @@ export const addUser = createAsyncThunk(
 
 
 
+
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
@@ -62,7 +64,7 @@ const usersSlice = createSlice({
                 state.users = []
                 state.users = action.payload
                 // console.log(state.users)
-
+               
             })
             .addCase(getUsers.rejected, (state, action) => {
                 state.status = 'failed'

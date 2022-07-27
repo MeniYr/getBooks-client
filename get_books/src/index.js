@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -6,9 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { myStore } from './globalStore/store';
 import { addUser, getUsers } from './features/usersSlice';
+import { AuthWithToken } from './features/tokenSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-myStore.dispatch(getUsers)
+myStore.dispatch(getUsers, AuthWithToken)
+
 
 root.render(
   <React.StrictMode>

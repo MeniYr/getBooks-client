@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import UserItem from '../comps/userStore/userItem'
+import { AuthWithToken } from '../features/tokenSlice'
 import { getUsers } from '../features/usersSlice'
 
 
@@ -13,8 +14,8 @@ export default function AllUsers() {
   useEffect(() => {
     // if (getStatus === "idle")
     console.log(getStatus)
-      dispatch(getUsers())
-
+    dispatch(getUsers())
+ 
   }, [])
 
   return (
