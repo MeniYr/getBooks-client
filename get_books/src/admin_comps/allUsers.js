@@ -7,10 +7,12 @@ import { getUsers } from '../features/usersSlice'
 export default function AllUsers() {
   const dispatch = useDispatch()
   const getStatus = useSelector((state) => state.users.status)
+  const getEroor = useSelector((state) => state.users.error)
   const arr = useSelector((state) => state.users.users)
   console.log(getStatus)
   useEffect(() => {
-    if (getStatus === "idle")
+    // if (getStatus === "idle")
+    console.log(getStatus)
       dispatch(getUsers())
 
   }, [])
@@ -20,9 +22,11 @@ export default function AllUsers() {
       <div className='row mx-auto col-md-6'>
         {getStatus === "succeeded" && arr.map(user => {
           return (
-            < UserItem key item={user} />
+            < UserItem item={user} />
           )
         })}
+        {getStatus === "loading" && <h2>Loading..</h2>}
+        {getStatus === "failed" && <h2>server problem pleace try again later ..</h2>}
 
       </div>
     </div>

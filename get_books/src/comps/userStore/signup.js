@@ -1,59 +1,33 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { addUser } from '../../features/usersSlice';
 import { API_URL, doApiMethod } from '../../services/apiService';
 
 export default function Signup() {
   const nav = useNavigate();
   let { register, getValues, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const getStatus = useSelector((state) => state.users.status)
+  const getEroor = useSelector((state) => state.users.error)
 
   const onSub = (_dataBody) => {
     delete _dataBody.password2;
-    console.log(_dataBody);
-    doApi(_dataBody);
-
+    dispatch(addUser(_dataBody)).unwrap()
+    console.log(getStatus);
+    console.log(getEroor)
+    // getStatus === "succeeded" && nav("/allUsers")
   }
 
-  const doApi = async (_dataBody) => {
-    let url = API_URL + "/users/signUp";
-    try {
-      let resp = await doApiMethod(url, "POST", _dataBody);
-      console.log(resp.data)
-      if (resp.data._id) {
-        toast.success("You sign up succefuly , now log in");
-        nav("/login");
-      }
-      else {
-        console.log(resp.data.user._id)
-        toast.error("There is problem come back later", {
-          className: "color:gray;"
-        });
-      }
-    }
-
-    catch (err) {
-      if (err.response.data.code === 11000) {
-        toast.error("Email already in system, try login or enter another email", {
-          // className:"w-md-10"
-        })
-      }
-      else {
-        console.log(err)
-        toast.error("There is problem come back later", {
-          // className: "w-md-10"
-        });
-      }
-
-    }
-  }
 
   return (
     <div className='d-flex justify-content-md-center container col-md-6'>
       <div >
 
         <h1 className='display-5 mt-5 mb-4 fw-bolder text-danger text-md-center'>Sign up</h1>
-        <form onSubmit={handleSubmit(onSub)} className=''>
+        <form onSubmit={handleSubmit(onSub)} >
 
           <label>Name:</label>
           <input {...register("name", { required: true, minLength: 2 })} type="text" className='form-control' />
@@ -78,15 +52,15 @@ export default function Signup() {
             required: true, validate: (value) => {
               return value === getValues("password")
             }
-          })} type="password2" className='form-control' />
+          })} type="password" className='form-control' />
           {errors.password2 && <small className='d-block text-danger'>
             Password not match
           </small>}
 
           <label>phone:</label>
-          <input {...register("phone", { required: true, minLength: 9 })} type="phone" className='form-control' />
+          <input {...register("phone", { required: true, minLength: 7 })} type="phone" className='form-control' />
           {errors.phone && <small className='d-block text-danger'>
-            Enter valid phone (min 9 chars)
+            Enter valid phone (min 7 chars)
           </small>}
 
           <label>address:</label>
