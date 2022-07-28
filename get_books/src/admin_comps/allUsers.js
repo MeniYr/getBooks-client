@@ -1,21 +1,35 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import UserItem from '../comps/userStore/userItem'
 import { AuthWithToken } from '../features/tokenSlice'
-import { getUsers } from '../features/usersSlice'
+import { addUser, getUsers } from '../features/usersSlice'
 
 
 export default function AllUsers() {
   const dispatch = useDispatch()
   const getStatus = useSelector((state) => state.users.status)
+  const getAuthStatus = useSelector((state) => state.token.authStatus)
+  const token = useSelector((state) => state.token)
   const getEroor = useSelector((state) => state.users.error)
   const arr = useSelector((state) => state.users.users)
+  const nav = useNavigate()
   console.log(getStatus)
   useEffect(() => {
     // if (getStatus === "idle")
-    console.log(getStatus)
+    if (token.token===null) {
+      toast.info("please sign in")
+      nav("/login")
+    }
+    console.log(token)
+    console.log(getEroor)
+    dispatch(AuthWithToken())
+
+
+    console.log(getAuthStatus);
+    console.log(getEroor);
     dispatch(getUsers())
- 
   }, [])
 
   return (

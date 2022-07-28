@@ -6,12 +6,16 @@ import { AuthWithToken } from "./tokenSlice"
 
 const USERS_URL = `${API_URL}/users`
 
+
 export const getUsers = createAsyncThunk(
     'users/getUsers', async () => {
         try {
-            return await (await doApiGet(USERS_URL)).data
+            let data = await (await doApiGet(USERS_URL)).data
+            console.log(data)
+            return data
         } catch (err) {
-            return err.message
+            console.log(err.response.data);
+           return isRejectedWithValue(err)
         }
     }
 )
@@ -60,11 +64,16 @@ const usersSlice = createSlice({
                 console.log(state.status)
             })
             .addCase(getUsers.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.users = []
-                state.users = action.payload
+                if (action.payload.length>1) {
+                    state.status = 'succeeded';
+                    state.users = []
+                    state.users = action.payload
+                    console.log(action.payload)
+                }
+
+
                 // console.log(state.users)
-               
+
             })
             .addCase(getUsers.rejected, (state, action) => {
                 state.status = 'failed'
@@ -79,6 +88,9 @@ const usersSlice = createSlice({
             })
             .addCase(addUser.fulfilled, (state, action) => {
                 console.log(action.payload)
+
+                console.log(action.meta)
+
                 if (action.payload) {
                     // state.users.push(action.payload)
                     state.status = "succeeded"

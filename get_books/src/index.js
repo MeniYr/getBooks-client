@@ -9,7 +9,7 @@ import { addUser, getUsers } from './features/usersSlice';
 import { AuthWithToken } from './features/tokenSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-myStore.dispatch(getUsers, AuthWithToken)
+myStore.dispatch(getUsers)
 
 
 root.render(

@@ -1,5 +1,5 @@
 import { isRejected, isRejectedWithValue } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios,{AxiosError} from "axios";
 export const API_URL = "http://localhost:3000";
 export const TOKEN_NAME = "token"
 
@@ -34,6 +34,7 @@ export const doApiMethod = async (_url, _method, _body) => {
     return resp;
   }
   catch (err) {
+    console.log(AxiosError.ERR_BAD_REQUEST)
     console.log(err)
    return isRejectedWithValue(err);
      
