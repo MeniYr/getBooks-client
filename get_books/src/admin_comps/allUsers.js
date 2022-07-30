@@ -14,10 +14,14 @@ export default function AllUsers() {
   const token = useSelector((state) => state.token)
   const getEroor = useSelector((state) => state.users.error)
   const arr = useSelector((state) => state.users.users)
+  const userID = useSelector((state) => state.token.id)
+
   const nav = useNavigate()
   console.log(getStatus)
   useEffect(() => {
     // if (getStatus === "idle")
+    console.log(userID)
+
     if (token.token===null) {
       toast.info("please sign in")
       nav("/login")

@@ -6,10 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { myStore } from './globalStore/store';
 import { addUser, getUsers } from './features/usersSlice';
-import { AuthWithToken } from './features/tokenSlice';
+import tokenSlice, { AuthWithToken, login } from './features/tokenSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-myStore.dispatch(getUsers)
+myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)
 
 
 root.render(

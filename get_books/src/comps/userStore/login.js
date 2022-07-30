@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import tokenSlice, { AuthWithToken } from '../../features/tokenSlice';
+import tokenSlice, { AuthWithToken, user_ID } from '../../features/tokenSlice';
 // import { ClientContext } from '../../context/clientContext';
 import { API_URL, doApiMethod, TOKEN_NAME } from '../../services/apiService';
 import { login } from "../../features/tokenSlice"
@@ -27,6 +27,7 @@ export default function Login() {
       console.log(status)
       console.log(userName)
       toast.success(`Welcome ${userName}, You logged in`);
+      nav("/msg")
     }
     catch (err) {
       toast.error("User or password worng or there is problem come back later");

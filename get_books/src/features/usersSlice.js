@@ -49,14 +49,15 @@ const usersSlice = createSlice({
         status: 'idle',
         error: null
     },
-    // reducers: {
-    //     addUser: {
-    //         reducer(state, action) {
-    //             state.users.users = [];
-    //             state.users.users.push(action.payload)
-    //         },
-    //     }
-    // },
+    reducers: {
+        checkUser: {
+            reducer(state, action) {
+                console.log("here");
+                state.users.users = [];
+                state.users.users.push(action.payload)
+            },
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(getUsers.pending, (state, action) => {
