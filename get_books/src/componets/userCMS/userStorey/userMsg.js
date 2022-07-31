@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthWithToken, userID } from '../../../shared/redux/features/tokenSlice'
-import { allUsers, getUser, getUsers, getUsersSlice, user, userMsg, userStatus } from '../../../shared/redux/features/usersSlice'
+import { allUsers, getUser, getUserByID, getUsers, getUsersSlice, user, userMsg, userStatus } from '../../../shared/redux/features/usersSlice'
 import MsgItem from './msgItem'
+import UserItem from './userItem'
 
 
 
@@ -12,28 +13,34 @@ import MsgItem from './msgItem'
 export default function Msg() {
     const dispatch = useDispatch()
     const nav = useNavigate()
+    const [userId, setUserId] = useState("")
 
     const token = useSelector((state) => state.token.token)
     const messagessArr = useSelector(userMsg)
     const requestStatus = useSelector(userStatus)
     const usersSlice = useSelector(getUsersSlice)
 
+    const fromUser = useSelector((state) => state.users.userByID)
+
     // const users = useSelector((state) => state.users.users)
     // const user = useSelector((state) => state.user)
     // const id = useSelector(userID)
 
-    const doApi = async () => {
+    const initPageInfo = async () => {
         console.log(usersSlice);
         console.log(requestStatus)
+        console.log(userId)
         dispatch(getUser())
+// dispatch((getUserByID("")))
     }
     useEffect(() => {
+
         dispatch(AuthWithToken())
         if (token === null) {
             toast.warn("there is problem, please log in")
             nav("/login")
         }
-        doApi()
+        initPageInfo()
     }, [])
 
     return (
@@ -41,8 +48,9 @@ export default function Msg() {
             <div className='row mx-auto col-md-6'>
                 {requestStatus === "succeeded" && messagessArr.map(item => {
                     return (
-                        <div key={item._id}>
+                        <div onChange={()=>console.log(item.fromUserId)} key={item._id}>
                             <MsgItem item={item} />
+                            {/* <Link>from: <UserItem item={fromUser} /></Link> */}
                         </div>
                     )
                 })

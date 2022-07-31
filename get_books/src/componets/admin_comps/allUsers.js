@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import UserItem from '../../componets/userCMS/userStorey/userItem'
 import { AuthWithToken } from '../../shared/redux/features/tokenSlice'
-import { addUser, getUsers } from '../../shared/redux/features/usersSlice'
+import { addUser, getUserByID, getUsers } from '../../shared/redux/features/usersSlice'
 
 
 export default function AllUsers() {
@@ -21,7 +21,6 @@ export default function AllUsers() {
   useEffect(() => {
     // if (getStatus === "idle")
     console.log(userID)
-
     if (token.token===null) {
       toast.info("please sign in")
       nav("/login")
@@ -29,7 +28,6 @@ export default function AllUsers() {
     console.log(token)
     console.log(getEroor)
     dispatch(AuthWithToken())
-
 
     console.log(getAuthStatus);
     console.log(getEroor);

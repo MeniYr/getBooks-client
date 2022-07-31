@@ -36,9 +36,6 @@ export const getUser = createAsyncThunk(
 export const getUserByID = createAsyncThunk(
     'users/getUserByID', async (userID) => {
         try {
-            if (userID)
-                console.log(userID);
-
             let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
             // console.log(data)
             return data
@@ -173,7 +170,7 @@ const usersSlice = createSlice({
                 if (action.payload) {
                     // state.users.push(action.payload)
                     state.status = "succeeded"
-                    localStorage.setItem(getUserByID, JSON.stringify(action.payload))
+                    localStorage.setItem(USER_ByID_INFO, JSON.stringify(action.payload))
                     console.log(state.status)
 
                 }
@@ -181,6 +178,7 @@ const usersSlice = createSlice({
 
             .addCase(getUserByID.rejected, (state, action) => {
                 state.error = action.error.message
+                localStorage.removeItem(USER_ByID_INFO)
                 console.log(state.error)
 
             })

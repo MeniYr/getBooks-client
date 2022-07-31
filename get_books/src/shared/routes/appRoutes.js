@@ -8,6 +8,7 @@ import Signup from '../auth/signup';
 import 'react-toastify/dist/ReactToastify.css';
 import Msg from '../../componets/userCMS/userStorey/userMsg';
 import Home from '../../componets/home';
+import UserByID from '../../componets/userCMS/userStorey/userByID';
 
 
 
@@ -23,6 +24,7 @@ export default function AppRoutes() {
 
         <Route path="/signup" element={<Signup />} />
          <Route path="/login" element={<Login />} />
+         <Route path="/user/:idUser" element={<UserByID />} />
          <Route path="/editUser/:id" element={<EditUser />} />
          <Route path="/msg" element={<Msg />} />
 
