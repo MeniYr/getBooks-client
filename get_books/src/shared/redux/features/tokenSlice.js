@@ -1,8 +1,7 @@
 import { createAction, createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-import { API_URL, doApiGet, doApiMethod, TOKEN_NAME } from "../services/apiService"
-
+import { API_URL, doApiGet, doApiMethod, TOKEN_NAME, USER_PROP } from "../../services/apiService"
 
 
 export const AuthWithToken = createAsyncThunk(
@@ -25,7 +24,6 @@ export const login = createAsyncThunk(
         try {
             let data = await (await doApiMethod(`${API_URL}/users/login`, "POST", _dataBody)).data
             console.log(data)
-            user_ID(data.user)
             if (data.token)
                 localStorage[TOKEN_NAME] = data.token
             return data
@@ -36,41 +34,39 @@ export const login = createAsyncThunk(
     }
 )
 
-export const logOut = createAction("token/logOut")
+//TODO export const logOut = createAction("token/logOut")
 // export const userId = createAction(("token/userId"))
 
 const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        token: localStorage[TOKEN_NAME] || null,
+        token: localStorage.getItem(TOKEN_NAME) || null,
         authStatus: 'idle',
         logINStatus: 'idle',
         error: null,
-        userName: "",
-        role: "",
-        id: ""
+        userName: JSON.parse(localStorage[USER_PROP]).userName,
+        role: JSON.parse(localStorage[USER_PROP]).role,
+        id: JSON.parse(localStorage[USER_PROP]).id
     },
     reducers: {
         user_ID: (state, action) => {
             console.log(action.payload)
-state.id = action.payload        
+            state.id = action.payload
         }
     },
     extraReducers(builder) {
         builder
             .addCase(AuthWithToken.pending, (state, action) => {
                 state.authStatus = 'loading'
-                console.log(state.authStatus)
-                console.log(state.token)
+                // console.log(state.authStatus)
+                // console.log(state.token)
             })
 
             .addCase(AuthWithToken.fulfilled, (state, action) => {
                 if (action.payload) {
                     state.authStatus = 'succeeded';
                     state.role = action.payload.role;
-                    // state.token = []
-                    // state.id="lk"
-                    console.log(state.token)
+                    // console.log(state.token)
                 }
 
             })
@@ -87,16 +83,19 @@ state.id = action.payload
                 console.log(state.token)
             })
             .addCase(login.fulfilled, (state, action) => {
-   
+
                 if (action.payload) {
                     state.logINStatus = 'succeeded';
-                    console.log(action.payload)
-                    state.userName = action.payload.user.name
-                    // state.token = action.payload.token
-                    localStorage[TOKEN_NAME] = state.token
-                    state.role = action.payload.user.role
-                    state.id = (action.payload.user.userID)
-                    console.log(state.id[0])
+
+                    localStorage.setItem(TOKEN_NAME,action.payload.token)
+                    localStorage[USER_PROP] = JSON.stringify({
+                        role: action.payload.user.role,
+                        id: action.payload.user.userID,
+                        userName: action.payload.user.name
+                    })
+
+                    console.log(action.payload.token)
+                    console.log(state.id)
                     console.log(action.payload.user.userID)
                 }
 
@@ -133,5 +132,5 @@ state.id = action.payload
     }
 })
 export const userID = (state) => state.token.id
-export const { user_ID } = tokenSlice.actions
+// export const { user_ID } = tokenSlice.actions
 export default tokenSlice.reducer;

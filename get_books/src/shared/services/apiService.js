@@ -2,6 +2,7 @@ import { isRejected, isRejectedWithValue } from "@reduxjs/toolkit";
 import axios,{AxiosError} from "axios";
 export const API_URL = "http://localhost:3000";
 export const TOKEN_NAME = "token"
+export const USER_PROP = "user_prop"
 
 export const doApiGet = async (_url) => {
   try {

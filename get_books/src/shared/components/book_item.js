@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import FavBtn from './ticketInfo/favBtn';
+// import FavBtn from './ticketInfo/favBtn';
 
 export default function ItemTicket(props) {
   let item = props.item;

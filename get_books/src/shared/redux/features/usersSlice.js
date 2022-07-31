@@ -1,8 +1,9 @@
 import axios from "axios"
-import { API_URL, doApiGet, doApiMethod } from "../services/apiService"
+import { API_URL, doApiGet, doApiMethod } from "../../services/apiService"
 import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue } from "@reduxjs/toolkit"
 import { toast } from "react-toastify"
-import { AuthWithToken } from "./tokenSlice"
+import { AuthWithToken, userID } from "./tokenSlice"
+import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings"
 
 const USERS_URL = `${API_URL}/users`
 
@@ -15,10 +16,39 @@ export const getUsers = createAsyncThunk(
             return data
         } catch (err) {
             console.log(err.response.data);
-           return isRejectedWithValue(err)
+            return isRejectedWithValue(err)
         }
     }
 )
+
+export const getUser = createAsyncThunk(
+    'users/getUser', async () => {
+        try {
+            let data = await (await doApiGet(`${USERS_URL}/userInfo`)).data
+            // console.log(data)
+            return data
+        } catch (err) {
+            console.log(err.response.data);
+            return isRejectedWithValue(err)
+        }
+    }
+)
+export const getUserByID = createAsyncThunk(
+    'users/getUserByID', async (userID) => {
+        try {
+            if (userID)
+                console.log(userID);
+
+            let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
+            // console.log(data)
+            return data
+        } catch (err) {
+            console.log(err.response.data);
+            return isRejectedWithValue(err)
+        }
+    }
+)
+
 export const addUser = createAsyncThunk(
     'users/addUser', async (dataBody, { rejectWithValue }) => {
         try {
@@ -45,7 +75,9 @@ export const addUser = createAsyncThunk(
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
+        currentUser: JSON.parse(localStorage[USER_INFO]) || null,
         users: [],
+        userByID: JSON.parse(localStorage.getItem(USER_ByID_INFO)) || null,
         status: 'idle',
         error: null
     },
@@ -65,7 +97,7 @@ const usersSlice = createSlice({
                 console.log(state.status)
             })
             .addCase(getUsers.fulfilled, (state, action) => {
-                if (action.payload.length>1) {
+                if (action.payload) {
                     state.status = 'succeeded';
                     state.users = []
                     state.users = action.payload
@@ -106,6 +138,52 @@ const usersSlice = createSlice({
                 console.log(state.error)
 
             })
+
+            .addCase(getUser.pending, (state, action) => {
+                state.status = 'loading'
+                // console.log(state.status)
+            })
+
+            .addCase(getUser.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.status = "succeeded"
+                    localStorage.setItem(USER_INFO, JSON.stringify(action.payload))
+                    console.log(state.status)
+
+                }
+            })
+
+            .addCase(getUser.rejected, (state, action) => {
+                state.error = action.error.message
+                console.log(state.error)
+
+            })
+
+            .addCase(getUserByID.pending, (state, action) => {
+                state.status = 'loading'
+                console.log(state.status)
+            })
+
+            .addCase(getUserByID.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.status = "succeeded"
+                    localStorage.setItem(getUserByID, JSON.stringify(action.payload))
+                    console.log(state.status)
+
+                }
+            })
+
+            .addCase(getUserByID.rejected, (state, action) => {
+                state.error = action.error.message
+                console.log(state.error)
+
+            })
         // .addMatcher(addUser.rejected, (state,action) =>{
         //     state.status = 'failed'
         //     console.log(state.status)
@@ -115,5 +193,9 @@ const usersSlice = createSlice({
     }
 })
 
+export const userMsg = (state) => state.users.currentUser.msg
+export const allUsers = (state) => state.users.users
+export const getUsersSlice = (state) => state.users
+export const userStatus = (state) => state.users.status
 
 export default usersSlice.reducer;

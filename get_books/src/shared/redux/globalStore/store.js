@@ -9,5 +9,8 @@ import rootReducer from "./rootSlices";
 // })
 export const myStore = configureStore({
     
-    reducer: rootReducer,
+    reducer: {
+        users: usersSlice,
+        token: tokenSlice
+    }
 })

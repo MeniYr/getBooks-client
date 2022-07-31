@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import UserItem from '../comps/userStore/userItem'
-import { AuthWithToken } from '../features/tokenSlice'
-import { addUser, getUsers } from '../features/usersSlice'
+import UserItem from '../../componets/userCMS/userStorey/userItem'
+import { AuthWithToken } from '../../shared/redux/features/tokenSlice'
+import { addUser, getUsers } from '../../shared/redux/features/usersSlice'
 
 
 export default function AllUsers() {

@@ -3,15 +3,17 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { addUser } from '../../features/usersSlice';
-import { API_URL, doApiMethod } from '../../services/apiService';
+import { addUser } from '../../shared/redux/features/usersSlice';
+
+import style from "./auth.module.css"
+
 
 export default function Signup() {
   const nav = useNavigate();
   let { register, getValues, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const getStatus = useSelector((state) => state.users.status)
-  const getEroor = useSelector((state) => state.users.error)
+  const getStatus = useSelector((state) => state.users)
+  const getEroor = useSelector((state) => state.users)
   // const getUsers = useSelector((state) => state.users.users)
 
   useEffect(() => {

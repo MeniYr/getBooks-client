@@ -5,7 +5,7 @@ import usersSlice, { getUsers } from "../features/usersSlice";
 
 
 const rootReducer = combineReducers({
-    usersSlice: usersSlice,
+    users: usersSlice,
     token: tokenSlice
 })
 

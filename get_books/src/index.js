@@ -4,9 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { myStore } from './globalStore/store';
-import { addUser, getUsers } from './features/usersSlice';
-import tokenSlice, { AuthWithToken, login } from './features/tokenSlice';
+import { myStore } from './shared/redux/globalStore/store';
+import { addUser, getUsers } from './shared/redux/features/usersSlice';
+import tokenSlice, { AuthWithToken, login } from './shared/redux/features/tokenSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)

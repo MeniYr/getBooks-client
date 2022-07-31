@@ -1,12 +1,13 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import AllUsers from './admin_comps/allUsers';
-import EditUser from './comps/userStore/editUser';
-import Login from './comps/userStore/login';
-import Signup from './comps/userStore/signup';
+import AllUsers from '../../componets/admin_comps/allUsers';
+import EditUser from '../../componets/userCMS/userStorey/editUser';
+import Login from '../auth/login';
+import Signup from '../auth/signup';
 import 'react-toastify/dist/ReactToastify.css';
-import Msg from './comps/userStore/msg';
+import Msg from '../../componets/userCMS/userStorey/userMsg';
+import Home from '../../componets/home';
 
 
 
@@ -18,6 +19,7 @@ export default function AppRoutes() {
 
       <Routes>
         {/* user cms */}
+        <Route path="/" element={<Home/>} />
 
         <Route path="/signup" element={<Signup />} />
          <Route path="/login" element={<Login />} />

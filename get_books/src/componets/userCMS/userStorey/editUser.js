@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { API_URL, doApiGet, doApiMethod } from '../../services/apiService';
+import { API_URL, doApiGet, doApiMethod } from '../../../shared/services/apiService';
 import { toast } from "react-toastify";
 
-import ClientAuthComp from './clientAuthComp';
+import ClientAuthComp from '../../../shared/auth/clientAuthComp';
 
 
 export default function EditUser() {
