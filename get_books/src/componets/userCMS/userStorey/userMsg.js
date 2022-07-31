@@ -13,8 +13,6 @@ import UserItem from './userItem'
 export default function Msg() {
     const dispatch = useDispatch()
     const nav = useNavigate()
-    const [userId, setUserId] = useState("")
-
     const token = useSelector((state) => state.token.token)
     const messagessArr = useSelector(userMsg)
     const requestStatus = useSelector(userStatus)
@@ -29,7 +27,7 @@ export default function Msg() {
     const initPageInfo = async () => {
         console.log(usersSlice);
         console.log(requestStatus)
-        console.log(userId)
+
         dispatch(getUser())
 // dispatch((getUserByID("")))
     }
@@ -48,7 +46,7 @@ export default function Msg() {
             <div className='row mx-auto col-md-6'>
                 {requestStatus === "succeeded" && messagessArr.map(item => {
                     return (
-                        <div onChange={()=>console.log(item.fromUserId)} key={item._id}>
+                        <div key={item._id}>
                             <MsgItem item={item} />
                             {/* <Link>from: <UserItem item={fromUser} /></Link> */}
                         </div>
