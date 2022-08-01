@@ -1,5 +1,6 @@
 import { createAction, createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 import { API_URL, doApiGet, doApiMethod, TOKEN_NAME, USER_PROP } from "../../services/apiService"
 
@@ -14,11 +15,13 @@ export const AuthWithToken = createAsyncThunk(
             return data
         } catch (err) {
             localStorage.removeItem(TOKEN_NAME)
+            toast.error(err.response.data.msg)
             console.log(err.response.data)
             return isRejectedWithValue(err.response.message)
         }
     }
 )
+
 export const login = createAsyncThunk(
     'token/login', async (_dataBody) => {
         try {
@@ -44,9 +47,9 @@ const tokenSlice = createSlice({
         authStatus: 'idle',
         logINStatus: 'idle',
         error: null,
-        userName: JSON.parse(localStorage[USER_PROP]).userName,
-        role: JSON.parse(localStorage[USER_PROP]).role,
-        id: JSON.parse(localStorage[USER_PROP]).id
+        userName: "",
+        role: "",
+        id: ""
     },
     reducers: {
         user_ID: (state, action) => {
@@ -54,6 +57,7 @@ const tokenSlice = createSlice({
             state.id = action.payload
         }
     },
+
     extraReducers(builder) {
         builder
             .addCase(AuthWithToken.pending, (state, action) => {
@@ -70,6 +74,7 @@ const tokenSlice = createSlice({
                 }
 
             })
+
             .addCase(AuthWithToken.rejected, (state, action) => {
                 state.authStatus = 'failed'
                 state.error = action.error
@@ -82,24 +87,27 @@ const tokenSlice = createSlice({
                 console.log(state.logINStatus)
                 console.log(state.token)
             })
+
             .addCase(login.fulfilled, (state, action) => {
 
                 if (action.payload) {
                     state.logINStatus = 'succeeded';
 
-                    localStorage.setItem(TOKEN_NAME,action.payload.token)
-                    localStorage[USER_PROP] = JSON.stringify({
-                        role: action.payload.user.role,
-                        id: action.payload.user.userID,
-                        userName: action.payload.user.name
-                    })
+                    localStorage.setItem(TOKEN_NAME, action.payload.token)
+
+                    state.role = action.payload.user.role
+                    state.id = action.payload.user.userID
+                    state.userName = action.payload.user.name
+
 
                     console.log(action.payload.token)
                     console.log(state.id)
-                    console.log(action.payload.user.userID)
+                    console.log(action.payload)
+                    return state
                 }
 
             })
+
             .addCase(login.rejected, (state, action) => {
                 state.logINStatus = 'failed'
                 state.error = action.error
@@ -107,6 +115,7 @@ const tokenSlice = createSlice({
                 console.log(state.token)
 
             })
+
         // .addCase(logOut.pending, (state, action) => {
         //     state.logINStatus = 'loading'
 
@@ -132,5 +141,7 @@ const tokenSlice = createSlice({
     }
 })
 export const userID = (state) => state.token.id
+export const user_name = (state) => state.token.userName
+export const user_from_token = (state) => state.token
 // export const { user_ID } = tokenSlice.actions
 export default tokenSlice.reducer;

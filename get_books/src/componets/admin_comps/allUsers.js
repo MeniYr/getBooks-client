@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import UserItem from '../../componets/userCMS/userStorey/userItem'
 import { AuthWithToken } from '../../shared/redux/features/tokenSlice'
-import { addUser, getUserByID, getUsers } from '../../shared/redux/features/usersSlice'
+import { addUser, delUser, getUserByID, getUsers } from '../../shared/redux/features/usersSlice'
 
 
 export default function AllUsers() {
@@ -18,10 +18,13 @@ export default function AllUsers() {
 
   const nav = useNavigate()
   console.log(getStatus)
+
+
+
   useEffect(() => {
     // if (getStatus === "idle")
     console.log(userID)
-    if (token.token===null) {
+    if (token.token === null) {
       toast.info("please sign in")
       nav("/login")
     }
@@ -39,7 +42,14 @@ export default function AllUsers() {
       <div className='row mx-auto col-md-6'>
         {getStatus === "succeeded" && arr.map(user => {
           return (
-            < UserItem item={user} />
+            <div key={user._id} className='d-flex justify-content-center '>
+
+              <div>
+
+                < UserItem item={user} />
+              </div>
+            </div>
+
           )
         })}
         {getStatus === "loading" && <h2>Loading..</h2>}

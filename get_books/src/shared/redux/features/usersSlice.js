@@ -20,6 +20,19 @@ export const getUsers = createAsyncThunk(
         }
     }
 )
+export const delUser = createAsyncThunk(
+    'users/delUser', async (idDel) => {
+        try {
+            let data = await (await doApiMethod(`${USERS_URL}/del/${idDel}`, "DELETE")).data
+            console.log(data)
+            toast.success("deleted successful")
+            return data
+        } catch (err) {
+            console.log(err.response.data);
+            return isRejectedWithValue(err)
+        }
+    }
+)
 
 export const getUser = createAsyncThunk(
     'users/getUser', async () => {
@@ -33,16 +46,13 @@ export const getUser = createAsyncThunk(
         }
     }
 )
+
 export const getUserByID = createAsyncThunk(
     'users/getUserByID', async (userID) => {
-        try {
-            let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
-            // console.log(data)
-            return data
-        } catch (err) {
-            console.log(err.response.data);
-            return isRejectedWithValue(err)
-        }
+console.log(userID);
+        let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
+        // console.log(data)
+        return data
     }
 )
 
@@ -72,9 +82,9 @@ export const addUser = createAsyncThunk(
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
-        currentUser: JSON.parse(localStorage[USER_INFO]) || null,
+        userByID: "",
+        currentUser: "",
         users: [],
-        userByID: JSON.parse(localStorage.getItem(USER_ByID_INFO)) || null,
         status: 'idle',
         error: null
     },
@@ -147,7 +157,7 @@ const usersSlice = createSlice({
                 if (action.payload) {
                     // state.users.push(action.payload)
                     state.status = "succeeded"
-                    localStorage.setItem(USER_INFO, JSON.stringify(action.payload))
+                    state.currentUser = action.payload
                     console.log(state.status)
 
                 }
@@ -170,7 +180,7 @@ const usersSlice = createSlice({
                 if (action.payload) {
                     // state.users.push(action.payload)
                     state.status = "succeeded"
-                    localStorage.setItem(USER_ByID_INFO, JSON.stringify(action.payload))
+                    state.userByID = action.payload
                     console.log(state.status)
 
                 }
@@ -178,7 +188,29 @@ const usersSlice = createSlice({
 
             .addCase(getUserByID.rejected, (state, action) => {
                 state.error = action.error.message
-                localStorage.removeItem(USER_ByID_INFO)
+                console.log(state.error)
+
+            })
+
+            .addCase(delUser.pending, (state, action) => {
+                state.status = 'loading'
+                console.log(state.status)
+            })
+
+            .addCase(delUser.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.status = "succeeded"
+                    state.userByID = action.payload
+                    console.log(state.status)
+
+                }
+            })
+
+            .addCase(delUser.rejected, (state, action) => {
+                state.error = action.error.message
                 console.log(state.error)
 
             })
@@ -195,5 +227,6 @@ export const userMsg = (state) => state.users.currentUser.msg
 export const allUsers = (state) => state.users.users
 export const getUsersSlice = (state) => state.users
 export const userStatus = (state) => state.users.status
+// export const userById = (state) => state.users.userByID
 
 export default usersSlice.reducer;

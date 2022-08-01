@@ -1,31 +1,26 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // import { ClientContext } from '../../context/clientContext';
-import { login } from "../../shared/redux/features/tokenSlice"
+import tokenSlice, { login, user_name } from "../../shared/redux/features/tokenSlice"
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch()
   const status = useSelector((state) => state.token.status)
-  const userName = useSelector((state) => state.token.userName)
+
   const nav = useNavigate();
   let { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSub = (_dataBody) => {
-    console.log(_dataBody);
-    doApi(_dataBody);
-
-  }
-
-  const doApi = async (_dataBody) => {
     try {
       dispatch(login(_dataBody))
       console.log(status)
-      console.log(userName)
-      toast.success(`Welcome ${userName}, You logged in`);
-      // nav("/msg")
+      setTimeout(() => {
+        nav("/")
+        
+      }, 1000);
     }
     catch (err) {
       toast.error("User or password worng or there is problem come back later");

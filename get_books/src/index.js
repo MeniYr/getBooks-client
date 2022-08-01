@@ -13,11 +13,11 @@ myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)
 
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={myStore} >
       <App />
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

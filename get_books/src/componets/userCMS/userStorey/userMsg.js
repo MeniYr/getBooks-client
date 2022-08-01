@@ -18,7 +18,7 @@ export default function Msg() {
     const requestStatus = useSelector(userStatus)
     const usersSlice = useSelector(getUsersSlice)
 
-    const fromUser = useSelector((state) => state.users.userByID)
+    const fromUser = useSelector((state) => state.users)
 
     // const users = useSelector((state) => state.users.users)
     // const user = useSelector((state) => state.user)
@@ -27,9 +27,10 @@ export default function Msg() {
     const initPageInfo = async () => {
         console.log(usersSlice);
         console.log(requestStatus)
+        console.log(fromUser)
 
         dispatch(getUser())
-// dispatch((getUserByID("")))
+        dispatch((getUserByID("62e10c6455663afe779f5f6es")))
     }
     useEffect(() => {
 

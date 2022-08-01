@@ -8,9 +8,8 @@ import UserItem from './userItem'
 export default function MsgItem(props) {
   const dispatch = useDispatch()
 
+
   const msg = props.item
-
-
 
   return (
     <div key={msg._id} className=''>
