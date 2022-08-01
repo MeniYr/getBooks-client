@@ -49,7 +49,7 @@ export const getUser = createAsyncThunk(
 
 export const getUserByID = createAsyncThunk(
     'users/getUserByID', async (userID) => {
-console.log(userID);
+        console.log(userID);
         let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
         // console.log(data)
         return data
@@ -66,13 +66,30 @@ export const addUser = createAsyncThunk(
         } catch (err) {
             console.log("thunk", err)
             if (err.response.data.code === 11000) {
-                toast.error(err.response.data.err_msg)
+                toast.error(err.response.data?.err_msg)
                 return rejectWithValue(err.response.data)
             }
-            toast.error(err.response.data.details[0].message)
+            toast.error(err.response.data.details[0]?.message)
             return rejectWithValue(err.response.data)
 
 
+        }
+    })
+
+export const sendMassage = createAsyncThunk(
+    'users/sendMassage', async (dataBody, { rejectWithValue }) => {
+        try {
+            let toUserID = dataBody.toUserId;
+            delete dataBody.toUserId
+
+            const { data } = await doApiMethod(`${USERS_URL}/addMsg/${toUserID}`, "POST", dataBody)
+            console.log(data)
+            return data
+
+        } catch (err) {
+            console.log("sendMstThunk", err)
+            toast.error(err.response.data.details[0].message)
+            return rejectWithValue(err.response.data)
         }
     })
 
@@ -83,7 +100,7 @@ const usersSlice = createSlice({
     name: 'users',
     initialState: {
         userByID: "",
-        currentUser: "",
+        currentUser: null,
         users: [],
         status: 'idle',
         error: null
@@ -159,6 +176,7 @@ const usersSlice = createSlice({
                     state.status = "succeeded"
                     state.currentUser = action.payload
                     console.log(state.status)
+                    console.log(state.currentUser)
 
                 }
             })
@@ -210,6 +228,28 @@ const usersSlice = createSlice({
             })
 
             .addCase(delUser.rejected, (state, action) => {
+                state.error = action.error.message
+                console.log(state.error)
+
+            })
+            .addCase(sendMassage.pending, (state, action) => {
+                state.status = 'loading'
+                console.log(state.status)
+            })
+
+            .addCase(sendMassage.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.status = "succeeded"
+                  toast.info("sent")
+                    console.log(state.status)
+
+                }
+            })
+
+            .addCase(sendMassage.rejected, (state, action) => {
                 state.error = action.error.message
                 console.log(state.error)
 

@@ -111,7 +111,7 @@ const tokenSlice = createSlice({
             .addCase(login.rejected, (state, action) => {
                 state.logINStatus = 'failed'
                 state.error = action.error
-                console.log("here", state.error)
+                console.log("here_error_msg", state.error)
                 console.log(state.token)
 
             })

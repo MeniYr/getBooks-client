@@ -16,6 +16,8 @@ export default function MsgItem(props) {
       <div className='row'>
         {/* <Link>from</Link> */}
         <div>נשלח: {moment(msg.date).format('DD-MM-YYYY, HH:mm')}</div>
+        <div>מאת: {}</div>
+        <div>תוכן: {msg.msg}</div>
       </div>
 
     </div>

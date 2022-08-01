@@ -45,7 +45,7 @@ export default function Msg() {
     return (
         <div className='container'>
             <div className='row mx-auto col-md-6'>
-                {requestStatus === "succeeded" && messagessArr.map(item => {
+                {requestStatus === "succeeded" &&  messagessArr.map(item => {
                     return (
                         <div key={item._id}>
                             <MsgItem item={item} />

@@ -9,6 +9,7 @@ export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch()
   const status = useSelector((state) => state.token.status)
+  const error = useSelector((state) => state.token.error)
 
   const nav = useNavigate();
   let { register, handleSubmit, formState: { errors } } = useForm();
@@ -18,10 +19,19 @@ export default function Login() {
       dispatch(login(_dataBody))
       console.log(status)
       setTimeout(() => {
-        nav("/")
-        
+        if (error !== null) {
+          console.log(error)
+          toast.error("email or user wrong")
+        }
+        else {
+
+          nav("/")
+
+        }
       }, 1000);
+
     }
+
     catch (err) {
       toast.error("User or password worng or there is problem come back later");
     }
