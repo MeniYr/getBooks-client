@@ -9,7 +9,7 @@ import { addUser, getUsers } from './shared/redux/features/usersSlice';
 import tokenSlice, { AuthWithToken, login } from './shared/redux/features/tokenSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)
+// myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)
 
 
 root.render(

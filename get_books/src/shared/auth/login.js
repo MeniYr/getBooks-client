@@ -5,56 +5,25 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, { login, user_name } from "../../shared/redux/features/tokenSlice"
+import { getUser } from '../redux/features/usersSlice';
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch()
-  const status = useSelector((state) => state.token.status)
+  const status = useSelector((state) => state.token.logINStatus)
   const error = useSelector((state) => state.token.error)
+  // const userName = useSelector(user_name)
 
   const nav = useNavigate();
   let { register, handleSubmit, formState: { errors } } = useForm();
 
+  useEffect(() => {
+    status === "failed" && toast.error("email or user wrong")
+    status === "succeeded" && nav("/")
+  }, [error, status])
+
   const onSub = (_dataBody) => {
-    try {
-      dispatch(login(_dataBody))
-      console.log(status)
-      setTimeout(() => {
-        if (error !== null) {
-          console.log(error)
-          toast.error("email or user wrong")
-        }
-        else {
-
-          nav("/")
-
-        }
-      }, 1000);
-
-    }
-
-    catch (err) {
-      toast.error("User or password worng or there is problem come back later");
-    }
+    dispatch(login(_dataBody))
   }
-
-  // let url = API_URL + "/users/login";
-  // let resp = await doApiMethod(url, "POST", _dataBody);
-  // if (resp.data.token) {
-  //   console.log(resp.data.token);
-  //   console.log(resp.data.user);
-
-  //save token
-  // localStorage.setItem(TOKEN_NAME, resp.data.token);
-  // TODO: update global store via context
-  // setUser(resp.data.user);
-  // doApiUserInfo();
-  // nav("/");
-  // TODO save token
-  // }
-  // else{
-  //   toast.error("There is problem come back later");
-
-  // }
 
   return (
     <div className='container'>

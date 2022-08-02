@@ -28,9 +28,9 @@ export default function Msg() {
         console.log(usersSlice);
         console.log(requestStatus)
         console.log(fromUser)
-
+console.log(messagessArr);
         dispatch(getUser())
-        dispatch((getUserByID("62e10c6455663afe779f5f6es")))
+        // dispatch((getUserByID(fromUser.)))
     }
     useEffect(() => {
 

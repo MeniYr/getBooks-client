@@ -7,33 +7,36 @@ import { API_URL, doApiGet, doApiMethod, TOKEN_NAME, USER_PROP } from "../../ser
 
 export const AuthWithToken = createAsyncThunk(
     'token/getToken', async () => {
-        try {
+        // try {
             let data = await (await doApiGet(`${API_URL}/users/checkToken`)).data
             console.log(data)
             if (!data.status === "ok")
                 console.log("there is no token, maybe remove from storage")
             return data
-        } catch (err) {
-            localStorage.removeItem(TOKEN_NAME)
-            toast.error(err.response.data.msg)
-            console.log(err.response.data)
-            return isRejectedWithValue(err.response.message)
-        }
+        // } catch (err) {
+        //     localStorage.removeItem(TOKEN_NAME)
+        //     toast.error(err.response?.data?.msg)
+        //     console.log(err.response.data)
+        //     return isRejectedWithValue(err.response?.message)
+        // }
     }
 )
 
 export const login = createAsyncThunk(
     'token/login', async (_dataBody) => {
-        try {
+        // try {
             let data = await (await doApiMethod(`${API_URL}/users/login`, "POST", _dataBody)).data
             console.log(data)
-            if (data.token)
+            if (data.token) {
+                console.log(data.token)
                 localStorage[TOKEN_NAME] = data.token
-            return data
-        } catch (err) {
-
-            return isRejectedWithValue(err.response.message)
-        }
+                return data
+            }
+            // return isRejectedWithValue(data.msg)
+        // } catch (err) {
+        //     console.log(err);
+        //     return isRejectedWithValue(err.response?.message)
+        // }
     }
 )
 
@@ -47,7 +50,7 @@ const tokenSlice = createSlice({
         authStatus: 'idle',
         logINStatus: 'idle',
         error: null,
-        userName: "",
+        userName: "aaaa",
         role: "",
         id: ""
     },
@@ -85,7 +88,7 @@ const tokenSlice = createSlice({
             .addCase(login.pending, (state, action) => {
                 state.logINStatus = 'loading'
                 console.log(state.logINStatus)
-                console.log(state.token)
+                // console.log(state.token)
             })
 
             .addCase(login.fulfilled, (state, action) => {
@@ -103,13 +106,15 @@ const tokenSlice = createSlice({
                     console.log(action.payload.token)
                     console.log(state.id)
                     console.log(action.payload)
-                    return state
+                    console.log(state.logINStatus)
+                    // return state
                 }
 
             })
 
             .addCase(login.rejected, (state, action) => {
                 state.logINStatus = 'failed'
+                // state.token = null
                 state.error = action.error
                 console.log("here_error_msg", state.error)
                 console.log(state.token)
@@ -140,6 +145,7 @@ const tokenSlice = createSlice({
 
     }
 })
+
 export const userID = (state) => state.token.id
 export const user_name = (state) => state.token.userName
 export const user_from_token = (state) => state.token

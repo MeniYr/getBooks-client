@@ -5,7 +5,7 @@ export const TOKEN_NAME = "token"
 export const USER_PROP = "user_prop"
 
 export const doApiGet = async (_url) => {
-  try {
+  // try {
     let resp = await axios.get(_url, {
       headers: {
         "x-api-key": localStorage[TOKEN_NAME],
@@ -13,14 +13,14 @@ export const doApiGet = async (_url) => {
       }
     })
     return resp;
-  }
-  catch (err) {
-    throw err;
-  }
+  // }
+  // catch (err) {
+  //   return isRejectedWithValue(err);
+  // }
 }
 
 export const doApiMethod = async (_url, _method, _body) => {
-  try {
+  // try {
     // console.log(_body)
     let resp = await axios({
       url: _url,
@@ -33,11 +33,11 @@ export const doApiMethod = async (_url, _method, _body) => {
     })
     // console.log(resp)
     return resp;
-  }
-  catch (err) {
-    console.log(AxiosError.ERR_BAD_REQUEST)
-    console.log(err)
-   return isRejectedWithValue(err);
+  // }
+  // catch (err) {
+  //   console.log(AxiosError.ERR_BAD_REQUEST)
+  //   console.log(err)
+  //  return isRejectedWithValue(err);
      
-  }
+  // }
 }
