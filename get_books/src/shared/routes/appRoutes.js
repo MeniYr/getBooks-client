@@ -11,6 +11,9 @@ import Home from '../../componets/home';
 import UserByID from '../../componets/userCMS/userStorey/userByID';
 import Navbar from '../layout/navbar';
 import SendMsg from '../../componets/userCMS/userStorey/sendMsg';
+import BottomAppBar from '../../componets/userCMS/userStorey/inbox';
+import AddBook from '../../componets/userCMS/bookStory/addBook';
+import MyAccount from '../../componets/userCMS/userStorey/myAccount';
 
 
 
@@ -35,6 +38,9 @@ export default function AppRoutes() {
         <Route path="/editUser/:id" element={<EditUser />} />
         <Route path="/msg" element={<Msg />} />
         <Route path="/sendMsg/:userId" element={<SendMsg />} />
+        <Route path="/newBook" element={< AddBook/>} />
+        <Route path="/myAccount" element={< MyAccount/>} />
+        
 
         {/*  <Route path="/logout" element={<Logout />} />
         <Route path="/userTickets" element={<UserTickets />} />

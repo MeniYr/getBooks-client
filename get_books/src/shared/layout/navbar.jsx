@@ -162,11 +162,6 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-        <Link className='btn' color={'white'} to={"/login"}>login</Link>
-        <Link className='btn' color={'white'} to={"/signUp"}>signUp</Link>
-        <Link className='btn' color={'white'} to={"/allUsers"}>all users</Link>
-        <Link className='btn' color={'white'} to={"/msg"}>massages</Link>
-        <Link className='btn' color={'white'} to={"/"}>home</Link>
           <IconButton
             size="large"
             edge="start"
@@ -193,6 +188,12 @@ export default function PrimarySearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+        <Link className='btn' color={'white'} to={"/login"}>login</Link>
+        <Link className='btn' color={'white'} to={"/signUp"}>signUp</Link>
+        <Link className='btn' color={'white'} to={"/allUsers"}>all users</Link>
+        <Link className='btn' color={'white'} to={"/msg"}>massages</Link>
+        <Link className='btn' color={'white'} to={"/"}>home</Link>
+        <Link className='btn' color={'white'} to={"/myAccount"}>my account</Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
