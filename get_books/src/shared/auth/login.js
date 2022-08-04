@@ -11,7 +11,7 @@ export default function Login() {
   const dispatch = useDispatch()
   const status = useSelector((state) => state.token.logINStatus)
   const error = useSelector((state) => state.token.error)
-  // const userName = useSelector(user_name)
+  const userName = useSelector(user_name)
 
   const nav = useNavigate();
   let { register, handleSubmit, formState: { errors } } = useForm();
@@ -20,6 +20,11 @@ export default function Login() {
     status === "failed" && toast.error("email or user wrong")
     status === "succeeded" && nav("/")
   }, [error, status])
+
+  useEffect(()=>{
+    if (userName != "aaaa") 
+    toast.success(`Welcome ${userName}, You logged in`)
+  },[userName])
 
   const onSub = (_dataBody) => {
     dispatch(login(_dataBody))

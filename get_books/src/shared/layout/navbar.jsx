@@ -194,6 +194,7 @@ export default function PrimarySearchAppBar() {
         <Link className='btn' color={'white'} to={"/msg"}>massages</Link>
         <Link className='btn' color={'white'} to={"/"}>home</Link>
         <Link className='btn' color={'white'} to={"/myAccount"}>my account</Link>
+        <Link className='btn' color={'white'} to={"/addBook"}>add new book</Link>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">

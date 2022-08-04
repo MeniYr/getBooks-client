@@ -10,88 +10,84 @@ const USERS_URL = `${API_URL}/users`
 
 export const getUsers = createAsyncThunk(
     'users/getUsers', async () => {
-        // try {
+        try {
             let data = await (await doApiGet(USERS_URL)).data
             console.log(data)
             return data
-        // } catch (err) {
-        //     console.log(err.response.data);
-        //     return isRejectedWithValue(err)
-        // }
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
     }
 )
 
 export const delUser = createAsyncThunk(
     'users/delUser', async (idDel) => {
-        // try {
+        try {
             let data = await (await doApiMethod(`${USERS_URL}/del/${idDel}`, "DELETE")).data
             console.log(data)
             toast.success("deleted successful")
             return data
-        // } catch (err) {
-        //     console.log(err.response.data);
-        //     return isRejectedWithValue(err)
-        // }
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
     }
 )
 
 export const getUser = createAsyncThunk(
     'users/getUser', async () => {
-        // try {
+        try {
             let data = await (await doApiGet(`${USERS_URL}/userInfo`)).data
             // console.log(data)
             return data
-        // } catch (err) {
-        //     console.log(err.response.data);
-        //     return isRejectedWithValue(err)
-        // }
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
     }
 )
 
 export const getUserByID = createAsyncThunk(
     'users/getUserByID', async (userID) => {
-        console.log(userID);
-        let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
-        // console.log(data)
-        return data
+        try {
+            console.log(userID);
+            let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
+            // console.log(data)
+            return data
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
     }
 )
 
 export const addUser = createAsyncThunk(
     'users/addUser', async (dataBody, { rejectWithValue }) => {
-        // try {
+        try {
             const { data } = await doApiMethod(`${USERS_URL}/signUp`, "POST", dataBody)
             // console.log(data)
             return data
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
 
-        // } catch (err) {
-        //     console.log("thunk", err)
-        //     if (err.response.data.code === 11000) {
-        //         toast.error(err.response.data?.err_msg)
-        //         return rejectWithValue(err.response.data)
-        //     }
-        //     toast.error(err.response.data.details[0]?.message)
-        //     return rejectWithValue(err.response.data)
-
-
-        // }
     })
 
 export const sendMassage = createAsyncThunk(
     'users/sendMassage', async (dataBody, { rejectWithValue }) => {
-        // try {
+        try {
             let toUserID = dataBody.toUserId;
             delete dataBody.toUserId
 
             const { data } = await doApiMethod(`${USERS_URL}/addMsg/${toUserID}`, "POST", dataBody)
             console.log(data)
             return data
-
-        // } catch (err) {
-        //     console.log("sendMstThunk", err)
-        //     toast.error(err.response.data.details[0].message)
-        //     return rejectWithValue(err.response.data)
-        // }
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
     })
 
 
@@ -244,7 +240,7 @@ const usersSlice = createSlice({
                 if (action.payload) {
                     // state.users.push(action.payload)
                     state.status = "succeeded"
-                  toast.info("sent")
+                    toast.info("sent")
                     console.log(state.status)
 
                 }
@@ -267,6 +263,7 @@ const usersSlice = createSlice({
 export const userMsg = (state) => state.users.currentUser?.msg
 export const allUsers = (state) => state.users.users
 export const getUsersSlice = (state) => state.users
+export const getCurrentUser = (state) => state.users.currentUser
 export const userStatus = (state) => state.users.status
 // export const userById = (state) => state.users.userByID
 

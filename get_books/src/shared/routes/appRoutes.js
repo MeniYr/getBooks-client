@@ -14,10 +14,27 @@ import SendMsg from '../../componets/userCMS/userStorey/sendMsg';
 import BottomAppBar from '../../componets/userCMS/userStorey/inbox';
 import AddBook from '../../componets/userCMS/bookStory/addBook';
 import MyAccount from '../../componets/userCMS/userStorey/myAccount';
+import Profile from '../../componets/userCMS/userStorey/profile';
+
+import { useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux'
+
+import { AuthWithToken, user_from_token } from '../redux/features/tokenSlice';
+import { getUser } from '../redux/features/usersSlice';
+
 
 
 
 export default function AppRoutes() {
+  const dispatch = useDispatch()
+
+
+  useEffect(() => {
+    dispatch(AuthWithToken())
+    dispatch(getUser())
+  }, [])
+
   return (
     <BrowserRouter>
       {/* <HeaderClient /> */}
@@ -27,8 +44,8 @@ export default function AppRoutes() {
       </Routes>
 
       <Routes >
-      {/* <Navbar /> */}
-      {/* <Outlet /> */}
+        {/* <Navbar /> */}
+        {/* <Outlet /> */}
         {/* user cms */}
         <Route path="/" element={<Home />} />
 
@@ -38,9 +55,11 @@ export default function AppRoutes() {
         <Route path="/editUser/:id" element={<EditUser />} />
         <Route path="/msg" element={<Msg />} />
         <Route path="/sendMsg/:userId" element={<SendMsg />} />
-        <Route path="/newBook" element={< AddBook/>} />
-        <Route path="/myAccount" element={< MyAccount/>} />
-        
+        <Route path="/newBook" element={< AddBook />} />
+        <Route path="/myAccount" element={< MyAccount />} />
+        <Route path="/myProfile" element={< Profile />} />
+        <Route path="/addBook" element={< AddBook />} />
+
 
         {/*  <Route path="/logout" element={<Logout />} />
         <Route path="/userTickets" element={<UserTickets />} />

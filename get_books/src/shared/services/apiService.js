@@ -25,7 +25,7 @@ export const doApiMethod = async (_url, _method, _body) => {
     let resp = await axios({
       url: _url,
       method: _method,
-      data: JSON.stringify(_body),
+      data: JSON.stringify(_body) || _body,
       headers: {
         "x-api-key": localStorage[TOKEN_NAME],
         'content-type': "application/json"

@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { API_URL, doApiGet, doApiMethod } from '../../../shared/services/apiService';
 import { toast } from "react-toastify";
-
+import { useDispatch } from 'react-redux'
 import ClientAuthComp from '../../../shared/auth/clientAuthComp';
+import { getUser, getUsers } from '../../../shared/redux/features/usersSlice';
 
 
 export default function EditUser() {
@@ -16,7 +17,7 @@ export default function EditUser() {
   const nav = useNavigate();
 
   let { register,getValues, handleSubmit, formState: { errors } } = useForm();
-
+const dispatch = useDispatch()
   useEffect(() => {
     doApiInit();
   }, [])
@@ -46,7 +47,8 @@ export default function EditUser() {
       console.log(resp.data)
       if (resp.data.modifiedCount == 1) {
         toast.success("user updated");
-        // nav("/admin/usersList");
+        dispatch(getUser())
+        nav(-1);
       }
     }
     catch (err) {
@@ -58,7 +60,7 @@ export default function EditUser() {
 
   return (
     <div className='container'>
-      <ClientAuthComp />
+      {/* <ClientAuthComp /> */}
       <h1 className='mx-auto col-md-4'>Edit user</h1>
       {user.name ?
         <form onSubmit={handleSubmit(onSub)} className='col-md-6  mx-auto'>
@@ -76,12 +78,12 @@ export default function EditUser() {
           </small>}
 
           <label>password:</label>
-          <input {...register("password")} type="password" className='form-control' />
+          <input autoComplete='new-password' {...register("password")} type="password" className='form-control' />
           {errors.password && <small className='d-block text-danger'>
             Enter valid password (min 3 chars)
           </small>}
           <label>Enter password again:</label>
-          <input {...register("password2", {
+          <input autoComplete='again' {...register("password2", {
              validate: (value) => {
               return value === getValues("password")
             }

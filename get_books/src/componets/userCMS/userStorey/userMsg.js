@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { AuthWithToken, userID } from '../../../shared/redux/features/tokenSlice'
+import { AuthWithToken, userID, user_from_token } from '../../../shared/redux/features/tokenSlice'
 import { allUsers, getUser, getUserByID, getUsers, getUsersSlice, user, userMsg, userStatus } from '../../../shared/redux/features/usersSlice'
 import MsgItem from './msgItem'
 import UserItem from './userItem'
@@ -17,7 +17,7 @@ export default function Msg() {
     const messagessArr = useSelector(userMsg)
     const requestStatus = useSelector(userStatus)
     const usersSlice = useSelector(getUsersSlice)
-
+    const checkErrorAuth = useSelector(user_from_token).error
     const fromUser = useSelector((state) => state.users)
 
     // const users = useSelector((state) => state.users.users)
@@ -28,24 +28,22 @@ export default function Msg() {
         console.log(usersSlice);
         console.log(requestStatus)
         console.log(fromUser)
-console.log(messagessArr);
+        console.log(messagessArr);
         dispatch(getUser())
         // dispatch((getUserByID(fromUser.)))
     }
     useEffect(() => {
-
-        dispatch(AuthWithToken())
-        if (token === null) {
+        if (checkErrorAuth != null) {
             toast.warn("there is problem, please log in")
             nav("/login")
         }
         initPageInfo()
-    }, [])
+    }, [checkErrorAuth])
 
     return (
         <div className='container'>
             <div className='row mx-auto col-md-6'>
-                {requestStatus === "succeeded" &&  messagessArr.map(item => {
+                {requestStatus === "succeeded" && messagessArr.map(item => {
                     return (
                         <div key={item._id}>
                             <MsgItem item={item} />

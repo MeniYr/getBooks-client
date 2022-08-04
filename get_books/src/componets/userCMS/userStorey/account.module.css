@@ -1,17 +1,29 @@
 .account {
     /* background-color: rgba(255, 228, 196, 0.301); */
-display: flex;
-justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
-.dives {
-    width: 450px;
+.links {
+    max-width: 450px;
     min-height: 300px;
-   /* padding: 20px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 15px;
 }
 
 @media(max-width:768px) {
+
+    .account {
+    display: block;
+    }
+
     .dives {
-        width: fit-content;
+        /* max-width:fit-content; */
+        display: block !important;
+        justify-content: center;
+        align-items: center;
     }
 }

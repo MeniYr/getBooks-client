@@ -87,19 +87,11 @@ export default function Signup() {
           <div className='d-flex py-2'>
             <label className='d-flex justify-content-md-center '>accept to share email with users </label>
             <input {...register("isShareMail", { minLength: 2 })} type="checkbox" className='ms-2 border' />
-            {errors.isShareMail &&
-              <small className='d-block text-danger'>
-                Enter a valid address (min 2 chars)
-              </small>}
           </div>
 
           <div className='d-flex py-2'>
             <label >accept to share phone with users</label>
             <input {...register("isSharePhone", { minLength: 2 })} type="checkbox" className='ms-2 border' />
-            {errors.isSharePhone &&
-              <small className='d-block text-danger'>
-                Enter a valid address (min 2 chars)
-              </small>}
           </div>
 
           <button className='btn btn-info mt-3'>Sign up</button>

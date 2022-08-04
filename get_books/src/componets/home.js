@@ -11,14 +11,9 @@ export default function Home() {
 
   useEffect(() => {
 
-    console.log(userName)
-    if (userName != "aaaa") {
-      toast.success(`Welcome ${userName}, You logged in`)
-    }
+  }, [])
 
-  }, [userName])
 
-  console.log(userName)
 
 
   return (
