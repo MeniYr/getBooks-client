@@ -25,13 +25,9 @@ export default function Msg() {
     // const id = useSelector(userID)
 
     const initPageInfo = async () => {
-        console.log(usersSlice);
-        console.log(requestStatus)
-        console.log(fromUser)
-        console.log(messagessArr);
         dispatch(getUser())
-        // dispatch((getUserByID(fromUser.)))
     }
+
     useEffect(() => {
         if (checkErrorAuth != null) {
             toast.warn("there is problem, please log in")
@@ -47,7 +43,6 @@ export default function Msg() {
                     return (
                         <div key={item._id}>
                             <MsgItem item={item} />
-                            {/* <Link>from: <UserItem item={fromUser} /></Link> */}
                         </div>
                     )
                 })
