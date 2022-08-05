@@ -45,25 +45,25 @@ export default function Signup() {
         <form onSubmit={handleSubmit(onSub)} >
 
           <label>Name:</label>
-          <input {...register("name", { required: true, minLength: 2 })} type="text" className='form-control' />
+          <input autoComplete='name' {...register("name", { required: true, minLength: 2 })} type="text" className='form-control' />
           {errors.name && <small className='d-block text-danger'>
             Enter a valid name (min 2 chars)
           </small>}
 
           <label>Email:</label>
-          <input {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
+          <input autoComplete='username' {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
           {errors.email && <small className='d-block text-danger'>
             Enter valid Email
           </small>}
 
           <label>password:</label>
-          <input {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
+          <input autoComplete='new-password' {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
           {errors.password && <small className='d-block text-danger'>
             Enter valid password (min 3 chars)
           </small>}
 
           <label>Enter password again:</label>
-          <input {...register("password2", {
+          <input autoComplete='new-password' {...register("password2", {
             required: true, validate: (value) => {
               return value === getValues("password")
             }

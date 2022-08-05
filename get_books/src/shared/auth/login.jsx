@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // import { ClientContext } from '../../context/clientContext';
-import tokenSlice, { login, user_name } from "../../shared/redux/features/tokenSlice"
+import tokenSlice, { login, user_name } from "../redux/features/tokenSlice"
 import { getUser } from '../redux/features/usersSlice';
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
@@ -36,12 +36,12 @@ export default function Login() {
       <form onSubmit={handleSubmit(onSub)} className='col-md-6 mx-auto'>
 
         <label> Email</label>
-        <input  {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
+        <input autoComplete='username' {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
         {errors.email && <small className='d-block text-danger'>
           Enter valid Email
         </small>}
         <label>password</label>
-        <input  {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
+        <input autoComplete='current-password' {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
         {errors.password && <small className='d-block text-danger'>
           Enter valid password (min 3 chars)
         </small>}
