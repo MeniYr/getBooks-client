@@ -18,16 +18,16 @@ export default function Login() {
 
   useEffect(() => {
     status === "failed" && toast.error("email or user wrong")
-    status === "succeeded" && nav("/")
-  }, [error, status])
-
+  }, [error])
+  
   useEffect(()=>{
     if (userName != "aaaa") 
     toast.success(`Welcome ${userName}, You logged in`)
   },[userName])
-
+  
   const onSub = (_dataBody) => {
     dispatch(login(_dataBody))
+    status === "succeeded" && nav("/")
   }
 
   return (
