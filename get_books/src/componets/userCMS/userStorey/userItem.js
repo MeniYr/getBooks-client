@@ -18,9 +18,9 @@ export default function UserItem(props) {
     }
     let hide = { display: "none" }
 
-    // useEffect(() => {
-    //     console.log(currentUserDetailes);
-    // }, [])
+    useEffect(() => {
+        console.log(currentUserDetailes);
+    }, [])
 
     return (
 
@@ -35,7 +35,7 @@ export default function UserItem(props) {
                 <h2>מסכים לשתף טלפון: {user.isSharePhone === true ? "כן" : "לא"}</h2>
                 <Link
                     style={{
-                        display: currentUserDetailes._id === user._id ? "none" : "inline-flex"
+                        display: currentUserDetailes?._id === user._id ? "none" : "inline-flex"
 
                     }}
                     className='btn btn-outline-primary'
@@ -53,7 +53,7 @@ export default function UserItem(props) {
             <div
                 style={{
                     cursor: "pointer",
-                    display: currentUserDetailes.role === "user" ? "none" : "block"
+                    display: currentUserDetailes?.role === "user" ? "none" : "block"
                 }}
                 className='link-danger'
                 onClick={() => { del(user._id) }} >

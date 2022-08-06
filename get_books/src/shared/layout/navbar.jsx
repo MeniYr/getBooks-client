@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -38,7 +39,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
   position: 'absolute',
-  left:"0",
+  left: "0",
   pointerEvents: 'none',
   display: 'flex',
   alignItems: 'center',
@@ -60,6 +61,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const userLogIn = useSelector((state) => state.token.token)
+  React.useEffect(() => {
+    console.log(userLogIn);
+  }, [userLogIn])
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -84,21 +90,21 @@ export default function PrimarySearchAppBar() {
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-      <Menu
+    <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-        >
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
 
       <MenuItem onClick={handleMenuClose}>login</MenuItem>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
@@ -181,20 +187,21 @@ export default function PrimarySearchAppBar() {
           </Typography>
           <Search>
             <SearchIconWrapper>
-              <SearchIcon/>
+              <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-        <Link className='btn' color={'white'} to={"/login"}>login</Link>
-        <Link className='btn' color={'white'} to={"/signUp"}>signUp</Link>
-        <Link className='btn' color={'white'} to={"/allUsers"}>all users</Link>
-        <Link className='btn' color={'white'} to={"/msg"}>massages</Link>
-        <Link className='btn' color={'white'} to={"/"}>home</Link>
-        <Link className='btn' color={'white'} to={"/myAccount"}>my account</Link>
-        <Link className='btn' color={'white'} to={"/addBook"}>add new book</Link>
+
+          <Link className='btn' color={'white'} to={"/signUp"}>signUp</Link>
+          <Link className='btn' color={'white'} to={"/allUsers"}>all users</Link>
+          <Link className='btn' color={'white'} to={"/msg"}>massages</Link>
+          <Link className='btn' color={'white'} to={"/"}>home</Link>
+          <Link className='btn' color={'white'} to={"/myAccount"}>my account</Link>
+          <Link className='btn' color={'white'} to={"/addBook"}>add new book</Link>
+          {userLogIn === null ? <Link className='btn' color={'white'} to={"/login"}>login</Link> : <Link className='btn' color={'white'} to={"/logOut"}>log out</Link>}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">

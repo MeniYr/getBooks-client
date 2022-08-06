@@ -42,18 +42,21 @@ export const login = createAsyncThunk(
 const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-        token: localStorage.getItem(TOKEN_NAME) || null,
+        token: localStorage[TOKEN_NAME] || null,
         authStatus: 'idle',
         logINStatus: 'idle',
         error: null,
-        userName: "aaaa",
+        userName: "",
         role: "",
         id: ""
     },
     reducers: {
-        user_ID: (state, action) => {
-            console.log(action.payload)
-            state.id = action.payload
+        logOutFromToken: (state, action) => {
+            localStorage.removeItem(TOKEN_NAME)
+            state.token =null;
+            state.userName="";
+            state.role = "";
+            state.id = ""
         }
     },
 
@@ -94,17 +97,16 @@ const tokenSlice = createSlice({
                 if (action.payload) {
                     state.logINStatus = 'succeeded';
                     state.error = null;
-                    localStorage.setItem(TOKEN_NAME, action.payload.token)
+                    state.token = localStorage[TOKEN_NAME]
 
-                    state.role = action.payload.user.role
-                    state.id = action.payload.user.userID
-                    state.userName = action.payload.user.name
+                    state.role = action.payload.user.role;
+                    state.id = action.payload.user.userID;
+                    state.userName = action.payload.user.name;
 
-
-                    console.log(action.payload.token)
-                    console.log(state.id)
-                    console.log(action.payload)
-                    console.log(state.logINStatus)
+                    console.log(action.payload.token);
+                    console.log(state.id);
+                    console.log(action.payload);
+                    console.log(state.logINStatus);
                     // return state
                 }
 
@@ -118,26 +120,6 @@ const tokenSlice = createSlice({
 
             })
 
-        // .addCase(logOut.pending, (state, action) => {
-        //     state.logINStatus = 'loading'
-
-        // })
-        // .addCase(logOut.fulfilled, (state, action) => {
-        //     if (action.payload) {
-        //         state.logINStatus = 'succeeded';
-        //         // localStorage.removeItem(TOKEN_NAME)
-        //         state.role = ""
-        //         state.id = ""
-        //         state.token = null
-        //         console.log(state.token)
-        //         // console.log(state.userName)
-        //     }
-
-        // })
-        // .addCase(logOut.rejected, (state, action) => {
-        //     state.logINStatus = 'failed'
-        //     state.error = action.error
-        // })
 
 
     }
@@ -146,5 +128,5 @@ const tokenSlice = createSlice({
 export const userID = (state) => state.token.id
 export const user_name = (state) => state.token.userName
 export const user_from_token = (state) => state.token
-// export const { user_ID } = tokenSlice.actions
+export const { logOutFromToken } = tokenSlice.actions
 export default tokenSlice.reducer;

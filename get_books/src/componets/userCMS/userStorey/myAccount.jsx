@@ -44,7 +44,6 @@ export default function MyAccount() {
                     מועדפים
                 </Link>
 
-
             </div>
         </div>
     )

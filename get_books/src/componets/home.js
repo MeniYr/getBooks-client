@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { user_name } from '../shared/redux/features/tokenSlice';
+import { logOut, logOutFromUsers, reset } from '../shared/redux/features/usersSlice';
 
 
 export default function Home() {
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const userName = useSelector(user_name)
   const [isLoginMode, setIsLoginMode] = useState(true)
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import UserItem from '../../componets/userCMS/userStorey/userItem'
 import { AuthWithToken } from '../../shared/redux/features/tokenSlice'
-import { addUser, delUser, getUserByID, getUsers } from '../../shared/redux/features/usersSlice'
+import { addUser, delUser, getCurrentUser, getUser, getUserByID, getUsers } from '../../shared/redux/features/usersSlice'
 
 
 export default function AllUsers() {
@@ -35,6 +35,7 @@ export default function AllUsers() {
     console.log(getAuthStatus);
     console.log(getEroor);
     dispatch(getUsers())
+    dispatch(getUser())
   }, [])
 
   return (

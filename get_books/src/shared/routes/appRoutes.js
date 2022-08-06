@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AuthWithToken, user_from_token } from '../redux/features/tokenSlice';
 import { getUser } from '../redux/features/usersSlice';
 import MyBooks from '../../componets/userCMS/bookStory/myBooks';
+import Logout from '../auth/logOut';
 
 
 
@@ -61,6 +62,7 @@ export default function AppRoutes() {
         <Route path="/myProfile" element={< Profile />} />
         <Route path="/addBook" element={< AddBook />} />
         <Route path="/myBooks" element={< MyBooks />} />
+        <Route path="/logOut" element={< Logout />} />
 
 
         {/*  <Route path="/logout" element={<Logout />} />

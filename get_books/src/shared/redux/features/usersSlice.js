@@ -1,6 +1,6 @@
 import axios from "axios"
-import { API_URL, doApiGet, doApiMethod } from "../../services/apiService"
-import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue } from "@reduxjs/toolkit"
+import { API_URL, doApiGet, doApiMethod, TOKEN_NAME } from "../../services/apiService"
+import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue, createAction } from "@reduxjs/toolkit"
 import { toast } from "react-toastify"
 import { AuthWithToken, userID } from "./tokenSlice"
 import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings"
@@ -92,7 +92,6 @@ export const sendMassage = createAsyncThunk(
 
 
 
-
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
@@ -103,11 +102,11 @@ const usersSlice = createSlice({
         error: null
     },
     reducers: {
-        checkUser: {
+
+        logOutFromUsers: {
             reducer(state, action) {
-                console.log("here");
-                state.users.users = [];
-                state.users.users.push(action.payload)
+                state.userByID = "";
+                state.currentUser = null;
             },
         }
     },
@@ -130,7 +129,7 @@ const usersSlice = createSlice({
 
             })
             .addCase(getUsers.rejected, (state, action) => {
-                state.status = 'failed'
+                state.status = "failed"
                 state.error = action.error
                 console.log("here", state.error)
 
@@ -154,8 +153,10 @@ const usersSlice = createSlice({
 
 
             })
+
             .addCase(addUser.rejected, (state, action) => {
                 state.error = action.error.message
+                state.status = "failed"
                 console.log(state.error)
 
             })
@@ -180,6 +181,8 @@ const usersSlice = createSlice({
 
             .addCase(getUser.rejected, (state, action) => {
                 state.error = action.error.message
+                state.status = "failed"
+
                 console.log(state.error)
 
             })
@@ -203,6 +206,7 @@ const usersSlice = createSlice({
 
             .addCase(getUserByID.rejected, (state, action) => {
                 state.error = action.error.message
+                state.status = "failed"
                 console.log(state.error)
 
             })
@@ -226,9 +230,11 @@ const usersSlice = createSlice({
 
             .addCase(delUser.rejected, (state, action) => {
                 state.error = action.error.message
+                state.status = "failed"
                 console.log(state.error)
 
             })
+
             .addCase(sendMassage.pending, (state, action) => {
                 state.status = 'loading'
                 console.log(state.status)
@@ -249,7 +255,7 @@ const usersSlice = createSlice({
             .addCase(sendMassage.rejected, (state, action) => {
                 state.error = action.error.message
                 console.log(state.error)
-
+                state.status = "failed"
             })
         // .addMatcher(addUser.rejected, (state,action) =>{
         //     state.status = 'failed'
@@ -260,6 +266,7 @@ const usersSlice = createSlice({
     }
 })
 
+
 export const userMsg = (state) => state.users.currentUser?.msg
 export const allUsers = (state) => state.users.users
 export const getUsersSlice = (state) => state.users
@@ -267,4 +274,5 @@ export const getCurrentUser = (state) => state.users.currentUser
 export const userStatus = (state) => state.users.status
 // export const userById = (state) => state.users.userByID
 
+export const { logOutFromUsers } = usersSlice.actions
 export default usersSlice.reducer;

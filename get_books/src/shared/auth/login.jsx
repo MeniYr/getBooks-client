@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,22 +12,29 @@ export default function Login() {
   const status = useSelector((state) => state.token.logINStatus)
   const error = useSelector((state) => state.token.error)
   const userName = useSelector(user_name)
-
+  const [clicked, setCilcked] = useState(false)
   const nav = useNavigate();
+
   let { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     status === "failed" && toast.error("email or user wrong")
   }, [error])
-  
-  useEffect(()=>{
-    if (userName != "aaaa") 
-    toast.success(`Welcome ${userName}, You logged in`)
-  },[userName])
-  
-  const onSub = (_dataBody) => {
-    dispatch(login(_dataBody))
-    status === "succeeded" && nav("/")
+
+  useEffect(() => {
+    if (userName != "")
+      toast.success(`Welcome ${userName}, You logged in`)
+    }, [userName])
+    
+    useEffect(() => {
+       status === "succeeded" && clicked && nav("/")
+       console.log(clicked);
+      }, [clicked,status])
+      
+      const onSub = (_dataBody) => {
+        
+        dispatch(login(_dataBody))
+        setCilcked(true)
   }
 
   return (
