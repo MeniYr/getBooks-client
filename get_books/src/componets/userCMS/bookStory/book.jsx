@@ -22,12 +22,12 @@ export default function Book(props) {
             <div >
                 <h2> <span className='fw-bolder'>שם הספר: </span> {book.name}</h2>
                 <h2> <span className='fw-bolder'>מחבר: </span>{book.author}</h2>
-                <h2><span className='fw-bolder'>קטגוריה: </span> {book.cat_id.category}</h2>
+                <h2><span className='fw-bolder'>קטגוריה: </span> {book.cat_id?.category}</h2>
                 <h2><span className='fw-bolder'>עמודים: </span> {book.pages}</h2>
                 <h2><span className='fw-bolder'> הוצאה לאור: </span> {book.publishing_year}</h2>
                 <h2><span className='fw-bolder'> הועלה בתאריך: </span> {moment(book.created_at).format('DD/MM/YYYY')}</h2>
                 <h2><span className='fw-bolder'> תאור: </span> {book.description}</h2>
-                {book.comments.length > 0 && <div>
+                {book.comments?.length > 0 && <div>
                     <button onClick={() => { SetClicked(!clicked) }} className='btn btn-outline-secondary w-75 m-3'>תגובות</button>
                     {
                         clicked && book.comments.map(comment => {

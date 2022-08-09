@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, { login, user_name } from "../redux/features/tokenSlice"
@@ -22,24 +22,30 @@ export default function Login() {
   }, [error])
 
   useEffect(() => {
-    if (userName != "")
+    if (userName != "" && clicked)
       toast.success(`Welcome ${userName}, You logged in`)
-    }, [userName])
-    
-    useEffect(() => {
-       status === "succeeded" && clicked && nav("/")
-       console.log(clicked);
-      }, [clicked,status])
-      
-      const onSub = (_dataBody) => {
-        
-        dispatch(login(_dataBody))
-        setCilcked(true)
+  }, [userName])
+
+  useEffect(() => {
+    status === "succeeded" && clicked && nav("/")
+    dispatch(getUser())
+  }, [clicked, status])
+
+  useEffect(() => {
+    dispatch(getUser())
+  }, [])
+
+
+
+  const onSub = (_dataBody) => {
+
+    dispatch(login(_dataBody))
+    setCilcked(true)
   }
 
   return (
-    <div className='container'>
-      <h1 className='display-5 text-center'>Log in</h1>
+    <div className='container mt-5'>
+      <h1 className='display-5 text-center'>התחברות</h1>
       <form onSubmit={handleSubmit(onSub)} className='col-md-6 mx-auto'>
 
         <label> Email</label>
@@ -55,6 +61,11 @@ export default function Login() {
 
         <button className='btn btn-success mt-3'>Log in</button>
       </form>
+
+      <div className='text-center'>
+        <p>לא רשום?</p>
+        <Link className='btn btn-outline-primary' to={"/signUp"}>הירשם</Link>
+      </div>
     </div>
   )
 }

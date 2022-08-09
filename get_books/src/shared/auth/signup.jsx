@@ -38,7 +38,7 @@ export default function Signup() {
 
 
   return (
-    <div className='d-flex justify-content-md-center container col-md-6'>
+    <div className='d-flex justify-content-center container col-md-6'>
       <div >
 
         <h1 className='display-5 mt-5 mb-4 fw-bolder text-danger text-md-center'>Sign up</h1>

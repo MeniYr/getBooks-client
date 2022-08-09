@@ -20,6 +20,7 @@ export default function UserItem(props) {
 
     useEffect(() => {
         console.log(currentUserDetailes);
+        console.log(user);
     }, [])
 
     return (
@@ -53,7 +54,7 @@ export default function UserItem(props) {
             <div
                 style={{
                     cursor: "pointer",
-                    display: currentUserDetailes?.role === "user" ? "none" : "block"
+                    display: ((currentUserDetailes?._id === user._id) || (currentUserDetailes?.role === "user")) ? "none" : "block"
                 }}
                 className='link-danger'
                 onClick={() => { del(user._id) }} >

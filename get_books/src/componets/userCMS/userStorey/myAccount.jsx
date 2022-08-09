@@ -15,7 +15,6 @@ export default function MyAccount() {
         if (checkErrorAuth != null) {
             toast.warning("please log in")
             nav("/login")
-
         }
 
     }, [checkErrorAuth])

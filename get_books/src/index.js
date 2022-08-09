@@ -5,11 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { myStore } from './shared/redux/globalStore/store';
-import { addUser, getUsers } from './shared/redux/features/usersSlice';
+import { addUser, getUser, getUsers } from './shared/redux/features/usersSlice';
 import tokenSlice, { AuthWithToken, login } from './shared/redux/features/tokenSlice';
+import { getBooks } from './shared/redux/features/bookSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-// myStore.dispatch(getUsers,login,AuthWithToken,tokenSlice)
+myStore.dispatch(getBooks())
+myStore.dispatch(getUser())
 
 
 root.render(

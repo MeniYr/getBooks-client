@@ -24,6 +24,7 @@ import { AuthWithToken, user_from_token } from '../redux/features/tokenSlice';
 import { getUser } from '../redux/features/usersSlice';
 import MyBooks from '../../componets/userCMS/bookStory/myBooks';
 import Logout from '../auth/logOut';
+import { Search } from '@mui/icons-material';
 
 
 
@@ -63,6 +64,7 @@ export default function AppRoutes() {
         <Route path="/addBook" element={< AddBook />} />
         <Route path="/myBooks" element={< MyBooks />} />
         <Route path="/logOut" element={< Logout />} />
+        <Route path="/search" element={< Search />} />
 
 
         {/*  <Route path="/logout" element={<Logout />} />
