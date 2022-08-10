@@ -18,7 +18,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { doApiMethod } from '../services/apiService';
-import { boxSizing } from '@mui/system';
+import { positions } from '@mui/system';
+import { colors } from '@mui/material';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -37,16 +39,16 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = () => ({
-  height: '100%',
-  position: 'absolute',
-  left: "0",
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+// const SearchIconWrapper = () => ({
+//   height: '100%',
+//   position: 'absolute',
+//   left: "0",
+//   pointerEvents: 'none',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
 
-});
+// });
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -84,17 +86,13 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
-    nav("/myProfile")
     setAnchorEl(event.currentTarget);
   };
+
   const handlePersonalAriaMenuOpen = (event) => {
-    // nav("/myAccount")
+    nav("/myAccount")
     setAnchorEl(event.currentTarget);
 
-  };
-  const handlePopUpMenuOpen = (event) => {
-
-    setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -106,33 +104,12 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(null);
   };
 
-  const handleHomeMenuClose = () => {
-    nav("/home")
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-  const handleUsersMenuClose = () => {
-    nav("/allUsers")
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
 
-  const handleMyBooksMenuClose = () => {
-    nav("/myBooks")
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
 
-  const handleAddBookMenuClose = () => {
-    nav("/addBook")
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
 
 
   const menuId = 'primary-search-account-menu';
@@ -153,9 +130,9 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
 
-      <MenuItem onClick={handleUsersMenuClose}>כל המשתמשים</MenuItem>
-      <MenuItem onClick={handleAddBookMenuClose}>הוספת ספר</MenuItem>
-      <MenuItem onClick={handleMyBooksMenuClose}>הספרים שלי</MenuItem>
+      <MenuItem> <Link to={"/allUsers"}>כל המשתמשים </Link> </MenuItem>
+      <MenuItem> <Link to={"/addBook"}>הוספת ספר</Link>  </MenuItem>
+      <MenuItem> <Link to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
     </Menu>
   );
 
@@ -167,18 +144,17 @@ export default function PrimarySearchAppBar() {
         vertical: 'top',
         horizontal: 'right',
       }}
-
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
         vertical: 'top',
         horizontal: 'right',
       }}
-
-
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+
+      {/* Messages */}
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
@@ -188,6 +164,7 @@ export default function PrimarySearchAppBar() {
         <p>Messages</p>
       </MenuItem>
 
+      {/* Notifications */}
       <MenuItem>
         <IconButton
           size="large"
@@ -200,16 +177,19 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+
+      {/* home */}
       <MenuItem
-      //TODO ICON HOME
+        //TODO ICON HOME
         className='d-flex justify-content-center'
-        onClick={handleHomeMenuClose}
       >
-        בית
+        <Link className='btn w-100 btn d-md-inline-flex align-items-center' to={"/"}>בית</Link>
       </MenuItem>
+
+      {/* myAccount */}
       <MenuItem
         onClick={handlePersonalAriaMenuOpen}
-        sx={{display: { xs: 'block', sm:"block", md: "none",lg:"none" } }}
+        sx={{ display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
       >
         <IconButton
           size="large"
@@ -217,23 +197,15 @@ export default function PrimarySearchAppBar() {
           aria-controls="primary-search-account-menu"
           // aria-haspopup="true"
           color="inherit"
-
         >
           <AccountCircle />
         </IconButton>
         <p>איזור אישי</p>
       </MenuItem>
 
+      {/* login */}
       <MenuItem className='d-flex justify-content-center'>
-        {/* <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-          >
-          <Badge badgeContent={17} color="error">
-          <NotificationsIcon />
-          </Badge>
-        </IconButton> */}
+
         {userLogIn === null ? <Link className='btn w-100 btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='btn btn-outline-warning d-md-inline-flex align-items-center w-100' color={'white'} to={"/logOut"}>יציאה</Link>}
       </MenuItem>
 
@@ -247,13 +219,13 @@ export default function PrimarySearchAppBar() {
       >
 
         <Toolbar>
-
+          {/* menu */}
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ ml: 1, display: { xs: 'none', md: "block" } }}//style
+            sx={{ display: { xs: 'none', md: "block" } }}//style
 
             onClick={handleProfileMenuOpen}
 
@@ -262,7 +234,7 @@ export default function PrimarySearchAppBar() {
 
           </IconButton>
 
-
+          {/* logo */}
           <Typography
             variant="h6"
             // noWrap
@@ -272,12 +244,13 @@ export default function PrimarySearchAppBar() {
             <Link className='text-white fst-italic fs-2 fw-semibold text-decoration-none' to={"/"}>get books</Link>
           </Typography>
 
-
+          {/* search */}
           <Search
+          sx={{
+            width:700,
+            mr:"auto"
+          }}
           >
-
-            {/* <SearchIconWrapper */}
-            {/* </SearchIconWrapper> */}
             <SearchIcon
               style={{
                 height: '100%',
@@ -285,45 +258,31 @@ export default function PrimarySearchAppBar() {
                 left: "0",
                 cursor: "pointer",
                 pointerEvents: 'painted',
-                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginLeft: "15",
                 zIndex: "99"
-              }}
+                  }}
+              sx={{
+                display: { xs: 'none', md: 'inline-flex', lg: "inline-flex" }
+                  }}
               onClick={search}
             />
-
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              inputRef={srchRef}
-              onKeyDown={(e) => (e.key === "Enter") ? search() : 0}
-            />
-
-
+                <StyledInputBase
+                placeholder="חיפוש..."
+                inputProps={{ 'aria-label': 'search' }}
+                inputRef={srchRef}
+                onKeyDown={(e) => (e.key === "Enter") ? search() : 0}
+                />
           </Search>
 
-          {/* linkes */}
-          <Box
-            paddingX={5}
-            sx={{
-              flexGrow: 1,
-              display: {
-                xs: 'none', md: 'inline-flex', lg: "inline-flex"
-              }
-            }}
+
+          {/* social menu, conection button */}
+          <Box sx={{
+            mr: 'auto',
+            display: { xs: 'none', md: 'inline-flex', lg: "inline-flex" }
+          }}
           >
-
-            {/* <Link className='btn' color={'white'} to={"/signUp"}>הרשמה</Link>
-            <Link className='btn' color={'white'} to={"/allUsers"}>כל המשתמשים</Link>
-            <Link className='btn' color={'white'} to={"/addBook"}>הוספת ספר</Link> */}
-            {/* <Link className='btn' color={'white'} to={"/msg"}>הודעות</Link> */}
-
-            {/* <Link className='btn' color={'white'} to={"/myAccount"}>אזור אישי</Link> */}
-          </Box>
-
-          <Box sx={{ display: { xs: 'none', md: 'inline-flex', lg: "inline-flex" } }}>
 
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
@@ -347,7 +306,7 @@ export default function PrimarySearchAppBar() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={() => nav("/myAccount")}
               color="inherit"
             >
               <AccountCircle />
@@ -356,7 +315,12 @@ export default function PrimarySearchAppBar() {
             {userLogIn === null ? <Link className='btn btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='btn btn-outline-warning d-md-inline-flex align-items-center' color={'white'} to={"/logOut"}>יציאה</Link>}
           </Box>
 
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          {/* my account icon / more`s button  */}
+          <Box sx={{
+            mr: 'auto',
+            display: { xs: 'flex', md: 'none' }
+          }}>
+
             <IconButton
               size="large"
               aria-label="show more"
@@ -367,6 +331,7 @@ export default function PrimarySearchAppBar() {
             >
               <MoreIcon />
             </IconButton>
+
           </Box>
 
         </Toolbar>
