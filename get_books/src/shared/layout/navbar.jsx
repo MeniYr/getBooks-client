@@ -16,12 +16,15 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { doApiMethod } from '../services/apiService';
 import { positions } from '@mui/system';
 import { colors } from '@mui/material';
+import { srchBooks } from '../redux/features/bookSlice';
+import { current } from '@reduxjs/toolkit';
 
 
+// search style
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -39,17 +42,7 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-// const SearchIconWrapper = () => ({
-//   height: '100%',
-//   position: 'absolute',
-//   left: "0",
-//   pointerEvents: 'none',
-//   display: 'flex',
-//   alignItems: 'center',
-//   justifyContent: 'center',
-
-// });
-
+// input style
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
@@ -59,13 +52,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '55ch',
     },
   },
 }));
 
 export default function PrimarySearchAppBar() {
 
+  const dispatch = useDispatch()
   const srchRef = React.useRef(null)
   const userLogIn = useSelector((state) => state.token.token)
   const nav = useNavigate()
@@ -74,8 +68,10 @@ export default function PrimarySearchAppBar() {
     console.log(userLogIn);
   }, [userLogIn])
 
+  // run search resault
   const search = () => {
-    doApiMethod()
+    dispatch(srchBooks([srchRef.current.value]))
+    nav("/search")
   }
 
 
@@ -85,6 +81,7 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  // handles
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -111,7 +108,7 @@ export default function PrimarySearchAppBar() {
 
 
 
-
+  // burger menu
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -130,12 +127,13 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
 
-      <MenuItem> <Link to={"/allUsers"}>כל המשתמשים </Link> </MenuItem>
-      <MenuItem> <Link to={"/addBook"}>הוספת ספר</Link>  </MenuItem>
-      <MenuItem> <Link to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
+      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/allUsers"}>כל המשתמשים </Link> </MenuItem>
+      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/addBook"}>הוספת ספר</Link>  </MenuItem>
+      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
     </Menu>
   );
 
+  // mobile menu
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -212,12 +210,11 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-
-      <AppBar position="static"
-      >
-
+      <AppBar position="static">
+      
         <Toolbar>
           {/* menu */}
           <IconButton
@@ -225,7 +222,10 @@ export default function PrimarySearchAppBar() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ display: { xs: 'none', md: "block" } }}//style
+            sx={{
+              ml:1, 
+              display: { xs: 'none', md: "block" } 
+              }}
 
             onClick={handleProfileMenuOpen}
 
@@ -246,10 +246,10 @@ export default function PrimarySearchAppBar() {
 
           {/* search */}
           <Search
-          sx={{
-            width:700,
-            mr:"auto"
-          }}
+            sx={{
+              width: 700,
+              mr: "auto"
+            }}
           >
             <SearchIcon
               style={{
@@ -262,20 +262,19 @@ export default function PrimarySearchAppBar() {
                 justifyContent: 'center',
                 marginLeft: "15",
                 zIndex: "99"
-                  }}
+              }}
               sx={{
                 display: { xs: 'none', md: 'inline-flex', lg: "inline-flex" }
-                  }}
+              }}
               onClick={search}
             />
-                <StyledInputBase
-                placeholder="חיפוש..."
-                inputProps={{ 'aria-label': 'search' }}
-                inputRef={srchRef}
-                onKeyDown={(e) => (e.key === "Enter") ? search() : 0}
-                />
+            <StyledInputBase
+              placeholder="חיפוש..."
+              inputProps={{ 'aria-label': 'search' }}
+              inputRef={srchRef}
+              onKeyDown={(e) => (e.key === "Enter") ? search() : 0}
+            />
           </Search>
-
 
           {/* social menu, conection button */}
           <Box sx={{

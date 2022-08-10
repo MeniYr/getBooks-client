@@ -14,24 +14,27 @@ export default function MyBooks() {
     const get_myBooks = useSelector(getMyBooks)
     const status = useSelector(bookStatus)
     const user_id = useSelector(getCurrentUser)?._id
-    
+
     // useEffect(() => {
     //     dispatch(getBooks())
     // }, [])
-    useEffect(()=>{
+    useEffect(() => {
         console.log(user_id);
         dispatch(myBooks(user_id))
 
-    },[user_id])
+    }, [user_id])
 
     return (
         <div className='container'>
             <div className='row mx-auto col-md-8 text-center'>
                 {status === "succeeded" && get_myBooks?.map(item => {
                     return (
-                        <div style={{
-                            borderRadius:"15px"
-                        }} key={item._id} className="border border-3 m-4">
+                        <div
+                            style={{
+                                borderRadius: "15px"
+                            }}
+                            key={item._id} 
+                        >
                             <Book book={item} />
                         </div>
                     )
