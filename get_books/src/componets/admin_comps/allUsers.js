@@ -19,7 +19,7 @@ export default function AllUsers() {
   const nav = useNavigate()
   console.log(getStatus)
 
-//TODO token save on login plus admin check 
+  //TODO token save on login plus admin check 
 
   useEffect(() => {
     // if (getStatus === "idle")
@@ -40,14 +40,13 @@ export default function AllUsers() {
 
   return (
     <div className='container'>
-      <div className='row mx-auto col-md-6'>
-        {getStatus === "succeeded" && arr.map(user => {
+      <div className='row'>
+        {getStatus === "succeeded" && arr.map((user, i) => {
           return (
-            <div key={user._id} className='d-flex justify-content-center '>
-
-              <div>
-
+            <div key={user._id} >
+              <div >
                 < UserItem item={user} />
+                {i!==arr.length-1&&<hr />}
               </div>
             </div>
 

@@ -19,7 +19,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { doApiMethod } from '../services/apiService';
 import { positions } from '@mui/system';
-import { colors } from '@mui/material';
+import { Button, colors, Tooltip } from '@mui/material';
 import { srchBooks } from '../redux/features/bookSlice';
 import { current } from '@reduxjs/toolkit';
 
@@ -127,9 +127,20 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
 
-      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/allUsers"}>כל המשתמשים </Link> </MenuItem>
-      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/addBook"}>הוספת ספר</Link>  </MenuItem>
-      <MenuItem> <Link className='text-decoration-none text-black-50' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+      >
+        <Link className='text-decoration-none text-black-50' to={"/allUsers"}>כל המשתמשים </Link>
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+      >
+        <Link className='text-decoration-none text-black-50' to={"/addBook"}>הוספת ספר</Link>
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+      >
+        <Link className='text-decoration-none text-black-50' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
     </Menu>
   );
 
@@ -161,7 +172,6 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-
       {/* Notifications */}
       <MenuItem>
         <IconButton
@@ -187,16 +197,17 @@ export default function PrimarySearchAppBar() {
       {/* myAccount */}
       <MenuItem
         onClick={handlePersonalAriaMenuOpen}
-        sx={{ display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
+        sx={{display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
+        title='אזור אישי'
       >
         <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           // aria-haspopup="true"
-          color="inherit"
+          color="inherit"          
         >
-          <AccountCircle />
+          <AccountCircle/>
         </IconButton>
         <p>איזור אישי</p>
       </MenuItem>
@@ -214,7 +225,7 @@ export default function PrimarySearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-      
+
         <Toolbar>
           {/* menu */}
           <IconButton
@@ -223,9 +234,9 @@ export default function PrimarySearchAppBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{
-              ml:1, 
-              display: { xs: 'none', md: "block" } 
-              }}
+              ml: 1,
+              display: { xs: 'none', md: "block" }
+            }}
 
             onClick={handleProfileMenuOpen}
 

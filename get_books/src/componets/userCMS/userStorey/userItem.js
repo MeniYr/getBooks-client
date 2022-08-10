@@ -1,6 +1,7 @@
+import { Button, Tooltip } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { user_from_token } from '../../../shared/redux/features/tokenSlice'
 import { delUser, getUser, getCurrentUser, getUsers } from '../../../shared/redux/features/usersSlice'
 import SendMsg from './sendMsg'
@@ -21,12 +22,14 @@ export default function UserItem(props) {
     useEffect(() => {
         console.log(currentUserDetailes);
         console.log(user);
+
     }, [])
 
     return (
 
-        <div key={user._id} className='border d-flex  my-3 p-2'>
+        <div key={user._id} className=' d-flex  justify-content-center  my-3 p-2'>
             <div>
+
                 <h2>שם: {user.name}</h2>
                 <h2>כתובת: {user.address}</h2>
                 <h2>טלפון: {user.phone}</h2>
@@ -45,8 +48,7 @@ export default function UserItem(props) {
                 </Link>
                 <div className='d-flex justify-content-between'>
 
-            <Link to={`/editUSer/${user._id}`} className='btn btn-info d-inline-flex'>Edit</Link>
-            <button className='btn btn-outline-success' onClick={()=>nav(-1)}>Back</button>
+                    <Link to={`/editUSer/${user._id}`} className='btn btn-info d-inline-flex my-2'>Edit</Link>
                 </div>
             </div>
 
