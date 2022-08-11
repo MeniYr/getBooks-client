@@ -11,7 +11,6 @@ import { toast } from "react-toastify"
 
 
 
-
 export default function AddBook() {
   const nav = useNavigate();
   let { register, getValues, handleSubmit, formState: { errors } } = useForm();
@@ -116,7 +115,7 @@ export default function AddBook() {
             <option selected >בחר קטגוריה ..</option>
             {getCategories.map((item) => {
               return (
-                <option value={item._id}>{item.category}</option>
+                <option key={item._id} value={item._id}>{item.category}</option>
               )
             })}
           </select>
@@ -129,6 +128,12 @@ export default function AddBook() {
           </div>
 
           <button className='btn btn-info mt-3'>שמור</button>
+          {getStatus === "failedloading" &&
+            <div>
+
+            </div>
+
+          }
         </form>
       </div>
     </div>

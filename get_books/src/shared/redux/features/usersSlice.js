@@ -99,6 +99,8 @@ const usersSlice = createSlice({
         currentUser: null,
         users: [],
         status: 'idle',
+        getUser_status: 'idle',
+        signUp_status: 'idle',
         error: null
     },
     reducers: {
@@ -136,33 +138,28 @@ const usersSlice = createSlice({
             })
 
             .addCase(addUser.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
+                state.signUp_status = 'loading'
+                console.log(state.signUp_status)
             })
             .addCase(addUser.fulfilled, (state, action) => {
-                console.log(action.payload)
-
-                console.log(action.meta)
 
                 if (action.payload) {
                     // state.users.push(action.payload)
-                    state.status = "succeeded"
-                    console.log(state.status)
+                    state.signUp_status = "succeeded"
+                    console.log(state.signUp_status)
 
                 }
-
-
             })
 
             .addCase(addUser.rejected, (state, action) => {
                 state.error = action.error.message
-                state.status = "failed"
+                state.signUp_status = "failed"
                 console.log(state.error)
 
             })
 
             .addCase(getUser.pending, (state, action) => {
-                state.status = 'loading'
+                state.getUser_status = 'loading'
                 // console.log(state.status)
             })
 
@@ -171,7 +168,7 @@ const usersSlice = createSlice({
 
                 if (action.payload) {
                     // state.users.push(action.payload)
-                    state.status = "succeeded"
+                    state.getUser_status = "succeeded"
                     state.currentUser = action.payload
                     console.log(state.status)
                     console.log(state.currentUser)
@@ -181,7 +178,7 @@ const usersSlice = createSlice({
 
             .addCase(getUser.rejected, (state, action) => {
                 state.error = action.error.message
-                state.status = "failed"
+                state.getUser_status = "failed"
 
                 console.log(state.error)
 

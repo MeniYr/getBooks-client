@@ -9,7 +9,7 @@ import { getUser } from '../redux/features/usersSlice';
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch()
-  const status = useSelector((state) => state.token.logINStatus)
+  const logIn_status = useSelector((state) => state.token.logINStatus)
   const error = useSelector((state) => state.token.error)
   const userName = useSelector(user_name)
   const [clicked, setCilcked] = useState(false)
@@ -18,7 +18,7 @@ export default function Login() {
   let { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
-    status === "failed" && toast.error("email or user wrong")
+    logIn_status === "failed" && toast.error("email or user wrong")
   }, [error])
 
   useEffect(() => {
@@ -27,12 +27,13 @@ export default function Login() {
   }, [userName])
 
   useEffect(() => {
-    status === "succeeded" && clicked && nav("/")
-    dispatch(getUser())
-  }, [clicked, status])
+    console.log(logIn_status);
+    logIn_status === "succeeded" && clicked && nav("/")
+    logIn_status === "succeeded" &&dispatch(getUser())
+  }, [clicked, logIn_status])
 
   useEffect(() => {
-    dispatch(getUser())
+    logIn_status === "succeeded" &&dispatch(getUser())
   }, [])
 
 

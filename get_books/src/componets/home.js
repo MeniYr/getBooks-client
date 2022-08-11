@@ -13,10 +13,7 @@ export default function Home() {
   const [isLoginMode, setIsLoginMode] = useState(true)
 
   useEffect(() => {
-      // <Tooltip title="אזור אישי" arrow>
-      //           <Button>yes</Button>
-      //           <Button>not</Button>
-      //       </Tooltip>
+
 
   }, [])
 
@@ -27,7 +24,7 @@ export default function Home() {
     <div>
       home
 
-        {/* {toast.success(`Welcome ${userName}, You logged in`)} */}
+      {/* {toast.success(`Welcome ${userName}, You logged in`)} */}
       <div>
       </div>
     </div>

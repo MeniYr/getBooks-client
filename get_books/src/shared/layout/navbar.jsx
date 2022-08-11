@@ -197,19 +197,20 @@ export default function PrimarySearchAppBar() {
       {/* myAccount */}
       <MenuItem
         onClick={handlePersonalAriaMenuOpen}
-        sx={{display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
-        title='אזור אישי'
+        sx={{ display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
       >
         <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           // aria-haspopup="true"
-          color="inherit"          
+          color="inherit"
         >
-          <AccountCircle/>
+
+          <AccountCircle />
+          <p>איזור אישי</p>
+
         </IconButton>
-        <p>איזור אישי</p>
       </MenuItem>
 
       {/* login */}
@@ -287,29 +288,35 @@ export default function PrimarySearchAppBar() {
             />
           </Search>
 
-          {/* social menu, conection button */}
+          {/* on web-desktop=> social menu, conection button */}
           <Box sx={{
             mr: 'auto',
             display: { xs: 'none', md: 'inline-flex', lg: "inline-flex" }
           }}
           >
-
+            {/* massages */}
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
-                <MailIcon />
+                <Tooltip title="הודעות">
+                  <MailIcon />
+                </Tooltip>
               </Badge>
             </IconButton>
 
+            {/* notifications */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <Tooltip title="התראות">
+                  <NotificationsIcon />
+                </Tooltip>
               </Badge>
             </IconButton>
 
+            {/* personal aria */}
             <IconButton
               size="large"
               edge="end"
@@ -319,10 +326,12 @@ export default function PrimarySearchAppBar() {
               onClick={() => nav("/myAccount")}
               color="inherit"
             >
-              <AccountCircle />
+              <Tooltip title="אזור אישי">
+                <AccountCircle />
+              </Tooltip>
             </IconButton>
 
-            {userLogIn === null ? <Link className='btn btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='btn btn-outline-warning d-md-inline-flex align-items-center' color={'white'} to={"/logOut"}>יציאה</Link>}
+            {userLogIn === null ? <Link className='btn btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='text-warning text-decoration-none d-md-inline-flex align-items-center' color={'white'} to={"/logOut"}>יציאה</Link>}
           </Box>
 
           {/* my account icon / more`s button  */}

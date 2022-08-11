@@ -65,24 +65,24 @@ const dispatch = useDispatch()
       {user.name ?
         <form onSubmit={handleSubmit(onSub)} className='col-md-6  mx-auto'>
 
-          <label>Name:</label>
+          <label>שם:</label>
           <input defaultValue={user.name} {...register("name", { required: true, minLength: 2 })} type="text" className='form-control' />
           {errors.name && <small className='d-block text-danger'>
             Enter a valid name (min 2 chars)
           </small>}
 
-          <label>Email:</label>
+          <label>אימייל:</label>
           <input  defaultValue={user.email}{...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
           {errors.email && <small className='d-block text-danger'>
             Enter valid Email
           </small>}
 
-          <label>password:</label>
+          <label>סיסמא:</label>
           <input autoComplete='new-password' {...register("password")} type="password" className='form-control' />
           {errors.password && <small className='d-block text-danger'>
             Enter valid password (min 3 chars)
           </small>}
-          <label>Enter password again:</label>
+          <label>הכנס סיסמא שנית:</label>
           <input autoComplete='again' {...register("password2", {
              validate: (value) => {
               return value === getValues("password")
@@ -92,21 +92,28 @@ const dispatch = useDispatch()
             Password not match
           </small>}
 
-          <label> phone:</label>
+          <label> פלאפון:</label>
           <input defaultValue={user.phone}{...register("phone", { required: true, minLength: 9 })} type="phone" className='form-control' />
           {errors.phone && <small className='d-block text-danger'>
             Enter valid phone (min 9 chars)
           </small>}
 
-          <label>address:</label>
-          <input defaultValue={user.address}{...register("address", { required: true, minLength: 2 })} type="text" className='form-control' />
+
+          <label>עיר:</label>
+          <input {...register("city", { required: true, minLength: 2 })} type="text" className='form-control' />
           {errors.address && <small className='d-block text-danger'>
-            Enter a valid address (min 2 chars)
+            Enter a valid city (min 2 chars)
+          </small>}
+
+          <label>רחוב:</label>
+          <input {...register("street", { required: true, minLength: 2 })} type="text" className='form-control' />
+          {errors.address && <small className='d-block text-danger'>
+            Enter a valid street (min 2 chars)
           </small>}
 
           <div className='d-flex py-2'>
           
-            <label className='d-flex justify-content-md-center '>accept to share email with users </label>
+            <label className='d-flex justify-content-md-center '>מסכים להציג את כתובת האימייל </label>
             <input  onInput={()=>setEmailChecked(!emailChecked)} defaultChecked={user.isShareMail} value={emailChecked} {...register("isShareMail", { minLength: 2 })} type="checkbox" className='ms-2 border' />
             {errors.isShareMail &&
               <small className='d-block text-danger'>
@@ -115,7 +122,7 @@ const dispatch = useDispatch()
           </div>
 
           <div className='d-flex py-2'>
-            <label >accept to share phone with users</label>
+            <label >מסכים להציג את מספר הפלאפון</label>
             <input onInput={()=>setPhoneChecked(!phoneChecked)} defaultChecked={user.isSharePhone} value={phoneChecked} {...register("isSharePhone", { minLength: 2 })} type="checkbox" className='ms-2 border' />
             {errors.isSharePhone &&
               <small className='d-block text-danger'>
@@ -123,7 +130,7 @@ const dispatch = useDispatch()
               </small>}
           </div>
 
-          <button className='btn btn-info mt-3'>save</button>
+          <button className='btn btn-info mt-3'>שמור</button>
         </form>
         : <h2>Loading...</h2>}
     </div>

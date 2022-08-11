@@ -46,7 +46,11 @@ export default function UserItem(props) {
                     to={`/sendMsg/${user._id}`}>
                     seng message
                 </Link>
-                <div className='d-flex justify-content-between'>
+                <div
+                    style={{
+                        display: currentUserDetailes?._id === user._id ? "inline-flex":"none" 
+                    }}
+                    className='d-flex justify-content-between'>
 
                     <Link to={`/editUSer/${user._id}`} className='btn btn-info d-inline-flex my-2'>Edit</Link>
                 </div>
