@@ -10,7 +10,7 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 
 export default function Search() {
   // const dispatch = useDispatch()
-  const { status, srchRes } = useSelector(books)
+  const { srchBooks_status, srchRes } = useSelector(books)
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth)
   const rating = (rate_num) => {
     console.log(rate_num);
@@ -50,7 +50,7 @@ export default function Search() {
         <div
 
           className="p-2 ">
-          {status === "succeeded" && srchRes?.length > 0 &&
+          {srchBooks_status === "succeeded" && srchRes?.length > 0 &&
             srchRes?.map((item, i) => {
               return (
                 <div key={item._id}>
@@ -122,7 +122,8 @@ export default function Search() {
                     </div>
 
                     {/* left */}
-                    <div className='my-5 shadow-lg rounded-circle'
+                    {/* TODO USER PROFILE */}
+                    {/* <div className='my-5 shadow-lg rounded-circle'
                       style={{
                         backgroundImage: `url(${"https://images.unsplash.com/photo-1621944190310-e3cca1564bd7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"})`,
                         backgroundPosition:"center",
@@ -137,7 +138,7 @@ export default function Search() {
                         <p>מרחק מאזור מגוריך: {}</p>
 
                       </div>
-                    </div>
+                    </div> */}
 
                   </div>
 
@@ -146,12 +147,12 @@ export default function Search() {
               )
             })
           }
-          {status === "loading" &&
+          {srchBooks_status === "loading" &&
             <div>
               Loading...
             </div>
           }
-          {status === "failed" &&
+          {srchBooks_status === "failed" &&
             <div>
               server problem try again
             </div>

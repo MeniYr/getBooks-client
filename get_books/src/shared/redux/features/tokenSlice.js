@@ -56,7 +56,8 @@ const tokenSlice = createSlice({
             state.token =null;
             state.userName="";
             state.role = "";
-            state.id = ""
+            state.id = "";
+            state.logINStatus = 'idle';
         }
     },
 

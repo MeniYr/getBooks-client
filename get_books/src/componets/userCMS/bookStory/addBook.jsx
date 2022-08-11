@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
-import { addBook, bookStatus } from '../../../shared/redux/features/bookSlice';
+import { addBook, addBookStatus } from '../../../shared/redux/features/bookSlice';
 import { categories, getCat } from '../../../shared/redux/features/categoriesSlice';
 import { doApiMethod } from '../../../shared/services/apiService';
 import axios, { AxiosError } from "axios";
@@ -16,21 +16,21 @@ export default function AddBook() {
   let { register, getValues, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const getCategories = useSelector(categories)
-  const getStatus = useSelector(bookStatus)
-
+  const getStatus = useSelector(addBookStatus)
+const [isPublish, setIsPublish] = useState(true)
 
   // const getUsers = useSelector((state) => state.users.users)
 
   useEffect(() => {
     dispatch(getCat())
-
   }, [])
 
 
-  //   useEffect(() => {
+  useEffect(() => {
 
-  //   }
-  // }, [getStatus])
+    console.log(getStatus);
+
+  }, [getStatus])
 
   const onSub = async (_dataBody) => {
 
@@ -44,10 +44,13 @@ export default function AddBook() {
 
     dispatch(addBook(_dataBody)).unwrap()
     if (getStatus === "succeeded") {
+      console.log(getStatus);
+
       toast.success("הספר הועלה בהצלחה")
       nav("/")
     }
     if (getStatus === "failed") {
+      console.log(getStatus);
       toast.error("נסה שנית")
     }
 
@@ -112,7 +115,7 @@ export default function AddBook() {
 
           <label>קטגוריה:</label>
           <select  {...register("cat_id")} type="select" className='select-control text-center fw-bolder w-100' >
-            <option selected >בחר קטגוריה ..</option>
+            <option >בחר קטגוריה ..</option>
             {getCategories.map((item) => {
               return (
                 <option key={item._id} value={item._id}>{item.category}</option>
@@ -124,16 +127,43 @@ export default function AddBook() {
 
           <div className='d-flex py-2'>
             <label >פרסם את הספר למסירה כעת</label>
-            <input {...register("deliver")} type="checkbox" className='ms-2 border mx-2' />
+            <input onClick={(e)=>setIsPublish(e.target.value)} {...register("deliver")} type="checkbox" defaultValue={isPublish} className='ms-2 border mx-2' />
           </div>
 
-          <button className='btn btn-info mt-3'>שמור</button>
-          {getStatus === "failedloading" &&
-            <div>
-
-            </div>
+          {
+            getStatus === "loading" &&
+            <button className='btn btn-info mt-3'>
+                <strong>Loading...</strong>
+                <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+            </button>
 
           }
+          {
+            getStatus === "idle" &&
+            <button className='btn btn-info mt-3'>
+
+              <p>הוסף</p>
+
+            </button>
+          }
+          {
+            getStatus === "failed" &&
+            <button className='btn btn-info mt-3'>
+
+              <p>הוסף</p>
+
+            </button>
+          }
+          {
+            getStatus === "succeeded" &&
+            <button className='btn btn-info mt-3'>
+
+              <p>הוסף</p>
+
+            </button>
+          }
+
+
         </form>
       </div>
     </div>

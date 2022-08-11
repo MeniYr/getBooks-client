@@ -54,7 +54,10 @@ const booksSlice = createSlice({
         srchRes: [],
         currentBook: null,
         bookJustLoaded: null,
-        status: "idle",
+        addBook_status: "idle",
+        getBooks_status: "idle",
+        srchBooks_status: "idle",
+        myBooks_status: "idle",
         error: null
     },
 
@@ -64,10 +67,16 @@ const booksSlice = createSlice({
             if (user_ID) {
                 state.userBooks = state.books.filter(item =>
                     item.userID?._id === user_ID
-                )
+                    )
+                    state.myBooks_status = "succeeded"
+                    console.log("getBooks work")
             }
             else {
                 state.userBooks = []
+                state.myBooks_status = "failed"
+
+                console.log("getBooks not work")
+
             }
 
         }
@@ -78,69 +87,69 @@ const booksSlice = createSlice({
         builder
             // add
             .addCase(addBook.pending, (state, action) => {
-                state.status = 'loading'
+                state.addBook_status = 'loading'
                 console.log(state.status)
             })
 
             .addCase(addBook.fulfilled, (state, action) => {
 
                 if (action.payload) {
-                    state.status = 'succeeded';
+                    state.addBook_status = 'succeeded';
                     state.error = null;
                     state.books.push(action.payload)
                     state.bookJustLoaded = action.payload
 
                     console.log(action.payload)
-                    console.log(state.status)
+                    console.log(state.addBook_status)
                 }
             })
 
             .addCase(addBook.rejected, (state, action) => {
-                state.status = 'failed'
+                state.addBook_status = 'failed'
                 state.error = action.error
                 console.log("here_error_msg", state.error)
             })
             // get
             .addCase(getBooks.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
+                state.getBooks_status = 'loading'
+                console.log(state.getBooks_status)
 
             })
 
             .addCase(getBooks.fulfilled, (state, action) => {
 
                 if (action.payload) {
-                    state.status = 'succeeded';
+                    state.getBooks_status = 'succeeded';
                     state.error = null;
                     state.books = action.payload
 
                     console.log(action.payload)
-                    console.log(state.status)
+                    console.log(state.getBooks_status)
 
                 }
             })
 
             .addCase(getBooks.rejected, (state, action) => {
-                state.status = 'failed'
+                state.getBooks_status = 'failed'
                 state.error = action.error
                 console.log("here_error_msg", state.error)
             })
             // search
             .addCase(srchBooks.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
+                state.srchBooks_status = 'loading'
+                console.log(state.srchBooks_status)
 
             })
 
             .addCase(srchBooks.fulfilled, (state, action) => {
 
                 if (action.payload) {
-                    state.status = 'succeeded';
+                    state.srchBooks_status = 'succeeded';
                     state.error = null;
                     state.srchRes = action.payload
 
                     console.log(action.payload)
-                    console.log(state.status)
+                    console.log(state.srchBooks_status)
 
                 }
                 else {
@@ -149,7 +158,7 @@ const booksSlice = createSlice({
             })
 
             .addCase(srchBooks.rejected, (state, action) => {
-                state.status = 'failed'
+                state.srchBooks_status = 'failed'
                 state.error = action.error
                 console.log("here_error_msg", state.error)
             })
@@ -159,7 +168,8 @@ const booksSlice = createSlice({
 })
 
 
-export const bookStatus = (state) => state.books.status
+export const addBookStatus = (state) => state.books.addBook_status
+export const myBooksStatus = (state) => state.books.myBooks_status
 export const getAllBooks = (state) => state.books.books
 export const getMyBooks = (state) => state.books.userBooks
 export const books = (state) => state.books
