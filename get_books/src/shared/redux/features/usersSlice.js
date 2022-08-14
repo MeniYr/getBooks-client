@@ -98,7 +98,10 @@ export const addNotify = createAsyncThunk(
 
             const { data } = await doApiMethod(`${USERS_URL}/addNote/${toUserID}`, "POST", dataBody)
             console.log(data)
-            return data
+            if (data.modifiedCount === 1)
+                return data
+            else
+                throw isRejectedWithValue("תקלה בנתונים")
         }
         catch (err) {
             throw err?.response?.data[0]?.message
@@ -279,7 +282,7 @@ const usersSlice = createSlice({
             .addCase(addNotify.fulfilled, (state, action) => {
                 // console.log(action.payload)
 
-                if (action.payload) {
+                if (action.payload.modifiedCount === 1) {
                     // state.users.push(action.payload)
                     state.addNote_status = "succeeded"
                     console.log(state.addNote_status)
@@ -289,8 +292,9 @@ const usersSlice = createSlice({
 
             .addCase(addNotify.rejected, (state, action) => {
                 state.error = action.error.message
-                console.log(state.error)
                 state.addNote_status = "failed"
+                console.log(state.error)
+                console.log(state.addNote_status)
             })
 
     }
