@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { user_name } from '../shared/redux/features/tokenSlice';
 import { logOut, logOutFromUsers, reset } from '../shared/redux/features/usersSlice';
+import Model from './model';
 
 
 export default function Home() {
@@ -23,7 +24,7 @@ export default function Home() {
   return (
     <div>
       home
-
+<Model />
       {/* {toast.success(`Welcome ${userName}, You logged in`)} */}
       <div>
       </div>
