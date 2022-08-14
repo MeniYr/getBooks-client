@@ -8,20 +8,23 @@ export default function Model() {
     const dispatch = useDispatch()
 
     return (
-        <aside className='model-container bg-gradient'>
+        <aside tabIndex={1} className='model bg-gradient'>
             <div className="model">
-                <div className="btn container">
-                    <h4>Are you sure?</h4>
-                    <button 
-                    onClick={()=>{dispatch(closeModel())}}
-                    className="btn confirm-btn">
-                        אישור
-                    </button>
-                    <button 
-                     onClick={()=>{dispatch(closeModel())}}
-                    className='btn clear-btn'>
-                        בטל
-                    </button>
+                <div className='model-dialog d-flex justify-content-center'>
+                    <div className=" ">
+                        <h4>אתה בטוח?</h4>
+                        <button
+                            onClick={() => { dispatch(closeModel()) }}
+                            className="btn confirm-btn">
+                            אישור
+                        </button>
+                        <button
+                            onClick={() => { dispatch(closeModel()) }}
+                            className='btn confirm-btn'>
+                            בטל
+                        </button>
+                    </div>
+
                 </div>
 
             </div>

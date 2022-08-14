@@ -34,10 +34,10 @@ export default function Signup() {
 
 
   return (
-    <div className='d-flex justify-content-center container col-md-6'>
-      <div >
+    <div className='model d-flex justify-content-center '>
+      <div className='model'>
 
-        <h1 className='display-5 mt-5 mb-4 fw-bolder text-danger text-md-center'>Sign up</h1>
+        <h1 className='display-5 mt-5 mb-4 fw-bolder w-100 text-danger text-md-center'>Sign up</h1>
         <form onSubmit={handleSubmit(onSub)} >
 
           <label>שם:</label>

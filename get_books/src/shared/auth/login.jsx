@@ -45,9 +45,16 @@ export default function Login() {
   }
 
   return (
-    <div className='container mt-5'>
+    <div 
+
+    className='model  d-flex justify-content-center'>
+       <div
+          //  style={{
+          //   width:"350px"
+          // }} 
+          className='model w-50 mt-5'>
       <h1 className='display-5 text-center'>התחברות</h1>
-      <form onSubmit={handleSubmit(onSub)} className='col-md-6 mx-auto'>
+      <form onSubmit={handleSubmit(onSub)} className='w-100 mx-auto'>
 
         <label> Email</label>
         <input autoComplete='username' {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
@@ -68,5 +75,7 @@ export default function Login() {
         <Link className='btn btn-outline-primary' to={"/signUp"}>הירשם</Link>
       </div>
     </div>
+    </div>
+   
   )
 }
