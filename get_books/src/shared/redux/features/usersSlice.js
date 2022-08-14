@@ -76,12 +76,27 @@ export const addUser = createAsyncThunk(
     })
 
 export const sendMassage = createAsyncThunk(
-    'users/sendMassage', async (dataBody, { rejectWithValue }) => {
+    'users/sendMassage', async (dataBody) => {
         try {
             let toUserID = dataBody.toUserId;
             delete dataBody.toUserId
 
             const { data } = await doApiMethod(`${USERS_URL}/addMsg/${toUserID}`, "POST", dataBody)
+            console.log(data)
+            return data
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
+    })
+
+export const addNotify = createAsyncThunk(
+    'users/addNotify', async (dataBody) => {
+        try {
+            let toUserID = dataBody.toUserId;
+            delete dataBody.toUserId
+
+            const { data } = await doApiMethod(`${USERS_URL}/addNote/${toUserID}`, "POST", dataBody)
             console.log(data)
             return data
         }
@@ -101,6 +116,7 @@ const usersSlice = createSlice({
         status: 'idle',
         getUser_status: 'idle',
         signUp_status: 'idle',
+        addNote_status: 'idle',
         error: null
     },
     reducers: {
@@ -254,11 +270,28 @@ const usersSlice = createSlice({
                 console.log(state.error)
                 state.status = "failed"
             })
-        // .addMatcher(addUser.rejected, (state,action) =>{
-        //     state.status = 'failed'
-        //     console.log(state.status)
-        //     console.log("rej")
-        // }
+
+            .addCase(addNotify.pending, (state, action) => {
+                state.addNote_status = 'loading'
+                console.log(state.addNote_status)
+            })
+
+            .addCase(addNotify.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                if (action.payload) {
+                    // state.users.push(action.payload)
+                    state.addNote_status = "succeeded"
+                    console.log(state.addNote_status)
+
+                }
+            })
+
+            .addCase(addNotify.rejected, (state, action) => {
+                state.error = action.error.message
+                console.log(state.error)
+                state.addNote_status = "failed"
+            })
 
     }
 })

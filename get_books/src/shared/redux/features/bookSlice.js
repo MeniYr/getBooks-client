@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit"
-import { API_URL, BOOKS } from "../../constants/globalinfo/URL`S"
+import { BOOKS } from "../../constants/globalinfo/URL`S"
 
 
 import { doApiGet, doApiMethod} from "../../services/apiService"
+
 
 
 
@@ -70,6 +71,7 @@ const booksSlice = createSlice({
                     )
                     state.myBooks_status = "succeeded"
                     console.log("getBooks work")
+
             }
             else {
                 state.userBooks = []
@@ -88,7 +90,7 @@ const booksSlice = createSlice({
             // add
             .addCase(addBook.pending, (state, action) => {
                 state.addBook_status = 'loading'
-                console.log(state.status)
+                console.log(state.addBook_status)
             })
 
             .addCase(addBook.fulfilled, (state, action) => {
@@ -98,7 +100,6 @@ const booksSlice = createSlice({
                     state.error = null;
                     state.books.push(action.payload)
                     state.bookJustLoaded = action.payload
-
                     console.log(action.payload)
                     console.log(state.addBook_status)
                 }

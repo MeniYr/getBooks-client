@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
-import { addBook, addBookStatus } from '../../../shared/redux/features/bookSlice';
+import { addBook, addBookStatus, books } from '../../../shared/redux/features/bookSlice';
 import { categories, getCat } from '../../../shared/redux/features/categoriesSlice';
 import { doApiMethod } from '../../../shared/services/apiService';
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify"
+import { createDelivery } from '../../../shared/redux/features/deliverySlice';
 
 
 
@@ -17,43 +18,37 @@ export default function AddBook() {
   const dispatch = useDispatch();
   const getCategories = useSelector(categories)
   const getStatus = useSelector(addBookStatus)
-const [isPublish, setIsPublish] = useState(true)
-
-  // const getUsers = useSelector((state) => state.users.users)
+  const { error, bookJustLoaded } = useSelector(books)
+  const [isPublish, setIsPublish] = useState(true)
+  const [clicked, setClicked] = useState(false)
 
   useEffect(() => {
     dispatch(getCat())
+    console.log(error);
   }, [])
 
 
   useEffect(() => {
+    error?.message && toast.error(error?.message)
 
-    console.log(getStatus);
+    if (getStatus === "succeeded" && !error && clicked) {
+      console.log(getStatus);
+      toast.success("הספר הועלה בהצלחה")
+      nav("/")
+    }
 
-  }, [getStatus])
+  }, [error, getStatus])
 
   const onSub = async (_dataBody) => {
-
+    setClicked(true)
     console.log(_dataBody)
-
-    //TODO  create delivery if the check box - to deliver in anather time - is false, plus delete the property of checkbox
-    delete _dataBody.deliver
 
     if (_dataBody.image[0])
       _dataBody.image = await uploadImg(_dataBody.image[0])
 
+    delete _dataBody.deliver
     dispatch(addBook(_dataBody)).unwrap()
-    if (getStatus === "succeeded") {
-      console.log(getStatus);
-
-      toast.success("הספר הועלה בהצלחה")
-      nav("/")
-    }
-    if (getStatus === "failed") {
-      console.log(getStatus);
-      toast.error("נסה שנית")
-    }
-
+    
   }
 
   const uploadImg = async (image) => {
@@ -114,7 +109,7 @@ const [isPublish, setIsPublish] = useState(true)
           <input {...register("image")} type="file" className='form-control' />
 
           <label>קטגוריה:</label>
-          <select  {...register("cat_id")} type="select" className='select-control text-center fw-bolder w-100' >
+          <select  {...register("cat_id", { required: true })} type="select" className='select-control text-center fw-bolder w-100' >
             <option >בחר קטגוריה ..</option>
             {getCategories.map((item) => {
               return (
@@ -122,27 +117,33 @@ const [isPublish, setIsPublish] = useState(true)
               )
             })}
           </select>
+          {errors.cat_id && <small className='d-block text-danger'>
+            choose a category
+          </small>}
 
 
-
-          <div className='d-flex py-2'>
+          {/* <div className='d-flex py-2'>
             <label >פרסם את הספר למסירה כעת</label>
-            <input onClick={(e)=>setIsPublish(e.target.value)} {...register("deliver")} type="checkbox" defaultValue={isPublish} className='ms-2 border mx-2' />
-          </div>
+            <input onClick={(e)=>setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
+          </div> */}
 
           {
             getStatus === "loading" &&
             <button className='btn btn-info mt-3'>
+              <div>
                 <strong>Loading...</strong>
-                <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+              </div>
+              <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
             </button>
 
           }
           {
             getStatus === "idle" &&
-            <button className='btn btn-info mt-3'>
+            <button
 
-              <p>הוסף</p>
+              className='btn btn-info mt-3'>
+
+              הוסף
 
             </button>
           }
@@ -150,7 +151,7 @@ const [isPublish, setIsPublish] = useState(true)
             getStatus === "failed" &&
             <button className='btn btn-info mt-3'>
 
-              <p>הוסף</p>
+              הוסף
 
             </button>
           }
@@ -158,7 +159,7 @@ const [isPublish, setIsPublish] = useState(true)
             getStatus === "succeeded" &&
             <button className='btn btn-info mt-3'>
 
-              <p>הוסף</p>
+              הוסף
 
             </button>
           }
