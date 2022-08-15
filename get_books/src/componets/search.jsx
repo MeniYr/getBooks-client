@@ -7,7 +7,7 @@ import Book from './userCMS/bookStory/book';
 import { GrFavorite } from "react-icons/gr"
 import { MdOutlineFavorite } from "react-icons/md"
 import { Button, IconButton, Tooltip } from '@mui/material';
-import { addNotify, getUsersSlice } from '../shared/redux/features/usersSlice';
+import { addNotify, getUsers, getUsersSlice } from '../shared/redux/features/usersSlice';
 import { toast } from "react-toastify"
 import { createDelivery } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
@@ -48,13 +48,14 @@ export default function Search() {
     }
   }, [innerWidthSize])
 
+  // succeeded notify
   useEffect(() => {
     addNote_status === "succeeded" && toast.success("הודעה נשלחה למוסר")
   }, [addNote_status])
 
-  // useEffect(() => {
-
-  //  }, [])
+  useEffect(() => {
+currentUser!==null&&dispatch(getUsers())
+   }, [])
 
   return (
     <div className='container d-flex align-items-center justify-content-center mt-5 pb-5'>
@@ -132,17 +133,13 @@ export default function Search() {
                           </Tooltip>
 
                           <IconButton
+                          className='shadow'
                             onClick={() => {
                               let notify = {
-                                fromUserId: item.userID,
-                                toUserId: currentUser._id,
+                                fromUserId: item.userID._id,
+                                toUserId: currentUser?._id,
                                 bookID: item._id,
                               }
-                              // dispatch(createDelivery({
-                              //   bookID:item._id,
-                              //   ownerID: item.userID,
-
-                              // }))
                               dispatch(addNotify(notify))
                             }}
                           >
@@ -159,7 +156,6 @@ export default function Search() {
                     {/* TODO USER PROFILE */}
                     {currentUser !== null && <div className='bg-light d-flex shadow-lg rounded-circle'
                       style={{
-                        // backgroundImage: `url(${"https://images.unsplash.com/photo-1621944190310-e3cca1564bd7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"})`,
                         minWidth: '160px',
                         height: '160px',
 

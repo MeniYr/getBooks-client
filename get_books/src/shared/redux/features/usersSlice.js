@@ -26,7 +26,7 @@ export const delUser = createAsyncThunk(
         try {
             let data = await (await doApiMethod(`${USERS_URL}/del/${idDel}`, "DELETE")).data
             console.log(data)
-            toast.success("deleted successful")
+            toast.success("המחיקה הושלמה")
             return data
         }
         catch (err) {
@@ -95,8 +95,9 @@ export const addNotify = createAsyncThunk(
         try {
             let toUserID = dataBody.toUserId;
             delete dataBody.toUserId
-
-            const { data } = await doApiMethod(`${USERS_URL}/addNote/${toUserID}`, "POST", dataBody)
+console.log(dataBody);
+console.log(toUserID);
+            const { data } = await doApiMethod(`${USERS_URL}/addNotify/${toUserID}`, "POST", dataBody)
             console.log(data)
             if (data.modifiedCount === 1)
                 return data
@@ -118,8 +119,10 @@ const usersSlice = createSlice({
         users: [],
         status: 'idle',
         getUser_status: 'idle',
+        getUsers_status: 'idle',
         signUp_status: 'idle',
         addNote_status: 'idle',
+        msg_status: 'idle',
         error: null
     },
     reducers: {
@@ -134,13 +137,12 @@ const usersSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(getUsers.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
+                state.getUsers_status = 'loading'
+                console.log(state.getUsers_status)
             })
             .addCase(getUsers.fulfilled, (state, action) => {
                 if (action.payload) {
-                    state.status = 'succeeded';
-                    state.users = []
+                    state.getUsers_status = 'succeeded';
                     state.users = action.payload
                     console.log(action.payload)
                 }
@@ -150,7 +152,7 @@ const usersSlice = createSlice({
 
             })
             .addCase(getUsers.rejected, (state, action) => {
-                state.status = "failed"
+                state.getUsers_status = "failed"
                 state.error = action.error
                 console.log("here", state.error)
 
@@ -252,8 +254,8 @@ const usersSlice = createSlice({
             })
 
             .addCase(sendMassage.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
+                state.msg_status = 'loading'
+                console.log(state.msg_status)
             })
 
             .addCase(sendMassage.fulfilled, (state, action) => {
@@ -261,17 +263,17 @@ const usersSlice = createSlice({
 
                 if (action.payload) {
                     // state.users.push(action.payload)
-                    state.status = "succeeded"
-                    toast.info("sent")
-                    console.log(state.status)
-
+                    state.msg_status = "succeeded"
+                    toast.info("ההודעה נשלחה")
+                    
+                    console.log(state.msg_status)
                 }
             })
 
             .addCase(sendMassage.rejected, (state, action) => {
                 state.error = action.error.message
                 console.log(state.error)
-                state.status = "failed"
+                state.msg_status = "failed"
             })
 
             .addCase(addNotify.pending, (state, action) => {
