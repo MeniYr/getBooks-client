@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { books } from '../shared/redux/features/bookSlice';
+import { createDelivery } from '../shared/redux/features/deliverySlice';
 import { user_name } from '../shared/redux/features/tokenSlice';
 import { logOut, logOutFromUsers, reset } from '../shared/redux/features/usersSlice';
 import Modal from './modal';
@@ -16,10 +17,8 @@ export default function Home() {
   const [isLoginMode, setIsLoginMode] = useState(true)
 
   useEffect(() => {
-    console.log(bookJustLoaded);
 
-
-  }, [bookJustLoaded])
+  }, [])
 
 
 
