@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,14 +31,9 @@ export default function Login() {
   }, [userName])
 
   useEffect(() => {
-    console.log(logIn_status);
     logIn_status === "succeeded" && clicked && nav("/")
     logIn_status === "succeeded" && dispatch(getUser())
   }, [clicked, logIn_status])
-
-  useEffect(() => {
-    logIn_status === "succeeded" && dispatch(getUser())
-  }, [])
 
 
 

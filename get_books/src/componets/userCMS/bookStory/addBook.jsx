@@ -9,6 +9,7 @@ import { doApiMethod } from '../../../shared/services/apiService';
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify"
 import { createDelivery } from '../../../shared/redux/features/deliverySlice';
+import { getCurrentUser } from '../../../shared/redux/features/usersSlice';
 
 
 
@@ -21,16 +22,18 @@ export default function AddBook() {
   const { error, bookJustLoaded } = useSelector(booksS)
   const [isPublish, setIsPublish] = useState(true)
   const [clicked, setClicked] = useState(false)
+  const user_id = useSelector(getCurrentUser)?._id
 
   // get category list
   useEffect(() => {
-    dispatch(getCat())
+    user_id!=undefined&&dispatch(getCategories())
+    user_id===undefined&&toast.info("נא התחבר")&&nav("/login")
   }, [])
 
   // create delivery
   useEffect(() => {
     return (() => {
-      dispatch(createDelivery({
+      clicked&&dispatch(createDelivery({
         ownerID: bookJustLoaded.userID,
         bookID: bookJustLoaded._id,
       }))
@@ -39,7 +42,7 @@ export default function AddBook() {
 
   // navigate forword
   useEffect(() => {
-    error?.message && toast.error(error?.message)
+    clicked&&error?.message && toast.error(error?.message)
 
     if (getStatus === "succeeded" && !error && clicked) {
       console.log(getStatus);

@@ -16,11 +16,12 @@ export default function MyBooks() {
     const user_id = useSelector(getCurrentUser)?._id
 
     useEffect(() => {
-        dispatch(getBooks())
+        user_id!=undefined&&dispatch(getBooks())
+        user_id===undefined&&toast.info("נא התחבר")&&nav("/login")
     }, [])
     useEffect(() => {
-        console.log(user_id);
-        dispatch(myBooks(user_id))
+    
+        user_id!=undefined&&dispatch(myBooks(user_id))
 
     }, [user_id])
 

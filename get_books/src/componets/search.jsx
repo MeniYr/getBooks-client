@@ -10,9 +10,12 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 import { addNotify, getUsersSlice } from '../shared/redux/features/usersSlice';
 import { toast } from "react-toastify"
 import { createDelivery } from '../shared/redux/features/deliverySlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
   const dispatch = useDispatch()
+  const nav = useNavigate();
+
   const { srchBooks_status, srchRes, books } = useSelector(booksS)
   const { addNote_status, currentUser } = useSelector(getUsersSlice)
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth)
@@ -31,7 +34,7 @@ export default function Search() {
   };
 
 
-
+  // screen size check
   useEffect(() => {
     window.addEventListener('resize', () => {
       setInnerWidthSize(window.innerWidth)
@@ -50,7 +53,7 @@ export default function Search() {
   }, [addNote_status])
 
   // useEffect(() => {
-      
+
   //  }, [])
 
   return (
@@ -154,23 +157,24 @@ export default function Search() {
 
                     {/* left */}
                     {/* TODO USER PROFILE */}
-                    {/* <div className='my-5 shadow-lg rounded-circle'
+                    {currentUser !== null && <div className='bg-light d-flex shadow-lg rounded-circle'
                       style={{
-                        backgroundImage: `url(${"https://images.unsplash.com/photo-1621944190310-e3cca1564bd7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"})`,
-                        backgroundPosition:"center",
-                        backgroundSize:"cover",
-                        backgroundRepeat: 'no-repeat',
-                        minWidth: '170px',
-                        height: '190px'
-                        
+                        // backgroundImage: `url(${"https://images.unsplash.com/photo-1621944190310-e3cca1564bd7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"})`,
+                        minWidth: '160px',
+                        height: '160px',
+
                       }}
                     >
-                      <div className=" ">
-                        <p>מרחק מאזור מגוריך: {}</p>
-
+                      <div className='my-auto mx-auto text-center text-wrap fw-bolder'>
+                        <p className='text-muted ' >משתמש: {item.userID?.name}</p>
+                        <p className='text-muted '> עיר: {item.userID?.city}</p>
+                        <button
+                          onClick={() => { nav(`/sendMsg/${item.userID?._id}`) }}
+                          className="btn btn-outline-info rounded-circle">הודעה</button>
                       </div>
-                    </div> */}
 
+                    </div>
+                    }
                   </div>
 
                   {i < srchRes.length - 1 && <hr />}

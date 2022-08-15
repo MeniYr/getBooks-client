@@ -9,6 +9,7 @@ import { addUser, delUser, getCurrentUser, getUser, getUserByID, getUsers } from
 
 export default function AllUsers() {
   const dispatch = useDispatch()
+  const nav = useNavigate()
   const getStatus = useSelector((state) => state.users.status)
   const getAuthStatus = useSelector((state) => state.token.authStatus)
   const token = useSelector((state) => state.token)
@@ -16,26 +17,20 @@ export default function AllUsers() {
   const arr = useSelector((state) => state.users.users)
   const userID = useSelector((state) => state.token.id)
 
-  const nav = useNavigate()
-  console.log(getStatus)
-
   //TODO token save on login plus admin check 
 
   useEffect(() => {
-    // if (getStatus === "idle")
-    console.log(userID)
+
     if (token.token === null) {
-      toast.info("please sign in")
+      toast.info("נא התחבר")
       nav("/login")
     }
-    console.log(token)
-    console.log(getEroor)
-    dispatch(AuthWithToken())
+    else {
+      dispatch(AuthWithToken())
+      dispatch(getUsers())
+      dispatch(getUser())
+    }
 
-    console.log(getAuthStatus);
-    console.log(getEroor);
-    dispatch(getUsers())
-    dispatch(getUser())
   }, [])
 
   return (
@@ -46,7 +41,7 @@ export default function AllUsers() {
             <div key={user._id} >
               <div >
                 < UserItem item={user} />
-                {i!==arr.length-1&&<hr />}
+                {i !== arr.length - 1 && <hr />}
               </div>
             </div>
 
