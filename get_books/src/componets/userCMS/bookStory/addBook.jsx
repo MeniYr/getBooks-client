@@ -24,13 +24,16 @@ export default function AddBook() {
 
   useEffect(() => {
     dispatch(getCat())
-    return (
+  }, [])
+
+  useEffect(() => {
+    return (() => {
       dispatch(createDelivery({
         ownerID: bookJustLoaded.userID,
         bookID: bookJustLoaded._id,
       }))
-    );
-  }, [])
+    })
+  }, [bookJustLoaded])
 
 
   useEffect(() => {
