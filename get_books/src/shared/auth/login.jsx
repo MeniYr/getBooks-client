@@ -13,27 +13,31 @@ export default function Login() {
   const error = useSelector((state) => state.token.error)
   const userName = useSelector(user_name)
   const [clicked, setCilcked] = useState(false)
+  const [closeBtn, setCloseBtn] = useState(true)
   const nav = useNavigate();
 
   let { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     logIn_status === "failed" && toast.error("email or user wrong")
+    return (
+      setCloseBtn(true)
+    )
   }, [error])
 
   useEffect(() => {
     if (userName != "" && clicked)
-      toast.success(`Welcome ${userName}, You logged in`)
+      toast.success(`ברוך הבא ${userName}`)
   }, [userName])
 
   useEffect(() => {
     console.log(logIn_status);
     logIn_status === "succeeded" && clicked && nav("/")
-    logIn_status === "succeeded" &&dispatch(getUser())
+    logIn_status === "succeeded" && dispatch(getUser())
   }, [clicked, logIn_status])
 
   useEffect(() => {
-    logIn_status === "succeeded" &&dispatch(getUser())
+    logIn_status === "succeeded" && dispatch(getUser())
   }, [])
 
 
@@ -45,37 +49,47 @@ export default function Login() {
   }
 
   return (
-    <div 
+    <div
 
-    className='model  d-flex justify-content-center'>
-       <div
-          //  style={{
-          //   width:"350px"
-          // }} 
-          className='model w-50 mt-5'>
-      <h1 className='display-5 text-center'>התחברות</h1>
-      <form onSubmit={handleSubmit(onSub)} className='w-100 mx-auto'>
+      className={`modal ${closeBtn ? "d-block" : "none"}`}>
+      <div
+        className='modal-dialog  mt-5'>
+        <div className="modal-content">
+          <button onClick={() => setCloseBtn(!closeBtn)} className="p-3 btn btn-close"></button>
 
-        <label> Email</label>
-        <input autoComplete='username' {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
-        {errors.email && <small className='d-block text-danger'>
-          Enter valid Email
-        </small>}
-        <label>password</label>
-        <input autoComplete='current-password' {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
-        {errors.password && <small className='d-block text-danger'>
-          Enter valid password (min 3 chars)
-        </small>}
+          <div className="modal-header">
 
-        <button className='btn btn-success mt-3'>Log in</button>
-      </form>
+            <h1 className='display-5 text-center mx-auto'>התחברות</h1>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit(onSub)} className='w-100 mx-auto'>
 
-      <div className='text-center'>
-        <p>לא רשום?</p>
-        <Link className='btn btn-outline-primary' to={"/signUp"}>הירשם</Link>
+              <label> אימייל</label>
+              <input autoComplete='username' {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })} type="email" className='form-control' />
+              {errors.email && <small className='d-block text-danger'>
+                Enter valid Email
+              </small>}
+              <label>סיסמא</label>
+              <input autoComplete='current-password' {...register("password", { required: true, minLength: 3 })} type="password" className='form-control' />
+              {errors.password && <small className='d-block text-danger'>
+                Enter valid password (min 3 chars)
+              </small>}
+
+              <button data-bs-dismiss="modal" className='btn btn-success mt-3'>התחבר</button>
+            </form>
+          </div>
+
+          <div className="modal-footer">
+            <div className='text-center mx-auto'>
+              <p>לא רשום?</p>
+              <Link className='btn btn-outline-primary' to={"/signUp"}>הירשם</Link>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
-    </div>
-   
+
   )
 }

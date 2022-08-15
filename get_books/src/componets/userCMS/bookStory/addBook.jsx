@@ -24,7 +24,12 @@ export default function AddBook() {
 
   useEffect(() => {
     dispatch(getCat())
-    console.log(error);
+    return (
+      dispatch(createDelivery({
+        ownerID: bookJustLoaded.userID,
+        bookID: bookJustLoaded._id,
+      }))
+    );
   }, [])
 
 
@@ -48,7 +53,7 @@ export default function AddBook() {
 
     delete _dataBody.deliver
     dispatch(addBook(_dataBody)).unwrap()
-    
+
   }
 
   const uploadImg = async (image) => {
