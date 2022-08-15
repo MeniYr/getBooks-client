@@ -173,7 +173,7 @@ export const addBookStatus = (state) => state.books.addBook_status
 export const myBooksStatus = (state) => state.books.myBooks_status
 export const getAllBooks = (state) => state.books.books
 export const getMyBooks = (state) => state.books.userBooks
-export const books = (state) => state.books
+export const booksS = (state) => state.books
 
 export const { myBooks } = booksSlice.actions
 export default booksSlice.reducer;

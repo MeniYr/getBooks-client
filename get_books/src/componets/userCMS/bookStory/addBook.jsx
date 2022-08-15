@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
-import { addBook, addBookStatus, books } from '../../../shared/redux/features/bookSlice';
+import { addBook, addBookStatus, books, booksS } from '../../../shared/redux/features/bookSlice';
 import { categories, getCat } from '../../../shared/redux/features/categoriesSlice';
 import { doApiMethod } from '../../../shared/services/apiService';
 import axios, { AxiosError } from "axios";
@@ -18,14 +18,16 @@ export default function AddBook() {
   const dispatch = useDispatch();
   const getCategories = useSelector(categories)
   const getStatus = useSelector(addBookStatus)
-  const { error, bookJustLoaded } = useSelector(books)
+  const { error, bookJustLoaded } = useSelector(booksS)
   const [isPublish, setIsPublish] = useState(true)
   const [clicked, setClicked] = useState(false)
 
+  // get category list
   useEffect(() => {
     dispatch(getCat())
   }, [])
 
+  // create delivery
   useEffect(() => {
     return (() => {
       dispatch(createDelivery({
@@ -35,7 +37,7 @@ export default function AddBook() {
     })
   }, [bookJustLoaded])
 
-
+  // navigate forword
   useEffect(() => {
     error?.message && toast.error(error?.message)
 
@@ -47,6 +49,7 @@ export default function AddBook() {
 
   }, [error, getStatus])
 
+  // submit form
   const onSub = async (_dataBody) => {
     setClicked(true)
     console.log(_dataBody)
@@ -130,10 +133,10 @@ export default function AddBook() {
           </small>}
 
 
-          {/* <div className='d-flex py-2'>
+          <div className='d-flex py-2'>
             <label >פרסם את הספר למסירה כעת</label>
             <input onClick={(e)=>setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
-          </div> */}
+          </div>
 
           {
             getStatus === "loading" &&

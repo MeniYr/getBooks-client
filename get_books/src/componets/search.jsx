@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react'
 import ReactStars from 'react-rating-stars-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { books } from '../shared/redux/features/bookSlice'
+import { books, booksS } from '../shared/redux/features/bookSlice'
 import Book from './userCMS/bookStory/book';
 import { GrFavorite } from "react-icons/gr"
 import { MdOutlineFavorite } from "react-icons/md"
@@ -13,11 +13,13 @@ import { createDelivery } from '../shared/redux/features/deliverySlice';
 
 export default function Search() {
   const dispatch = useDispatch()
-  const { srchBooks_status, srchRes } = useSelector(books)
-  const {addNote_status, currentUser} = useSelector(getUsersSlice)
+  const { srchBooks_status, srchRes, books } = useSelector(booksS)
+  const { addNote_status, currentUser } = useSelector(getUsersSlice)
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth)
+
+  // rating
   const rating = (rate_num) => {
-    console.log(rate_num);
+    // console.log(rate_num);
     let isInt = Number.isInteger(rate_num);
     let num = Number(rate_num);
     if (!isInt && (Math.ceil(num) > num)) {
@@ -43,9 +45,13 @@ export default function Search() {
     }
   }, [innerWidthSize])
 
-  useEffect(()=>{
-    addNote_status==="succeeded"&&toast.success("הודעה נשלחה למוסר")
-  },[addNote_status])
+  useEffect(() => {
+    addNote_status === "succeeded" && toast.success("הודעה נשלחה למוסר")
+  }, [addNote_status])
+
+  // useEffect(() => {
+      
+  //  }, [])
 
   return (
     <div className='container d-flex align-items-center justify-content-center mt-5 pb-5'>
@@ -132,7 +138,7 @@ export default function Search() {
                               // dispatch(createDelivery({
                               //   bookID:item._id,
                               //   ownerID: item.userID,
-                                
+
                               // }))
                               dispatch(addNotify(notify))
                             }}
