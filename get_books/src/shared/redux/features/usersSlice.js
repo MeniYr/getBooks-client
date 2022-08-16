@@ -95,8 +95,8 @@ export const addNotify = createAsyncThunk(
         try {
             let toUserID = dataBody.toUserId;
             delete dataBody.toUserId
-console.log(dataBody);
-console.log(toUserID);
+            console.log(dataBody);
+            console.log(toUserID);
             const { data } = await doApiMethod(`${USERS_URL}/addNotify/${toUserID}`, "POST", dataBody)
             console.log(data)
             if (data.modifiedCount === 1)
@@ -123,16 +123,34 @@ const usersSlice = createSlice({
         signUp_status: 'idle',
         addNote_status: 'idle',
         msg_status: 'idle',
+        userNotifyAlready: false,
         error: null
     },
     reducers: {
 
-        logOutFromUsers: {
-            reducer(state, action) {
-                state.userByID = "";
-                state.currentUser = null;
-            },
-        }
+        logOutFromUsers: (state, action) => {
+
+            state.userByID = "";
+            state.currentUser = null;
+
+        },
+
+        isUserNotifyAlready: (state, action) => {
+
+            if (action.payload && state.users.length > 0) {
+                // console.log(state.users);
+                state.userNotifyAlready = state.users.filter(item => {
+                    item._id === action.payload?.toUserId &&
+                        item.notifications.filter(notificationsitem1 =>
+                            (notificationsitem1.fromUserId === action.payload?.fromUserId)) &&
+                        item.notifications.filter(notificationsitem2 =>
+                            (notificationsitem2.bookID === action.payload?.bookID))
+                    // state.userNotifyAlready = true
+                })
+                console.log(state.userNotifyAlready);
+            }
+        },
+
     },
     extraReducers(builder) {
         builder
@@ -265,7 +283,7 @@ const usersSlice = createSlice({
                     // state.users.push(action.payload)
                     state.msg_status = "succeeded"
                     toast.info("ההודעה נשלחה")
-                    
+
                     console.log(state.msg_status)
                 }
             })
@@ -310,5 +328,5 @@ export const getCurrentUser = (state) => state.users.currentUser
 export const userStatus = (state) => state.users.status
 // export const userById = (state) => state.users.userByID
 
-export const { logOutFromUsers } = usersSlice.actions
+export const { logOutFromUsers, isUserNotifyAlready } = usersSlice.actions
 export default usersSlice.reducer;

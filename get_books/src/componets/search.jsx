@@ -7,7 +7,7 @@ import Book from './userCMS/bookStory/book';
 import { GrFavorite } from "react-icons/gr"
 import { MdOutlineFavorite } from "react-icons/md"
 import { Button, IconButton, Tooltip } from '@mui/material';
-import { addNotify, getUsers, getUsersSlice } from '../shared/redux/features/usersSlice';
+import { addNotify, getUsers, getUsersSlice, isUserNotifyAlready } from '../shared/redux/features/usersSlice';
 import { toast } from "react-toastify"
 import { createDelivery } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +17,10 @@ export default function Search() {
   const nav = useNavigate();
 
   const { srchBooks_status, srchRes, books } = useSelector(booksS)
-  const { addNote_status, currentUser } = useSelector(getUsersSlice)
+  const { addNote_status, currentUser, userNotifyAlready } = useSelector(getUsersSlice)
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth)
-
+  const [userNotify, setUserNotify] = useState(userNotifyAlready)
+  const [notifyClicked, setNotifyClicked] = useState(false)
   // rating
   const rating = (rate_num) => {
     // console.log(rate_num);
@@ -54,8 +55,15 @@ export default function Search() {
   }, [addNote_status])
 
   useEffect(() => {
-currentUser!==null&&dispatch(getUsers())
-   }, [])
+    currentUser !== null && dispatch(getUsers())
+  }, [])
+
+  useEffect(() => {
+    return (
+      dispatch(getUsers())
+    )
+  }, [])
+
 
   return (
     <div className='container d-flex align-items-center justify-content-center mt-5 pb-5'>
@@ -133,14 +141,17 @@ currentUser!==null&&dispatch(getUsers())
                           </Tooltip>
 
                           <IconButton
-                          className='shadow'
+                            className='shadow'
                             onClick={() => {
                               let notify = {
-                                fromUserId: item.userID._id,
-                                toUserId: currentUser?._id,
+                                fromUserId: currentUser?._id,
+                                toUserId: item.userID._id,
                                 bookID: item._id,
                               }
-                              dispatch(addNotify(notify))
+                              // setNotifyClicked(true)
+                              dispatch(isUserNotifyAlready(notify))
+                              // console.log(userNotify);
+                              // dispatch(addNotify(notify))
                             }}
                           >
                             מעוניין
