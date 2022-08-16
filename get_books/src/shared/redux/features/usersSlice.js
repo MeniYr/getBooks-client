@@ -138,22 +138,21 @@ const usersSlice = createSlice({
         isUserNotifyAlready: (state, action) => {
 
             if (action.payload && state.users.length > 0) {
-                // console.log(state.users);
-                let user = state.users.map(item => 
-                        (item._id === action.payload.toUserId)
-                
-                )
-                let userIsNotify = user.notifications?.filter(item =>
-                    item.fromUserId === action.payload.fromUserId
-                )
+                let isSameUser, isSameBook;
+                state.users.forEach(item => {
 
-                let onSameBook = user.notifications?.filter(item =>
-                    item.bookID === action.payload.bookID
-                )
-                console.log(user);
-                console.log(userIsNotify);
-                console.log(onSameBook);
-
+                    item._id === action.payload.toUserId &&
+                        item.notifications.find(notify_item => {
+                            isSameBook = isSameUser = state.userNotifyAlready = false;
+                            isSameBook = (notify_item.bookID === action.payload.bookID);
+                            isSameUser = (notify_item.fromUserId === action.payload.fromUserId);
+                            if (isSameBook && isSameUser)
+                                return state.userNotifyAlready = isSameBook && isSameUser;
+                        });
+                })
+            }
+            else{
+                toast.error("ישנה תקלה זמנית, התחבר מחדש או רענן את הדף")
             }
         },
 
