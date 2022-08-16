@@ -139,15 +139,21 @@ const usersSlice = createSlice({
 
             if (action.payload && state.users.length > 0) {
                 // console.log(state.users);
-                state.userNotifyAlready = state.users.filter(item => {
-                    item._id === action.payload?.toUserId &&
-                        item.notifications.filter(notificationsitem1 =>
-                            (notificationsitem1.fromUserId === action.payload?.fromUserId)) &&
-                        item.notifications.filter(notificationsitem2 =>
-                            (notificationsitem2.bookID === action.payload?.bookID))
-                    // state.userNotifyAlready = true
-                })
-                console.log(state.userNotifyAlready);
+                let user = state.users.map(item => 
+                        (item._id === action.payload.toUserId)
+                
+                )
+                let userIsNotify = user.notifications?.filter(item =>
+                    item.fromUserId === action.payload.fromUserId
+                )
+
+                let onSameBook = user.notifications?.filter(item =>
+                    item.bookID === action.payload.bookID
+                )
+                console.log(user);
+                console.log(userIsNotify);
+                console.log(onSameBook);
+
             }
         },
 
