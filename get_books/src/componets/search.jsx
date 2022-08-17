@@ -9,7 +9,7 @@ import { MdOutlineFavorite } from "react-icons/md"
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { addNotify, getUsers, getUsersSlice, isUserNotifyAlready } from '../shared/redux/features/usersSlice';
 import { toast } from "react-toastify"
-import { createDelivery } from '../shared/redux/features/deliverySlice';
+import { addInterestedID, createDelivery, delInterestedID, delivery, getDeliveries } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
@@ -18,9 +18,11 @@ export default function Search() {
 
   const { srchBooks_status, srchRes, books } = useSelector(booksS)
   const { addNote_status, currentUser, userNotifyAlready } = useSelector(getUsersSlice)
+  const { deliveries } = useSelector(delivery)
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth)
-  const [userNotify, setUserNotify] = useState(userNotifyAlready)
   const [notifyClicked, setNotifyClicked] = useState(false)
+  const [isSameBook, setIsSameBook] = useState(false)
+  const [book_id, setBook_id] = useState("")
   // rating
   const rating = (rate_num) => {
     // console.log(rate_num);
@@ -51,7 +53,7 @@ export default function Search() {
 
   // succeeded notify
   useEffect(() => {
-    addNote_status === "succeeded" && toast.success("הודעה נשלחה למוסר")
+    addNote_status === "succeeded" && (!userNotifyAlready) && toast.success("הודעה נשלחה למוסר")
   }, [addNote_status])
 
   useEffect(() => {
@@ -59,10 +61,47 @@ export default function Search() {
   }, [])
 
   useEffect(() => {
-    return (
+    return () => {
       dispatch(getUsers())
-    )
+    }
   }, [])
+  useEffect(() => {
+    console.log(book_id);
+    dispatch(getDeliveries())
+    notifyClicked && dispatch(addInterestedID(book_id))
+    notifyClicked === false && dispatch(delInterestedID(book_id))
+  }, [notifyClicked])
+
+
+
+  const notifyControl = (notify) => {
+    // console.log(userNotifyAlready);
+    // if (!userNotifyAlready)
+    dispatch(addNotify(notify))
+
+  }
+  const interestedControle = (book) => {
+    let sameBook, sameUser;
+    
+    deliveries.forEach(item => {
+      setIsSameBook(false)
+      console.log(item);
+      item.bookID === book._id &&
+        item.interestedUsersID.find(user_id => {
+          sameBook=true;
+          sameUser = false;
+          sameUser = (user_id === book.userID._id);
+
+          console.log(sameBook && sameUser);
+          
+        });
+        if (sameBook && sameUser){
+          console.log(isSameBook);
+          return setIsSameBook(sameBook && sameUser);
+        }
+    })
+
+  }
 
 
   return (
@@ -141,17 +180,17 @@ export default function Search() {
                           </Tooltip>
 
                           <IconButton
-                            className='shadow'
+                            className={`shadow ${notifyClicked && isSameBook ? "bg-info" : "bg-white"}`}
                             onClick={() => {
                               let notify = {
                                 fromUserId: currentUser?._id,
                                 toUserId: item.userID._id,
                                 bookID: item._id,
                               }
-                              // setNotifyClicked(true)
-                              dispatch(isUserNotifyAlready(notify))
-                              // console.log(userNotify);
-                              // dispatch(addNotify(notify))
+                              setBook_id(item._id)
+                      
+                              setNotifyClicked(!notifyClicked)
+                              interestedControle(item)
                             }}
                           >
                             מעוניין

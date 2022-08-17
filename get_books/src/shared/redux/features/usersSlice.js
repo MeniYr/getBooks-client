@@ -146,6 +146,7 @@ const usersSlice = createSlice({
                             isSameBook = isSameUser = state.userNotifyAlready = false;
                             isSameBook = (notify_item.bookID === action.payload.bookID);
                             isSameUser = (notify_item.fromUserId === action.payload.fromUserId);
+                            console.log(isSameBook && isSameUser);
                             if (isSameBook && isSameUser)
                                 return state.userNotifyAlready = isSameBook && isSameUser;
                         });

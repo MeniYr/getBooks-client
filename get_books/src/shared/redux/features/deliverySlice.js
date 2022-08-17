@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/too
 import { API_URL, BOOKS, DELIVERY } from "../../constants/globalinfo/URL`S"
 
 
-import { doApiGet, doApiMethod} from "../../services/apiService"
+import { doApiGet, doApiMethod } from "../../services/apiService"
 
 
 
@@ -18,6 +18,7 @@ export const createDelivery = createAsyncThunk(
         }
     }
 )
+
 export const delDelivery = createAsyncThunk(
     'delivery/delDelivery', async (_dataBody) => {
         try {
@@ -45,9 +46,22 @@ export const getDeliveries = createAsyncThunk(
 )
 
 export const addInterestedID = createAsyncThunk(
-    'delivery/addInterestedID', async (userID) => {
+    'delivery/addInterestedID', async (bookID) => {
         try {
-            let data = await (await doApiMethod(`${DELIVERY}/addInterestedID/${userID}`, "PATCH")).data
+            let data = await (await doApiMethod(`${DELIVERY}/addInterestedID/${bookID}`, "PATCH")).data
+            console.log(data)
+            return data
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
+    }
+)
+
+export const delInterestedID = createAsyncThunk(
+    'delivery/addInterestedID', async (bookID) => {
+        try {
+            let data = await (await doApiMethod(`${DELIVERY}/delInterestedID/${bookID}`, "PATCH")).data
             console.log(data)
             return data
         }
@@ -81,6 +95,7 @@ const deliverySlice = createSlice({
         addInterestedID_status: "idle",
         getDeliveries_status: "idle",
         delDelivery_status: "idle",
+        delInterestedID_status: "idle",
         error: null
     },
 
@@ -153,8 +168,8 @@ const deliverySlice = createSlice({
                     console.log(state.delDelivery_status)
 
                 }
-   
-                
+
+
             })
 
             .addCase(delDelivery.rejected, (state, action) => {
@@ -162,6 +177,33 @@ const deliverySlice = createSlice({
                 state.error = action.error
                 console.log("here_error_msg", state.error)
             })
+
+            // removeInterestedUser
+            .addCase(delInterestedID.pending, (state, action) => {
+                state.delInterestedID_status = 'loading'
+                console.log(state.delInterestedID_status)
+
+            })
+
+            .addCase(delInterestedID.fulfilled, (state, action) => {
+
+                if (action.payload) {
+                    state.delInterestedID_status = 'succeeded';
+                    state.error = null;
+                    console.log(action.payload)
+                    console.log(state.delInterestedID_status)
+
+                }
+
+
+            })
+
+            .addCase(delInterestedID.rejected, (state, action) => {
+                state.delInterestedID_status = 'failed'
+                state.error = action.error
+                console.log("here_error_msg", state.error)
+            })
+
 
     }
 })

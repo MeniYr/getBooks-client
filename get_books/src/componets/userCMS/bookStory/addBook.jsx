@@ -17,7 +17,7 @@ export default function AddBook() {
   const nav = useNavigate();
   let { register, getValues, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const getCategories = useSelector(categories)
+  const getAllCategories = useSelector(categories)
   const getStatus = useSelector(addBookStatus)
   const { error, bookJustLoaded } = useSelector(booksS)
   const [isPublish, setIsPublish] = useState(true)
@@ -26,7 +26,7 @@ export default function AddBook() {
 
   // get category list
   useEffect(() => {
-    user_id!=undefined&&dispatch(getCategories())
+    user_id!=undefined&&dispatch(getCat())
     user_id===undefined&&toast.info("נא התחבר")&&nav("/login")
   }, [])
 
@@ -103,7 +103,7 @@ export default function AddBook() {
           </small>}
 
           <label>שנת הוצאה:</label>
-          <input {...register("publishing_year", { required: true, minLength: 1, maxLength: 4 })} type="text" className='form-control' />
+          <input {...register("publishing_year", { maxLength: 4 })} type="text" className='form-control' />
           {errors.publishing_year && <small className='d-block text-danger'>
             Enter valid publishing year
           </small>}
@@ -113,7 +113,7 @@ export default function AddBook() {
           {errors.pages && <small className='d-block text-danger'>
             Enter valid pages
           </small>}
-          <label>תאור:</label>
+          <label>תקציר:</label>
           <textarea {...register("description")} type="text" className='form-control' />
           {errors.description && <small className='d-block text-danger'>
             Enter valid pages
@@ -125,7 +125,7 @@ export default function AddBook() {
           <label>קטגוריה:</label>
           <select  {...register("cat_id", { required: true })} type="select" className='select-control text-center fw-bolder w-100' >
             <option >בחר קטגוריה ..</option>
-            {getCategories.map((item) => {
+            {getAllCategories.map((item) => {
               return (
                 <option key={item._id} value={item._id}>{item.category}</option>
               )
