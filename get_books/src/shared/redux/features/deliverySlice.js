@@ -36,7 +36,6 @@ export const getDeliveries = createAsyncThunk(
     'delivery/getDeliveries', async () => {
         try {
             let data = await (await doApiGet(DELIVERY)).data
-            console.log(data)
             return data
         }
         catch (err) {
@@ -59,10 +58,9 @@ export const addInterestedID = createAsyncThunk(
 )
 
 export const delInterestedID = createAsyncThunk(
-    'delivery/addInterestedID', async (bookID) => {
+    'delivery/delInterestedID', async (bookID) => {
         try {
             let data = await (await doApiMethod(`${DELIVERY}/delInterestedID/${bookID}`, "PATCH")).data
-            console.log(data)
             return data
         }
         catch (err) {
@@ -72,7 +70,7 @@ export const delInterestedID = createAsyncThunk(
 )
 
 export const srchBooksOnDlvrs = createAsyncThunk(
-    'delivery/srchBooks', async (search_experetion) => {
+    'delivery/srchBooksOnDlvrs', async (search_experetion) => {
         try {
             let data = await (await doApiMethod(`${BOOKS}/srch`, "POST", search_experetion)).data
             console.log(data)
@@ -139,7 +137,7 @@ const deliverySlice = createSlice({
                     state.error = null;
                     state.deliveries = action.payload
 
-                    console.log(action.payload)
+                    // console.log(action.payload)
                     console.log(state.getDeliveries_status)
 
                 }

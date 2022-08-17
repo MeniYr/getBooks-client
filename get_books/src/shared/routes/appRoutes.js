@@ -34,8 +34,8 @@ export default function AppRoutes() {
 
 
   useEffect(() => {
-    dispatch(AuthWithToken())
-    dispatch(getUser())
+    // dispatch(AuthWithToken())
+    // dispatch(getUser())
   }, [])
 
   return (

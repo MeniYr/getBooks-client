@@ -11,6 +11,7 @@ import { addNotify, getUsers, getUsersSlice, isUserNotifyAlready } from '../shar
 import { toast } from "react-toastify"
 import { addInterestedID, createDelivery, delInterestedID, delivery, getDeliveries } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 export default function Search() {
   const dispatch = useDispatch()
@@ -23,6 +24,7 @@ export default function Search() {
   const [notifyClicked, setNotifyClicked] = useState(false)
   const [isSameBook, setIsSameBook] = useState(false)
   const [book_id, setBook_id] = useState("")
+  const buttonRef = useRef()
   // rating
   const rating = (rate_num) => {
     // console.log(rate_num);
@@ -62,14 +64,17 @@ export default function Search() {
 
   useEffect(() => {
     return () => {
+    dispatch(getDeliveries())
+
       dispatch(getUsers())
     }
   }, [])
   useEffect(() => {
-    console.log(book_id);
-    dispatch(getDeliveries())
+    console.log(notifyClicked);
     notifyClicked && dispatch(addInterestedID(book_id))
     notifyClicked === false && dispatch(delInterestedID(book_id))
+
+    dispatch(getDeliveries())
   }, [notifyClicked])
 
 
@@ -82,23 +87,24 @@ export default function Search() {
   }
   const interestedControle = (book) => {
     let sameBook, sameUser;
-    
-    deliveries.forEach(item => {
-      setIsSameBook(false)
-      console.log(item);
+
+    deliveries.find(item => {
+      // console.log(item);
       item.bookID === book._id &&
-        item.interestedUsersID.find(user_id => {
-          sameBook=true;
+        item.interestedUsersID.filter(user_id => {
+          sameBook = true;
           sameUser = false;
           sameUser = (user_id === book.userID._id);
 
-          console.log(sameBook && sameUser);
-          
+          // console.log(sameBook && sameUser);
+          if (sameBook && sameUser)
+            return setIsSameBook(true);
+          else
+            setIsSameBook(false)
         });
-        if (sameBook && sameUser){
-          console.log(isSameBook);
-          return setIsSameBook(sameBook && sameUser);
-        }
+
+
+
     })
 
   }
@@ -178,9 +184,21 @@ export default function Search() {
                               {/* <MdOutlineFavorite /> */}
                             </p>
                           </Tooltip>
-
+                          {isSameBook ? "true" : "false"}
                           <IconButton
-                            className={`shadow ${notifyClicked && isSameBook ? "bg-info" : "bg-white"}`}
+                            className={`shadow ${
+                              // book_id === item._id && isSameBook ? "bg-info" : "bg-white"
+                              deliveries.filter(deliver => {
+                                return(
+                                (deliver.bookID === item._id) &&
+                                (deliver.interestedUsersID.filter(user_id =>
+                                 user_id === item.userID._id
+                                ))
+                            )
+                          }
+                          )
+                          ?"bg-info" : "bg-white"}`
+                        }
                             onClick={() => {
                               let notify = {
                                 fromUserId: currentUser?._id,
@@ -188,11 +206,13 @@ export default function Search() {
                                 bookID: item._id,
                               }
                               setBook_id(item._id)
-                      
+
                               setNotifyClicked(!notifyClicked)
-                              interestedControle(item)
+                              // interestedControle(item)
                             }}
                           >
+
+
                             מעוניין
                           </IconButton>
 
