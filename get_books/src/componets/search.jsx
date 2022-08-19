@@ -235,8 +235,8 @@ export default function Search() {
 
 
                             מעוניין
-                          </IconButton>
                           <IsInterested  book={item} />
+                          </IconButton>
 
                         </div>
                       </div>
