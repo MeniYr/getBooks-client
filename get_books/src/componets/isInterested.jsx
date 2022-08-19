@@ -5,25 +5,28 @@ import { MdImportContacts } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 import { Button, IconButton, Tooltip } from '@mui/material';
+import { getUsersSlice } from '../shared/redux/features/usersSlice';
 
 export default function IsInterested(props) {
     const { book } = props;
+    const { currentUser,  } = useSelector(getUsersSlice)
     const { deliveries } = useSelector(delivery)
     const [isExist, setIsExist] = useState([])
-  const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
 
     useEffect(() => {
-    // dispatch(getDeliveries())
+        // dispatch(getDeliveries())
 
-                // const bookid = 
+        // const bookid = 
 
-                setIsExist(deliveries.filter(a=>a.bookID===book._id));
-            console.log(isExist);    
-// return()=>{
-//     dispatch(getDeliveries())
+        setIsExist(deliveries.filter(a => a.bookID === book._id));
+        console.log(isExist);
+        // console.log();
+        // return()=>{
+        //     dispatch(getDeliveries())
 
-// }
+        // }
     }, [deliveries])
     return (
 
@@ -38,14 +41,15 @@ export default function IsInterested(props) {
 
         })
         } */}
-        {isExist?<h2>true</h2>:0}
-        {isExist?.map(item=>{
-            return(
-                <div>{item.bookID===book._id&& (item.interestedUsersID===book.usedID?._id)?<IconButton>מעוניין</IconButton>:2}
-                <h2>{item.interestedUsersID.includes(book.userID._id)?1:2}</h2>
-                </div>
-            )
-        })}
+            {isExist?.map(item => {
+                return (
+                    <div>
+                        <h2>{item.interestedUsersID.includes(currentUser?._id) ? 1 : 2}</h2>
+                        <h2>{currentUser?._id}</h2>
+                        <h2>{book._id}</h2>
+                    </div>
+                )
+            })}
         </div>
     )
 }

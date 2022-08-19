@@ -207,14 +207,7 @@ export default function Search() {
                               {/* <MdOutlineFavorite /> */}
                             </p>
                           </Tooltip>
-                          {isSameBook ? "true" : "false"}
                           <br />
-                          {deliveries?.find(deliverItem =>
-                            (deliverItem?.bookID === item?._id) &&
-                            (deliverItem?.interestedUsersID?.map(user_id =>
-                              user_id === item?.userID?._id))) ?
-                            "found" : "not"
-                          }
 
                           {/* <div>a: {deliver[0]?.interestedUsersID[0]}</div> */}
 
@@ -224,8 +217,7 @@ export default function Search() {
                               // book_id === item._id && isSameBook ? "bg-info" : "bg-white"
                               deliver?.find(deliverItem =>
                                 (deliverItem.bookID === item._id) &&
-                                (deliverItem.interestedUsersID?.map(user_id =>
-                                  user_id === item.userID?._id)))
+                                (deliverItem.interestedUsersID?.includes(item.userID?._id)))
                                 ? "bg-info" : ""}`
                             }
                             onClick={() => {
