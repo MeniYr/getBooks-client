@@ -135,6 +135,7 @@ const deliverySlice = createSlice({
                 if (action.payload) {
                     state.getDeliveries_status = 'succeeded';
                     state.error = null;
+                    state.deliveries = []
                     state.deliveries = action.payload
 
                     // console.log(action.payload)

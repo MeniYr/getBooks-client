@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import { addInterestedID, createDelivery, delInterestedID, delivery, getDeliveries } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
+import IsInterested from './isInterested';
 
 export default function Search() {
   const dispatch = useDispatch()
@@ -24,6 +25,7 @@ export default function Search() {
   const [notifyClicked, setNotifyClicked] = useState(false)
   const [isSameBook, setIsSameBook] = useState(false)
   const [book_id, setBook_id] = useState("")
+  const [deliver, setDeliver] = useState(deliveries)
   const buttonRef = useRef()
   // rating
   const rating = (rate_num) => {
@@ -63,19 +65,40 @@ export default function Search() {
   }, [])
 
   useEffect(() => {
-    return () => {
     dispatch(getDeliveries())
+    return () => {
 
       dispatch(getUsers())
+    dispatch(getDeliveries())
+
     }
   }, [])
   useEffect(() => {
     console.log(notifyClicked);
-    notifyClicked && dispatch(addInterestedID(book_id))
-    notifyClicked === false && dispatch(delInterestedID(book_id))
+   dispatch(addInterestedID(book_id))
+    // notifyClicked === false && dispatch(delInterestedID(book_id))
 
     dispatch(getDeliveries())
   }, [notifyClicked])
+  let booksInterested;
+  useEffect(() => {
+    setDeliver(deliveries)
+    console.log(deliveries);
+    console.log(
+      (deliveries.find(deliver =>
+        (deliver.bookID === "62fc8d7b288f3236e1e9299e") &&
+        (deliver?.interestedUsersID.find(user_id =>
+          user_id === "62d8f2e0783f67c23544bd3c")))
+      )
+    );
+    booksInterested = {
+      // book: deliveries.bookID,
+      exist: deliveries.find(deliver =>
+        (deliver.bookID === "62fc8d7b288f3236e1e9299e") &&
+        (deliver?.interestedUsersID.find(user_id =>
+          user_id === "62d8f2e0783f67c23544bd3c")))
+    }
+  }, [deliveries])
 
 
 
@@ -86,26 +109,26 @@ export default function Search() {
 
   }
   const interestedControle = (book) => {
-    let sameBook, sameUser;
+    dispatch(getDeliveries())
+    // let sameBook, sameUser;
+    // deliveries.find(item => {
+    //   // console.log(item);
+    //   item.bookID === book._id &&
+    //     item.interestedUsersID.filter(user_id => {
+    //       sameBook = true;
+    //       sameUser = false;
+    //       sameUser = (user_id === book.userID._id);
 
-    deliveries.find(item => {
-      // console.log(item);
-      item.bookID === book._id &&
-        item.interestedUsersID.filter(user_id => {
-          sameBook = true;
-          sameUser = false;
-          sameUser = (user_id === book.userID._id);
-
-          // console.log(sameBook && sameUser);
-          if (sameBook && sameUser)
-            return setIsSameBook(true);
-          else
-            setIsSameBook(false)
-        });
+    //       // console.log(sameBook && sameUser);
+    //       if (sameBook && sameUser)
+    //         return setIsSameBook(true);
+    //       else
+    //         setIsSameBook(false)
+    //     });
 
 
 
-    })
+    // })
 
   }
 
@@ -185,20 +208,26 @@ export default function Search() {
                             </p>
                           </Tooltip>
                           {isSameBook ? "true" : "false"}
+                          <br />
+                          {deliveries?.find(deliverItem =>
+                            (deliverItem?.bookID === item?._id) &&
+                            (deliverItem?.interestedUsersID?.map(user_id =>
+                              user_id === item?.userID?._id))) ?
+                            "found" : "not"
+                          }
+
+                          {/* <div>a: {deliver[0]?.interestedUsersID[0]}</div> */}
+
+
                           <IconButton
                             className={`shadow ${
                               // book_id === item._id && isSameBook ? "bg-info" : "bg-white"
-                              deliveries.filter(deliver => {
-                                return(
-                                (deliver.bookID === item._id) &&
-                                (deliver.interestedUsersID.filter(user_id =>
-                                 user_id === item.userID._id
-                                ))
-                            )
-                          }
-                          )
-                          ?"bg-info" : "bg-white"}`
-                        }
+                              deliver?.find(deliverItem =>
+                                (deliverItem.bookID === item._id) &&
+                                (deliverItem.interestedUsersID?.map(user_id =>
+                                  user_id === item.userID?._id)))
+                                ? "bg-info" : ""}`
+                            }
                             onClick={() => {
                               let notify = {
                                 fromUserId: currentUser?._id,
@@ -208,14 +237,14 @@ export default function Search() {
                               setBook_id(item._id)
 
                               setNotifyClicked(!notifyClicked)
-                              // interestedControle(item)
+                              interestedControle()
                             }}
                           >
 
 
                             מעוניין
                           </IconButton>
-
+                          <IsInterested  book={item} />
 
                         </div>
                       </div>
