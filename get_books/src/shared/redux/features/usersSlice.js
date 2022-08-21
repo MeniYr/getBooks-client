@@ -117,6 +117,7 @@ const usersSlice = createSlice({
         currentUser: null,
         users: [],
         userNotify: [],
+        countNotify:0,
         status: 'idle',
         getUser_status: 'idle',
         getUsers_status: 'idle',
@@ -196,6 +197,7 @@ const usersSlice = createSlice({
                     // state.users.push(action.payload)
                     state.getUser_status = "succeeded"
                     state.currentUser = action.payload
+                    state.userNotify = action.payload.notifications
                     console.log(state.status)
                     console.log(state.currentUser)
 
