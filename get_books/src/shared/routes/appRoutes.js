@@ -25,30 +25,37 @@ import { getUser } from '../redux/features/usersSlice';
 import MyBooks from '../../componets/userCMS/bookStory/myBooks';
 import Logout from '../auth/logOut';
 import Search from '../../componets/search';
+import { booksS } from '../redux/features/bookSlice';
+import { doApiMethod } from '../services/apiService';
+import { DELIVERY } from '../constants/globalinfo/URL`S';
 
 
 
 
 export default function AppRoutes() {
   const dispatch = useDispatch()
-
+  const {books} = useSelector(booksS)
 
   useEffect(() => {
-    // dispatch(AuthWithToken())
+    dispatch(AuthWithToken())
     // dispatch(getUser())
+    // books.forEach(element => {
+
+    //   (doApiMethod(`${DELIVERY}/create`, "POST", { bookID: element._id, ownerID: element.userID._id }))
+    // });
+
+
   }, [])
 
   return (
     <BrowserRouter>
       {/* <HeaderClient /> */}
       <Routes>
-
         <Route path="/*" element={<Navbar />} />
       </Routes>
 
       <Routes >
         {/* <Navbar /> */}
-        {/* <Outlet /> */}
         {/* user cms */}
         <Route path="/" element={<Home />} />
 

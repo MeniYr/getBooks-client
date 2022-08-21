@@ -12,7 +12,6 @@ export const getUsers = createAsyncThunk(
     'users/getUsers', async () => {
         try {
             let data = await (await doApiGet(USERS_URL)).data
-            console.log(data)
             return data
         }
         catch (err) {
@@ -117,6 +116,7 @@ const usersSlice = createSlice({
         userByID: "",
         currentUser: null,
         users: [],
+        userNotify: [],
         status: 'idle',
         getUser_status: 'idle',
         getUsers_status: 'idle',
@@ -135,28 +135,6 @@ const usersSlice = createSlice({
 
         },
 
-        isUserNotifyAlready: (state, action) => {
-
-            if (action.payload && state.users.length > 0) {
-                let isSameUser, isSameBook;
-                state.users.forEach(item => {
-
-                    item._id === action.payload.toUserId &&
-                        item.notifications.find(notify_item => {
-                            isSameBook = isSameUser = state.userNotifyAlready = false;
-                            isSameBook = (notify_item.bookID === action.payload.bookID);
-                            isSameUser = (notify_item.fromUserId === action.payload.fromUserId);
-                            console.log(isSameBook && isSameUser);
-                            if (isSameBook && isSameUser)
-                                return state.userNotifyAlready = isSameBook && isSameUser;
-                        });
-                })
-            }
-            else{
-                toast.error("ישנה תקלה זמנית, התחבר מחדש או רענן את הדף")
-            }
-        },
-
     },
     extraReducers(builder) {
         builder
@@ -164,17 +142,19 @@ const usersSlice = createSlice({
                 state.getUsers_status = 'loading'
                 console.log(state.getUsers_status)
             })
+
             .addCase(getUsers.fulfilled, (state, action) => {
                 if (action.payload) {
                     state.getUsers_status = 'succeeded';
                     state.users = action.payload
-                    console.log(action.payload)
+                    console.log(state.getUsers_status)
                 }
 
 
                 // console.log(state.users)
 
             })
+
             .addCase(getUsers.rejected, (state, action) => {
                 state.getUsers_status = "failed"
                 state.error = action.error
@@ -186,6 +166,7 @@ const usersSlice = createSlice({
                 state.signUp_status = 'loading'
                 console.log(state.signUp_status)
             })
+
             .addCase(addUser.fulfilled, (state, action) => {
 
                 if (action.payload) {
@@ -306,10 +287,9 @@ const usersSlice = createSlice({
             })
 
             .addCase(addNotify.fulfilled, (state, action) => {
-                // console.log(action.payload)
+                console.log(action.payload)
 
                 if (action.payload.modifiedCount === 1) {
-                    // state.users.push(action.payload)
                     state.addNote_status = "succeeded"
                     console.log(state.addNote_status)
 
@@ -317,7 +297,7 @@ const usersSlice = createSlice({
             })
 
             .addCase(addNotify.rejected, (state, action) => {
-                state.error = action.error.message
+                state.error = action.error?.message
                 state.addNote_status = "failed"
                 console.log(state.error)
                 console.log(state.addNote_status)
@@ -334,5 +314,5 @@ export const getCurrentUser = (state) => state.users.currentUser
 export const userStatus = (state) => state.users.status
 // export const userById = (state) => state.users.userByID
 
-export const { logOutFromUsers, isUserNotifyAlready } = usersSlice.actions
+export const { logOutFromUsers, isUserClickForNotifyAlready } = usersSlice.actions
 export default usersSlice.reducer;
