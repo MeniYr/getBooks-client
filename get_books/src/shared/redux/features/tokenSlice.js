@@ -89,6 +89,7 @@ const tokenSlice = createSlice({
 
             .addCase(login.pending, (state, action) => {
                 state.logINStatus = 'loading'
+                state.error=null
                 console.log(state.logINStatus)
                 // console.log(state.token)
             })

@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,28 +19,46 @@ export default function Login() {
   let { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
-    logIn_status === "failed" && toast.error("email or user wrong")
-    return (
-      setCloseBtn(true)
-    )
-  }, [error])
+    clicked&&logIn_status === "failed" && toast.error("email or user wrong")
+console.log(logIn_status);
+  }, [error,logIn_status])
+
+  // useEffect(()=>{
+  //   console.log();
+  //   return (()=>{
+  //     console.log(logIn_status);
+  //     setCloseBtn(true)
+  //     logIn_status==="succeeded"&&dispatch(getUser())
+
+  //   }
+  //   )
+  // },[logIn_status])
 
   useEffect(() => {
     if (userName != "" && clicked)
       toast.success(`ברוך הבא ${userName}`)
-  }, [userName])
+  }, [userName,clicked])
 
   useEffect(() => {
-    logIn_status === "succeeded" && clicked && nav("/")
-    logIn_status === "succeeded" && dispatch(getUser())
-  }, [clicked, logIn_status])
-
-
+    return(
+      ()=>{
+        
+        clicked && dispatch(getUser())
+      }
+      )
+    }, [clicked])
+    
+    useEffect(() => {
+    logIn_status === "succeeded" && clicked&&toast.success(`ברוך הבא ${userName}`) && nav("/")
+    !closeBtn && nav("/")
+  }, [closeBtn, logIn_status])
 
   const onSub = (_dataBody) => {
-
     dispatch(login(_dataBody))
     setCilcked(true)
+    setCloseBtn(false)
+    logIn_status==="succeeded"&&dispatch(getUser())
+
   }
 
   return (
@@ -50,7 +68,7 @@ export default function Login() {
       <div
         className='modal-dialog  mt-5'>
         <div className="modal-content">
-          <button onClick={() => setCloseBtn(!closeBtn)} className="p-3 btn btn-close"></button>
+          <button onClick={() => setCloseBtn(false)} className="p-3 btn btn-close"></button>
 
           <div className="modal-header">
 

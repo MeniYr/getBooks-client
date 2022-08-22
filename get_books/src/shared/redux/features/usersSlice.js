@@ -108,6 +108,22 @@ export const addNotify = createAsyncThunk(
         }
     })
 
+export const readNotify = createAsyncThunk(
+    'users/readNotify', async (dataBody) => {
+        try {
+           
+            const { data } = await doApiMethod(`${USERS_URL}/readNotify/${dataBody}`, "PUT")
+            console.log(data)
+            if (data.modifiedCount === 1)
+                return data
+            else
+                throw isRejectedWithValue("תקלה בנתונים")
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
+    })
+
 
 
 const usersSlice = createSlice({
@@ -117,7 +133,7 @@ const usersSlice = createSlice({
         currentUser: null,
         users: [],
         userNotify: [],
-        countNotify:0,
+        countNotify: 0,
         status: 'idle',
         getUser_status: 'idle',
         getUsers_status: 'idle',
@@ -198,6 +214,12 @@ const usersSlice = createSlice({
                     state.getUser_status = "succeeded"
                     state.currentUser = action.payload
                     state.userNotify = action.payload.notifications
+                    let count = 0;
+                    action.payload.notifications.forEach(note => {
+                        if (note.isRead === false)
+                            count++
+                    })
+                    state.countNotify = count
                     console.log(state.status)
                     console.log(state.currentUser)
 
@@ -303,6 +325,27 @@ const usersSlice = createSlice({
                 state.addNote_status = "failed"
                 console.log(state.error)
                 console.log(state.addNote_status)
+            })
+            .addCase(readNotify.pending, (state, action) => {
+                state.readNotify = 'loading'
+                console.log(state.readNotify)
+            })
+
+            .addCase(readNotify.fulfilled, (state, action) => {
+                console.log(action.payload)
+
+                if (action.payload.modifiedCount === 1) {
+                    state.readNotify = "succeeded"
+                    console.log(state.readNotify)
+
+                }
+            })
+
+            .addCase(readNotify.rejected, (state, action) => {
+                state.error = action.error?.message
+                state.readNotify = "failed"
+                console.log(state.error)
+                console.log(state.readNotify)
             })
 
     }

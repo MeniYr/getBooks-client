@@ -19,6 +19,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from '@mui/material';
 import { srchBooks } from '../redux/features/bookSlice';
+import { MdHome } from 'react-icons/md';
+import { getUser, getUsersSlice, readNotify } from '../redux/features/usersSlice';
 
 
 
@@ -60,10 +62,13 @@ export default function PrimarySearchAppBar() {
   const dispatch = useDispatch()
   const srchRef = React.useRef(null)
   const userLogIn = useSelector((state) => state.token.token)
+  const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice)
   const nav = useNavigate()
 
   React.useEffect(() => {
-    console.log(userLogIn);
+    console.log(countNotify);
+    userLogIn && dispatch(getUser())
+    //  console.log(userNotify);
   }, [userLogIn])
 
   // run search resault
@@ -74,14 +79,19 @@ export default function PrimarySearchAppBar() {
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [noteEl, setNoteEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNoteMenuOpen = Boolean(noteEl);
 
   // handles
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleNoteMenuOpen = (event) => {
+    setNoteEl(event.currentTarget);
   };
 
   const handlePersonalAriaMenuOpen = (event) => {
@@ -103,6 +113,10 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+  const handleNoteMenuClose = () => {
+    setNoteEl(null);
+    handleMobileMenuClose();
+  };
 
 
 
@@ -110,9 +124,12 @@ export default function PrimarySearchAppBar() {
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
+      // anchorPosition={{
+      //   top:700}
+      // }
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
       id={menuId}
@@ -121,8 +138,10 @@ export default function PrimarySearchAppBar() {
         vertical: 'top',
         horizontal: 'right',
       }}
+
       open={isMenuOpen}
       onClose={handleMenuClose}
+
     >
 
       <MenuItem
@@ -141,11 +160,55 @@ export default function PrimarySearchAppBar() {
         <Link className='text-decoration-none text-black-50' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
     </Menu>
   );
+  // notify menu
+  const notyfiMenuId = 'primary-search-account-menu';
+  const renderNoteMenu = (
+    <Menu
+
+      anchorEl={noteEl}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      id={notyfiMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+
+      open={isNoteMenuOpen}
+      onClose={handleNoteMenuClose}
+    >
+      {
+        userNotify.map(item => {
+          return (
+              <MenuItem
+              sx={{
+                width:250
+              }}
+              key={item._id}
+                onClick={()=>{
+                  handleNoteMenuClose()
+                  item.isRead===false&&dispatch(readNotify(item._id))&&dispatch(getUser())
+                }
+                }
+              >
+                <p className={`text-wrap p-0 m-0 ${item.isRead===false?"opacity-100": "opacity-50"}`}>{item.fromUserId.name} מעוניין בספר {item.bookID.name}</p>
+            </MenuItem>
+          )
+        })
+      }
+
+
+    </Menu>
+  );
 
   // mobile menu
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
+
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: 'top',
@@ -176,8 +239,9 @@ export default function PrimarySearchAppBar() {
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
+          onClick={handleNoteMenuOpen}
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={countNotify} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -225,16 +289,18 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
 
-        <Toolbar>
+        <Toolbar
+        >
           {/* menu */}
           <IconButton
+
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
             sx={{
               ml: 1,
-              display: { xs: 'none', md: "block" }
+              display: { xs: 'none', md: "block" },
             }}
 
             onClick={handleProfileMenuOpen}
@@ -251,7 +317,8 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block', md: "block" } }} //style
           >
-            <Link className='text-white fst-italic fs-2 fw-semibold text-decoration-none' to={"/"}>get books</Link>
+
+            <Link className='text-white fst-italic fs-2 fw-semibold text-decoration-none' to={"/"}>get books <MdHome /></Link>
           </Typography>
 
           {/* search */}
@@ -306,8 +373,9 @@ export default function PrimarySearchAppBar() {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              onClick={handleNoteMenuOpen}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={countNotify} color="error">
                 <Tooltip title="התראות">
                   <NotificationsIcon />
                 </Tooltip>
@@ -329,7 +397,7 @@ export default function PrimarySearchAppBar() {
               </Tooltip>
             </IconButton>
 
-            {userLogIn === null ? <Link className='btn btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='text-warning text-decoration-none d-md-inline-flex align-items-center' color={'white'} to={"/logOut"}>יציאה</Link>}
+            {userLogIn === null ? <Link className='text-bolder  text-decoration-none d-md-inline-flex align-items-center badge' color={'white'} to={"/login"}>החחברות</Link> : <Tooltip title="יציאה"><Link className='text-warning text-decoration-none d-md-inline-flex align-items-center ' color={'white'} to={"/logOut"}>{currentUser?.name} </Link></Tooltip>}
           </Box>
 
           {/* my account icon / more`s button  */}
@@ -356,6 +424,7 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNoteMenu}
     </Box>
   );
 }

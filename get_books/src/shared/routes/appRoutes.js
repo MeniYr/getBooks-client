@@ -34,10 +34,12 @@ import { DELIVERY } from '../constants/globalinfo/URL`S';
 
 export default function AppRoutes() {
   const dispatch = useDispatch()
-  const {books} = useSelector(booksS)
+  const { books } = useSelector(booksS)
+  const { authStatus } = useSelector(user_from_token)
 
   useEffect(() => {
     dispatch(AuthWithToken())
+    authStatus === "succeeded" && dispatch(getUser())
     // dispatch(getUser())
     // books.forEach(element => {
 
@@ -50,10 +52,11 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       {/* <HeaderClient /> */}
+        
       <Routes>
         <Route path="/*" element={<Navbar />} />
       </Routes>
-
+      <Outlet />
       <Routes >
         {/* <Navbar /> */}
         {/* user cms */}
@@ -85,7 +88,6 @@ export default function AppRoutes() {
       </Routes>
       {/* FOOTER COMP */}
       <ToastContainer theme='colored' />
-
     </BrowserRouter>
   )
 }

@@ -22,18 +22,23 @@ export default function AddBook() {
   const { error, bookJustLoaded } = useSelector(booksS)
   const [isPublish, setIsPublish] = useState(true)
   const [clicked, setClicked] = useState(false)
-  const user_id = useSelector(getCurrentUser)?._id
+  const user_id = useSelector(getCurrentUser)
 
   // get category list
   useEffect(() => {
-    user_id!=undefined&&dispatch(getCat())
-    user_id===undefined&&toast.info("נא התחבר")&&nav("/login")
+
+    user_id != null && dispatch(getCat())
   }, [])
+
+  useEffect(() => {
+
+    user_id === null && toast.info("נא התחבר") && nav("/login")
+  }, [user_id])
 
   // create delivery
   useEffect(() => {
     return (() => {
-      clicked&&dispatch(createDelivery({
+      clicked && dispatch(createDelivery({
         ownerID: bookJustLoaded.userID,
         bookID: bookJustLoaded._id,
       }))
@@ -42,7 +47,7 @@ export default function AddBook() {
 
   // navigate forword
   useEffect(() => {
-    clicked&&error?.message && toast.error(error?.message)
+    clicked && error?.message && toast.error(error?.message)
 
     if (getStatus === "succeeded" && !error && clicked) {
       console.log(getStatus);
@@ -138,7 +143,7 @@ export default function AddBook() {
 
           <div className='d-flex py-2'>
             <label >פרסם את הספר למסירה כעת</label>
-            <input onClick={(e)=>setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
+            <input onClick={(e) => setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
           </div>
 
           {

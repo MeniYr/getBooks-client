@@ -16,9 +16,10 @@ export default function Signup() {
   const getEroor = useSelector((state) => state.users)
   // const getUsers = useSelector((state) => state.users.users)
   const [close, setClose] = useState(true)
+  const [clicked, setclicked] = useState(false)
 
   useEffect(() => {
-    if (getStatus === "succeeded") {
+    if (clicked&& getStatus=== "succeeded") {
       toast.success("נרשמת בהצלחה, נא התחבר")
       nav("/login")
     }
@@ -30,7 +31,8 @@ export default function Signup() {
 
   const onSub = async (_dataBody) => {
     delete _dataBody.password2;
-    await (await dispatch(addUser(_dataBody)).unwrap())
+      dispatch(addUser(_dataBody))
+    setclicked(true)
   }
 
 
