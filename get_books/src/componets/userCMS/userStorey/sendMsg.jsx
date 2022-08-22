@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getUser, getUserByID, getUsersSlice, sendMassage } from '../../../shared/redux/features/usersSlice'
 
-export default function SendMsg() {
+export default function SendMsg({id, msgClose}) {
     let { register, handleSubmit, formState: { errors } } = useForm();
 
     const dispatch = useDispatch()
@@ -23,7 +23,7 @@ export default function SendMsg() {
         console.log(user);
         let msg = {
             fromUserId: user._id,
-            toUserId: toUserId,
+            toUserId: toUserId || id,
             msg: _dataBody.msg
         }
         dispatch(sendMassage(msg))
@@ -37,7 +37,7 @@ export default function SendMsg() {
             toast.info("נא התחבר")
             nav("/login")
         }
-        dispatch(getUserByID(toUserId))
+        dispatch(getUserByID(toUserId || id))
         dispatch(getUser())
             if (toUser?.error)
                 toast.error("נסה שנית")
@@ -49,10 +49,10 @@ export default function SendMsg() {
     },[msg_status])
 
     return (
-        <div className={`modal ${closeMsgBtn ? "d-block" : "none"}`}>
+        <div className={`modal d-block`}>
             <div className="modal-dialog">
                 <div className="modal-content">
-                    <button onClick={() => setCloseMsgBtn(!closeMsgBtn)} className="p-3 btn btn-close"></button>
+                    <button onClick={() => msgClose(false)} className="p-3 btn btn-close"></button>
                     <div className="modal-header">
                         <h1 className='display-5 text-center mx-auto'>שליחת הודעה</h1>
                     </div>

@@ -28,6 +28,7 @@ import Search from '../../componets/search';
 import { booksS } from '../redux/features/bookSlice';
 import { doApiMethod } from '../services/apiService';
 import { DELIVERY } from '../constants/globalinfo/URL`S';
+import Delivery from '../../componets/userCMS/delivery';
 
 
 
@@ -75,6 +76,7 @@ export default function AppRoutes() {
         <Route path="/myBooks" element={< MyBooks />} />
         <Route path="/logOut" element={< Logout />} />
         <Route path="/search" element={< Search />} />
+        <Route path="/delivery" element={< Delivery />} />
 
 
         {/*  <Route path="/logout" element={<Logout />} />

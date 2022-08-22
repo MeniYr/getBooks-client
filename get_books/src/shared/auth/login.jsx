@@ -49,7 +49,8 @@ console.log(logIn_status);
     }, [clicked])
     
     useEffect(() => {
-    logIn_status === "succeeded" && clicked&&toast.success(`ברוך הבא ${userName}`) && nav("/")
+    logIn_status === "succeeded" && clicked&&toast.success(`ברוך הבא ${userName}`) 
+    && nav(-1)
     !closeBtn && nav("/")
   }, [closeBtn, logIn_status])
 

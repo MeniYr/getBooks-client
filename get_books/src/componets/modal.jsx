@@ -8,9 +8,9 @@ export default function Modal() {
     const dispatch = useDispatch()
 
     return (
-        <aside className='model d-flex'>
-            <div className="model mx-auto">
-                <div className='model-dialog '>
+        <div className='modal d-flex align-items-center'>
+            <div className=" border mx-auto">
+                <div className='modal-body '>
                     <div className="text-center">
                         <h4>אתה בטוח?</h4>
                         <button
@@ -29,6 +29,6 @@ export default function Modal() {
 
             </div>
 
-        </aside>
+        </div>
     )
 }

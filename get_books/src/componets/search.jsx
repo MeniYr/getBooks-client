@@ -12,7 +12,8 @@ import { toast } from "react-toastify"
 import { addInterestedID, createDelivery, delInterestedID, delivery, getDeliveries } from '../shared/redux/features/deliverySlice';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
-import IsInterested from './isInterested';
+import Modal from './modal';
+import Delivery from './userCMS/delivery';
 // import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 
 export default function Search() {
@@ -26,7 +27,7 @@ export default function Search() {
   const [notifyClicked, setNotifyClicked] = useState(false)
   const [isSameBook, setIsSameBook] = useState(false)
   const [notify, setNotify] = useState({})
-  const [deliver, setDeliver] = useState(deliveries)
+  // const [openModal, setOpenModal] = useState(false)
   const buttonRef = useRef()
   // rating
   const rating = (rate_num) => {
@@ -124,10 +125,11 @@ export default function Search() {
           width: innerWidthSize < 768 ? "auto" : "700px",
         }}
         className="row">
+          
 
         <div
 
-          className="p-2 ">
+className="p-2 ">
           {srchBooks_status === "succeeded" && srchRes?.length > 0 &&
             srchRes?.map((item, i) => {
               return (
@@ -196,7 +198,6 @@ export default function Search() {
                          {deliveries?.find(a => a.bookID === item._id)?.
                             interestedUsersID?.includes(currentUser?._id) ? "yes" : "not"} */}
 
-
                           <IconButton
                             className={`shadow ${deliveries?.find(a => a.bookID === item._id)?.
                               interestedUsersID?.includes(currentUser?._id) ? "bg-info" : <></>}`}
@@ -209,8 +210,9 @@ export default function Search() {
                               dispatch(addInterestedID(item._id))
                               setNotifyClicked(!notifyClicked)
                               notifyControl(notify)
+                              // setOpenModal(true)
                             }}
-                          >
+                            >
                             {deliveries?.find(a => a.bookID === item._id)?.
                               interestedUsersID?.includes(currentUser?._id) ? <>🔖</> : <></>
                             }

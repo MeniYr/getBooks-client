@@ -8,6 +8,7 @@ import { createDelivery } from '../shared/redux/features/deliverySlice';
 import { user_name } from '../shared/redux/features/tokenSlice';
 import { logOut, logOutFromUsers, reset } from '../shared/redux/features/usersSlice';
 import Modal from './modal';
+import Delivery from './userCMS/delivery';
 
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const userName = useSelector(user_name)
   const { bookJustLoaded } = useSelector(booksS)
   const [isLoginMode, setIsLoginMode] = useState(true)
+  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
 
@@ -26,10 +28,13 @@ export default function Home() {
   return (
     <div>
       home
-{/* <Modal /> */}
+      {/* <button onClick={() => { setOpenModal(true) }}>
+        לחץ
+      </button>
+      {openModal && <Delivery toOpenModal={setOpenModal} />} */}
       {/* {toast.success(`Welcome ${userName}, You logged in`)} */}
-      <div>
-      </div>
+    
+    
     </div>
   )
 }

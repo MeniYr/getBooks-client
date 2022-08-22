@@ -21,6 +21,8 @@ import { Tooltip } from '@mui/material';
 import { srchBooks } from '../redux/features/bookSlice';
 import { MdHome } from 'react-icons/md';
 import { getUser, getUsersSlice, readNotify } from '../redux/features/usersSlice';
+import Modal from '../../componets/modal';
+import Delivery from '../../componets/userCMS/delivery';
 
 
 
@@ -63,6 +65,10 @@ export default function PrimarySearchAppBar() {
   const srchRef = React.useRef(null)
   const userLogIn = useSelector((state) => state.token.token)
   const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice)
+  // const [openLogin, setOpenLogin] = React.useState(false)
+  const [openModal, setOpenModal] = React.useState(false)
+  const [notify, setNotify] = React.useState({})
+
   const nav = useNavigate()
 
   React.useEffect(() => {
@@ -147,28 +153,30 @@ export default function PrimarySearchAppBar() {
       <MenuItem
         onClick={handleMenuClose}
       >
-        <Link className='text-decoration-none text-black-50' to={"/allUsers"}>כל המשתמשים </Link>
+        <Link className='text-decoration-none text-black' to={"/allUsers"}>כל המשתמשים </Link>
       </MenuItem>
       <MenuItem
         onClick={handleMenuClose}
       >
-        <Link className='text-decoration-none text-black-50' to={"/addBook"}>הוספת ספר</Link>
+        <Link className='text-decoration-none text-black' to={"/addBook"}>הוספת ספר</Link>
       </MenuItem>
       <MenuItem
         onClick={handleMenuClose}
-      >
-        <Link className='text-decoration-none text-black-50' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
+        >
+        <Link className='text-decoration-none text-black' to={"/myBooks"}>הספרים שלי</Link>  </MenuItem>
     </Menu>
   );
+  
   // notify menu
+  
   const notyfiMenuId = 'primary-search-account-menu';
   const renderNoteMenu = (
     <Menu
-
-      anchorEl={noteEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
+    
+    anchorEl={noteEl}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
       }}
       id={notyfiMenuId}
       keepMounted
@@ -179,22 +187,24 @@ export default function PrimarySearchAppBar() {
 
       open={isNoteMenuOpen}
       onClose={handleNoteMenuClose}
-    >
+      >
       {
         userNotify.map(item => {
           return (
-              <MenuItem
-              sx={{
-                width:250
-              }}
-              key={item._id}
-                onClick={()=>{
-                  handleNoteMenuClose()
-                  item.isRead===false&&dispatch(readNotify(item._id))&&dispatch(getUser())
-                }
-                }
-              >
-                <p className={`text-wrap p-0 m-0 ${item.isRead===false?"opacity-100": "opacity-50"}`}>{item.fromUserId.name} מעוניין בספר {item.bookID.name}</p>
+            <MenuItem
+            sx={{
+              width: 250
+            }}
+            key={item._id}
+            onClick={() => {
+              setOpenModal(true)
+              setNotify(item)
+              handleNoteMenuClose()
+              item.isRead === false && dispatch(readNotify(item._id)) && dispatch(getUser())
+            }
+          }
+          >
+              <p className={`text-wrap p-0 m-0 ${item.isRead === false ? "opacity-100" : "opacity-50"}`}>{item.fromUserId.name} מעוניין בספר {item.bookID.name}</p>
             </MenuItem>
           )
         })
@@ -203,26 +213,27 @@ export default function PrimarySearchAppBar() {
 
     </Menu>
   );
-
+  
   // mobile menu
+  
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
-
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
+    
+    anchorEl={mobileMoreAnchorEl}
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    id={mobileMenuId}
+    keepMounted
+    transformOrigin={{
         vertical: 'top',
         horizontal: 'right',
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    >
+      >
 
       {/* Messages */}
       <MenuItem>
@@ -240,7 +251,7 @@ export default function PrimarySearchAppBar() {
           aria-label="show 17 new notifications"
           color="inherit"
           onClick={handleNoteMenuOpen}
-        >
+          >
           <Badge badgeContent={countNotify} color="error">
             <NotificationsIcon />
           </Badge>
@@ -252,7 +263,7 @@ export default function PrimarySearchAppBar() {
       <MenuItem
         //TODO ICON HOME
         className='d-flex justify-content-center'
-      >
+        >
         <Link className='btn w-100 btn d-md-inline-flex align-items-center' to={"/"}>בית</Link>
       </MenuItem>
 
@@ -260,14 +271,14 @@ export default function PrimarySearchAppBar() {
       <MenuItem
         onClick={handlePersonalAriaMenuOpen}
         sx={{ display: { xs: 'block', sm: "block", md: "none", lg: "none" } }}
-      >
+        >
         <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           // aria-haspopup="true"
           color="inherit"
-        >
+          >
 
           <AccountCircle />
           <p>איזור אישי</p>
@@ -277,16 +288,17 @@ export default function PrimarySearchAppBar() {
 
       {/* login */}
       <MenuItem className='d-flex justify-content-center'>
-
+        <p>{currentUser?.name}</p>
         {userLogIn === null ? <Link className='btn w-100 btn-success d-md-inline-flex align-items-center' color={'white'} to={"/login"}>החחברות</Link> : <Link className='btn btn-outline-warning d-md-inline-flex align-items-center w-100' color={'white'} to={"/logOut"}>יציאה</Link>}
       </MenuItem>
 
     </Menu>
   );
-
-
+  
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {openModal && <Delivery toOpenModal={setOpenModal} note={notify} />}
       <AppBar position="static">
 
         <Toolbar
@@ -294,10 +306,10 @@ export default function PrimarySearchAppBar() {
           {/* menu */}
           <IconButton
 
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
+size="large"
+edge="start"
+color="inherit"
+aria-label="open drawer"
             sx={{
               ml: 1,
               display: { xs: 'none', md: "block" },
@@ -396,7 +408,8 @@ export default function PrimarySearchAppBar() {
                 <AccountCircle />
               </Tooltip>
             </IconButton>
-
+            {/* {openLogin&&<Login />} */}
+            {/* <button onClick={()=>setOpenLogin(true)}>לחץ</button> */}
             {userLogIn === null ? <Link className='text-bolder  text-decoration-none d-md-inline-flex align-items-center badge' color={'white'} to={"/login"}>החחברות</Link> : <Tooltip title="יציאה"><Link className='text-warning text-decoration-none d-md-inline-flex align-items-center ' color={'white'} to={"/logOut"}>{currentUser?.name} </Link></Tooltip>}
           </Box>
 
