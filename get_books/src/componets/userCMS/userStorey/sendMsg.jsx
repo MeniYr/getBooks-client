@@ -1,10 +1,11 @@
+import { Backdrop, backdropClasses } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getUser, getUserByID, getUsersSlice, sendMassage } from '../../../shared/redux/features/usersSlice'
-
+import styles from "./userStore.module.css"
 export default function SendMsg({id, msgClose}) {
     let { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -49,7 +50,8 @@ export default function SendMsg({id, msgClose}) {
     },[msg_status])
 
     return (
-        <div className={`modal d-block`}>
+        <div
+         className={`modal .modal-open  .modal-backdrop  d-block`}>
             <div className="modal-dialog">
                 <div className="modal-content">
                     <button onClick={() => msgClose(false)} className="p-3 btn btn-close"></button>
