@@ -46,6 +46,19 @@ export const srchBooks = createAsyncThunk(
     }
 )
 
+export const sendBookMassage = createAsyncThunk(
+    'books/sendBookMassage', async (dataBody) => {
+        try {
+
+console.log(dataBody);
+            const { data } = await doApiMethod(`${BOOKS}/addMsg/${dataBody.toBookID}`, "PATCH",dataBody)
+            console.log(data)
+            return data
+        }
+        catch (err) {
+            throw err?.response?.data[0]?.message
+        }
+    })
 
 const booksSlice = createSlice({
     name: 'books',
@@ -58,6 +71,7 @@ const booksSlice = createSlice({
         addBook_status: "idle",
         getBooks_status: "idle",
         srchBooks_status: "idle",
+        sendBookMassage_status: "idle",
         myBooks_status: "idle",
         currentBook_status: "idle",
         error: null
@@ -182,6 +196,29 @@ const booksSlice = createSlice({
 
             .addCase(srchBooks.rejected, (state, action) => {
                 state.srchBooks_status = 'failed'
+                state.error = action.error
+                console.log("here_error_msg", state.error)
+            })
+            .addCase(sendBookMassage.pending, (state, action) => {
+                state.sendBookMassage_status = 'loading'
+                console.log(state.sendBookMassage_status)
+
+            })
+
+            .addCase(sendBookMassage.fulfilled, (state, action) => {
+
+                if (action.payload) {
+                    state.sendBookMassage_status = 'succeeded';
+                    state.error = null;
+
+                    console.log(action.payload)
+                    console.log(state.sendBookMassage_status)
+
+                }
+            })
+
+            .addCase(sendBookMassage.rejected, (state, action) => {
+                state.sendBookMassage_status = 'failed'
                 state.error = action.error
                 console.log("here_error_msg", state.error)
             })

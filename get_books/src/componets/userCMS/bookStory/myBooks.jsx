@@ -13,15 +13,15 @@ export default function MyBooks() {
     const books = useSelector(getAllBooks)
     const get_myBooks = useSelector(getMyBooks)
     const status = useSelector(myBooksStatus)
-    const user_id = useSelector(getCurrentUser)?._id
+    const user_id = useSelector(getCurrentUser)
 
     useEffect(() => {
-        user_id!=undefined&&dispatch(getBooks())
-        user_id===undefined&&toast.info("נא התחבר")&&nav("/login")
+        user_id?._id!=null&&dispatch(getBooks())
+        user_id?._id===null&&toast.info("נא התחבר")&&nav("/login")
     }, [])
     useEffect(() => {
     
-        user_id!=undefined&&dispatch(myBooks(user_id))
+        user_id?._id!=null&&dispatch(myBooks(user_id))
 
     }, [user_id])
 
@@ -31,7 +31,7 @@ export default function MyBooks() {
                 {status === "succeeded" && get_myBooks?.map(item => {
                     return (
                         <div
-                        className='p-2'
+                        className='p-2 '
                             key={item._id} 
                         >
                             <Book book={item} />

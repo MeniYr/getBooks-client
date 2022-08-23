@@ -4,31 +4,44 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { booksS, getBooks, sendBookMassage } from '../../../shared/redux/features/bookSlice';
 import { getUser, getUserByID, getUsersSlice, sendMassage } from '../../../shared/redux/features/usersSlice'
 import styles from "./userStore.module.css"
-export default function SendMsg({id, msgClose}) {
+
+
+export default function SendMsg({id,bookId,msgClose}) {
     let { register, handleSubmit, formState: { errors } } = useForm();
 
     const dispatch = useDispatch()
     const toUser = useSelector(getUsersSlice)?.userByID
     const user = useSelector(getUsersSlice)?.currentUser
     const {msg_status } = useSelector(getUsersSlice)
+    const {sendBookMassage_status } = useSelector(booksS)
     const nav = useNavigate()
     const params = useParams()
     const toUserId = params.userId
     const [closeMsgBtn, setCloseMsgBtn] = useState(true)
+useEffect(()=>{
 
-
+    toUserId&&msg_status==="succeeded"&&msgClose(false)
+    bookId&&sendBookMassage_status==="succeeded"&&dispatch(getBooks())&&msgClose(false)
+},[sendBookMassage_status,msg_status ])
 
     const onSub = (_dataBody) => {
-        console.log(user);
+        console.log(bookId);
         let msg = {
             fromUserId: user._id,
-            toUserId: toUserId || id,
-            msg: _dataBody.msg
+            toUserId: toUserId || bookId,
         }
-        dispatch(sendMassage(msg))
-        msg_status==="succeeded"&&nav(-1)
+        
+        let bookMsg ={
+            toBookID: bookId,
+            fromUserId: id,
+            msg:_dataBody.msg
+        }
+        toUserId&&dispatch(sendMassage(msg))
+
+        bookId&&dispatch(sendBookMassage(bookMsg))
     }
 
 
@@ -61,8 +74,9 @@ export default function SendMsg({id, msgClose}) {
                     <div className="modal-body">
                         <div className=' p-2  mx-auto d-block'>
                             <form onSubmit={handleSubmit(onSub)}>
-                                <p>למשתמש: {toUser.name}</p>
-                                <label>תוכן ההודעה:</label>
+                                {toUserId&&<p>למשתמש: {toUser.name}</p>}
+                                {bookId&&<p>רשום כאן ביקורת על הספר:</p>}
+                                {toUserId&&<label>תוכן ההודעה:</label>}
                                 <input {...register("msg", { required: true })} type="text" className='w-100 form-control' />
                                 <div className="modal-footer">
                                     <button className='btn btn-success mt-3'>שלח</button>
