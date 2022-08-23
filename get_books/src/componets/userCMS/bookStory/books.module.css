@@ -1,3 +1,7 @@
-/* img:hover{
+.book {
+    opacity: 1;
+}
+
+.book:hover {
     opacity: 0.8;
-} */
+}

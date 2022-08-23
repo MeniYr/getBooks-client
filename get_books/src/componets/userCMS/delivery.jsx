@@ -23,7 +23,7 @@ export default function Delivery({ toOpenModal, note }) {
                     <div class="modal-content d-flex justify-content-center">
                         <button onClick={() => toOpenModal(false)} type="button" class="btn-close me-auto ps-2 pt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="modal-header mx-auto">
-                            <h5 class="modal-title">מסירת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fulllBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
+                            <h5 class="modal-title">מסירת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fullBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
                         </div>
                         <div class="modal-body ">
                             <div className=' d-md-flex p-2 '>
@@ -93,7 +93,7 @@ export default function Delivery({ toOpenModal, note }) {
                     <div class="modal-content d-flex justify-content-center">
                         <button onClick={() => toOpenModal(false)} type="button" class="btn-close me-auto ps-2 pt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="modal-header mx-auto">
-                            <h5 class="modal-title">קבלת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fulllBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
+                            <h5 class="modal-title">קבלת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fullBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
                         </div>
                         <div class="modal-body ">
                             <div className=' d-md-flex p-2 '>

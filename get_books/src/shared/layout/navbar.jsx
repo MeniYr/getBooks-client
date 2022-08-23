@@ -189,7 +189,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleNoteMenuClose}
       >
       {
-        userNotify.map(item => {
+        userNotify?.map(item => {
           return (
             <MenuItem
             sx={{
@@ -197,10 +197,10 @@ export default function PrimarySearchAppBar() {
             }}
             key={item._id}
             onClick={() => {
+              item?.isRead === false && dispatch(readNotify(item?._id)) && dispatch(getUser())
               setOpenModal(true)
               setNotify(item)
               handleNoteMenuClose()
-              item.isRead === false && dispatch(readNotify(item._id)) && dispatch(getUser())
             }
           }
           >

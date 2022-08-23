@@ -6,11 +6,10 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useSelector } from 'react-redux';
 import { getUsersSlice } from '../../../shared/redux/features/usersSlice';
 import { Link } from 'react-router-dom';
-import "./books.module.css";
+import myStyle from "./books.module.css";
 
 export default function Book(props) {
     const { currentUser } = useSelector(getUsersSlice)
-    const [isHover, setIsHover] = useState(false);
     let book = props.book
     console.log(book);
     const rating = (rate_num) => {
@@ -25,9 +24,9 @@ export default function Book(props) {
 
     };
 
-    const [clicked, SetClicked] = useState()
+    const [clicked, SetClicked] = useState(false)
 
-    const imageStyle = {
+    let imageStyle = {
         borderRadius: "5px",
         width: "177px",
         height: "279px"
@@ -37,12 +36,12 @@ export default function Book(props) {
 
         <div style={{
             width: "207px",
-            height: "444px",
+            height: "444px"
         }} >
             <div className=' text-md-end p-2'>
                 <Link to={`/fullBook/${book._id}`}>
                     <img
-                        className={`shadow book_img ${isHover?}`}
+                        className={`shadow ${myStyle.book}`}
                         style={imageStyle}
                         src={book.image ? book.image : "https://images.unsplash.com/photo-1576872381149-7847515ce5d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2536&q=80"}
                         alt="book photo"

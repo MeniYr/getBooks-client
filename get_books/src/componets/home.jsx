@@ -1,8 +1,9 @@
 import { Button, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import PrimarySearchAppBar from '../shared/layout/navbar';
 import { books, booksS } from '../shared/redux/features/bookSlice';
 import { createDelivery } from '../shared/redux/features/deliverySlice';
 import { user_name } from '../shared/redux/features/tokenSlice';
@@ -27,9 +28,12 @@ export default function Home() {
 
   return (
     <div>
+      <PrimarySearchAppBar />
       home
+      <Outlet />
       {/* <button onClick={() => { setOpenModal(true) }}>
         לחץ
+        
       </button>
       {openModal && <Delivery toOpenModal={setOpenModal} />} */}
       {/* {toast.success(`Welcome ${userName}, You logged in`)} */}

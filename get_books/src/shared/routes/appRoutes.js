@@ -55,31 +55,34 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       {/* <HeaderClient /> */}
-        
+
       <Routes>
-        <Route path="/*" element={<Navbar />} />
+        {/* <Route path="/*" element={<Navbar />} /> */}
       </Routes>
-      <Outlet />
+
+      {/* <Outlet /> */}
       <Routes >
         {/* <Navbar /> */}
         {/* user cms */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}>
 
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="/user/:idUser" element={<UserByID />} /> */}
-        <Route path="/editUser/:id" element={<EditUser />} />
-        <Route path="/msg" element={<Msg />} />
-        <Route path="/sendMsg/:userId" element={<SendMsg />} />
-        <Route path="/newBook" element={< AddBook />} />
-        <Route path="/myAccount" element={< MyAccount />} />
-        <Route path="/myProfile" element={< Profile />} />
-        <Route path="/addBook" element={< AddBook />} />
-        <Route path="/myBooks" element={< MyBooks />} />
-        <Route path="/logOut" element={< Logout />} />
-        <Route path="/search" element={< Search />} />
-        <Route path="/delivery" element={< Delivery />} />
-        <Route path="/fullBook/:bookId" element={< FullBook />} />
+
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          {/* <Route path="/user/:idUser" element={<UserByID />} /> */}
+          <Route path="/editUser/:id" element={<EditUser />} />
+          <Route path="/msg" element={<Msg />} />
+          <Route path="/sendMsg/:userId" element={<SendMsg />} />
+          <Route path="/newBook" element={< AddBook />} />
+          <Route path="/myAccount" element={< MyAccount />} />
+          <Route path="/myProfile" element={< Profile />} />
+          <Route path="/addBook" element={< AddBook />} />
+          <Route path="/myBooks" element={< MyBooks />} />
+          <Route path="/logOut" element={< Logout />} />
+          <Route path="/search" element={< Search />} />
+          <Route path="/delivery" element={< Delivery />} />
+          <Route path="/fullBook/:bookId" element={< FullBook />} />
+        </Route>
 
 
         {/*  <Route path="/logout" element={<Logout />} />
