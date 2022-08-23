@@ -204,7 +204,8 @@ export default function PrimarySearchAppBar() {
             }
           }
           >
-              <p className={`text-wrap p-0 m-0 ${item.isRead === false ? "opacity-100" : "opacity-50"}`}>{item.fromUserId.name} מעוניין בספר {item.bookID.name}</p>
+              {item.fromUserId._id !== item.bookID.userID&&<p className={`text-wrap p-0 m-0 ${item.isRead === false ? "opacity-100" : "opacity-50"}`}>{item.fromUserId.name} מעוניין בספר {item.bookID.name}</p>}
+              {item.fromUserId._id === item.bookID.userID&&<p className={`text-wrap p-0 m-0 ${item.isRead === false ? "opacity-100" : "opacity-50"}`}>{item.fromUserId.name} אישר מסירת ספר {item.bookID.name}</p>}
             </MenuItem>
           )
         })

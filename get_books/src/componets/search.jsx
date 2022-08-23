@@ -10,7 +10,7 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 import { addNotify, getUser, getUsers, getUsersSlice, isUserClickForNotifyAlready } from '../shared/redux/features/usersSlice';
 import { toast } from "react-toastify"
 import { addInterestedID, createDelivery, delInterestedID, delivery, getDeliveries } from '../shared/redux/features/deliverySlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import Modal from './modal';
 import Delivery from './userCMS/delivery';
@@ -125,11 +125,11 @@ export default function Search() {
           width: innerWidthSize < 768 ? "auto" : "700px",
         }}
         className="row">
-          
+
 
         <div
 
-className="p-2 ">
+          className="p-2 ">
           {srchBooks_status === "succeeded" && srchRes?.length > 0 &&
             srchRes?.map((item, i) => {
               return (
@@ -141,18 +141,21 @@ className="p-2 ">
                       className="d-md-flex ">
                       {/* img */}
                       <div className='ps-3'>
-                        <img
-                          className='shadow rounded-1'
-                          src={item.image ? item.image : "https://images.unsplash.com/photo-1576872381149-7847515ce5d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2536&q=80"}
-                          alt="book pic"
-                          width={177}
-                          height={279}
-                        />
+                        <Link className='text-body text-decoration-none' to={`/fullBook/${item._id}`}>
+                          <img
+                            className='shadow rounded-1'
+                            src={item.image ? item.image : "https://images.unsplash.com/photo-1576872381149-7847515ce5d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2536&q=80"}
+                            alt="book pic"
+                            width={177}
+                            height={279}
+                          />
+                        </Link>
+
                       </div>
 
                       {/* props */}
                       <div>
-                        <h2 className=''>{item.name}</h2>
+                        <Link className='text-body text-decoration-none' to={`/fullBook/${item._id}`}><h2>{item.name}</h2></Link>
                         <p>{item.author}</p>
                         <ReactStars
                           count={5}
@@ -198,7 +201,8 @@ className="p-2 ">
                          {deliveries?.find(a => a.bookID === item._id)?.
                             interestedUsersID?.includes(currentUser?._id) ? "yes" : "not"} */}
 
-                          <IconButton
+                          {currentUser?._id !== item.userID._id &&
+                            <IconButton
                             className={`shadow ${deliveries?.find(a => a.bookID === item._id)?.
                               interestedUsersID?.includes(currentUser?._id) ? "bg-info" : <></>}`}
                             onClick={() => {
@@ -212,14 +216,14 @@ className="p-2 ">
                               notifyControl(notify)
                               // setOpenModal(true)
                             }}
-                            >
+                          >
                             {deliveries?.find(a => a.bookID === item._id)?.
                               interestedUsersID?.includes(currentUser?._id) ? <>🔖</> : <></>
                             }
                             מעוניין
 
                           </IconButton>
-
+            }
                         </div>
                       </div>
                       {/* <Book book={item} /> */}
@@ -227,22 +231,24 @@ className="p-2 ">
 
                     {/* left */}
                     {/* TODO USER PROFILE */}
-                    {currentUser !== null && <div className='bg-light d-flex shadow-lg rounded-circle'
-                      style={{
-                        minWidth: '160px',
-                        height: '160px',
+                    {currentUser !== null &&
+                      currentUser?._id !== item.userID._id &&
+                      <div className='bg-light d-flex shadow-lg rounded-circle'
+                        style={{
+                          minWidth: '160px',
+                          height: '160px',
 
-                      }}
-                    >
-                      <div className='my-auto mx-auto text-center text-wrap fw-bolder'>
-                        <p className='text-muted ' >משתמש: {item.userID?.name}</p>
-                        {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
-                        <button
-                          onClick={() => { nav(`/sendMsg/${item.userID?._id}`) }}
-                          className="btn btn-outline-info rounded-circle">הודעה</button>
+                        }}
+                      >
+                        <div className='my-auto mx-auto text-center text-wrap fw-bolder'>
+                          <p className='text-muted ' >משתמש: {item.userID?.name}</p>
+                          {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
+                          <button
+                            onClick={() => { nav(`/sendMsg/${item.userID?._id}`) }}
+                            className="btn btn-outline-info rounded-circle">הודעה</button>
+                        </div>
+
                       </div>
-
-                    </div>
                     }
                   </div>
 

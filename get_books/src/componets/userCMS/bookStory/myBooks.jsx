@@ -27,13 +27,11 @@ export default function MyBooks() {
 
     return (
         <div className='container'>
-            <div className='row mx-auto col-md-8 text-center'>
+            <div className='row'>
                 {status === "succeeded" && get_myBooks?.map(item => {
                     return (
                         <div
-                            style={{
-                                borderRadius: "15px"
-                            }}
+                        className='p-2'
                             key={item._id} 
                         >
                             <Book book={item} />

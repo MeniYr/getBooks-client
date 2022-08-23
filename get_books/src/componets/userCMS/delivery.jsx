@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { MdAnimation } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { addNotify, getUsersSlice } from '../../shared/redux/features/usersSlice'
 import SendMsg from './userStorey/sendMsg'
 import styles from "./userStorey/userStore.module.css"
@@ -22,7 +23,7 @@ export default function Delivery({ toOpenModal, note }) {
                     <div class="modal-content d-flex justify-content-center">
                         <button onClick={() => toOpenModal(false)} type="button" class="btn-close me-auto ps-2 pt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="modal-header mx-auto">
-                            <h5 class="modal-title">מסירת ספר - {note.bookID.name}</h5>
+                            <h5 class="modal-title">מסירת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fulllBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
                         </div>
                         <div class="modal-body ">
                             <div className=' d-md-flex p-2 '>
@@ -92,7 +93,7 @@ export default function Delivery({ toOpenModal, note }) {
                     <div class="modal-content d-flex justify-content-center">
                         <button onClick={() => toOpenModal(false)} type="button" class="btn-close me-auto ps-2 pt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="modal-header mx-auto">
-                            <h5 class="modal-title">קבלת ספר - {note.bookID.name}</h5>
+                            <h5 class="modal-title">קבלת ספר - <Link onClick={()=> toOpenModal(false)} className='text-decoration-none navbar-text' to={`/fulllBook/${note.bookID._id}`}>{note.bookID.name}</Link></h5>
                         </div>
                         <div class="modal-body ">
                             <div className=' d-md-flex p-2 '>

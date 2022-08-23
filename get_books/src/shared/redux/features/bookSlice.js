@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/too
 import { BOOKS } from "../../constants/globalinfo/URL`S"
 
 
-import { doApiGet, doApiMethod} from "../../services/apiService"
+import { doApiGet, doApiMethod } from "../../services/apiService"
 
 
 
@@ -59,18 +59,20 @@ const booksSlice = createSlice({
         getBooks_status: "idle",
         srchBooks_status: "idle",
         myBooks_status: "idle",
+        currentBook_status: "idle",
         error: null
     },
 
     reducers: {
         myBooks: (state, action) => {
             const user_ID = action.payload
+          
             if (user_ID) {
                 state.userBooks = state.books.filter(item =>
                     item.userID?._id === user_ID
-                    )
-                    state.myBooks_status = "succeeded"
-                    console.log("getBooks work")
+                )
+                state.myBooks_status = "succeeded"
+                console.log("getBooks work")
 
             }
             else {
@@ -80,6 +82,26 @@ const booksSlice = createSlice({
                 console.log("getBooks not work")
 
             }
+
+        },
+        findBook: (state, action) => {
+            const book_ID = action.payload
+            console.log(action.payload);
+            console.log(state.books);
+            // try {
+                let res = state.books.find(item =>
+                        item._id === book_ID
+                )
+              
+                state.currentBook =  res
+                state.currentBook_status = "succeeded"
+                console.log("getBooks work")
+
+            // }
+            // catch (e) {
+            //     state.currentBook = "failed"
+            //     console.log(e)
+            // }
 
         }
     },
@@ -175,5 +197,5 @@ export const getAllBooks = (state) => state.books.books
 export const getMyBooks = (state) => state.books.userBooks
 export const booksS = (state) => state.books
 
-export const { myBooks } = booksSlice.actions
+export const { myBooks,findBook } = booksSlice.actions
 export default booksSlice.reducer;
