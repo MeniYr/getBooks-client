@@ -32,6 +32,7 @@ import Delivery from "../../componets/userCMS/delivery";
 import Book from "../../componets/userCMS/bookStory/book";
 import FullBook from "../../componets/userCMS/bookStory/fullBook";
 import BooksOnDeliver from "../layout/booksOnDeliver";
+import Layout from "../layout/layout";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
@@ -52,13 +53,14 @@ export default function AppRoutes() {
     <BrowserRouter>
       {/* <HeaderClient /> */}
 
-      <Routes>{/* <Route path="/*" element={<Navbar />} /> */}</Routes>
+      {/* <Routes><Route path="/*" element={<Navbar />} /></Routes> */}
 
       {/* <Outlet /> */}
       <Routes>
         {/* <Navbar /> */}
         {/* user cms */}
-        <Route path="/" element={<Home />}>
+        <Route  element={<Layout />}>
+          <Route index element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           {/* <Route path="/user/:idUser" element={<UserByID />} /> */}

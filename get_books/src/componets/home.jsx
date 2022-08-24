@@ -18,18 +18,7 @@ export default function Home() {
 
   return (
     <div>
-      <PrimarySearchAppBar />
-      <div className="d-flex">
-        <div className="col-2 border min-vh-100">
-          <BooksUserInterested />
-        </div>
-        <div className="col-8 border  min-vh-100">
-          <Outlet />
-        </div>
-        <div className="col-2 border  min-vh-100">
-          <BooksOnDeliver />
-        </div>
-      </div>
+home
     </div>
   );
 }
