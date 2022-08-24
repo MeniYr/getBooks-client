@@ -65,6 +65,11 @@ export default function Search() {
     };
   }, [innerWidthSize]);
 
+  const is_interested = () => {
+    return deliveries
+      ?.find((a) => a.bookID === notify?.bookID)
+      ?.interestedUsersID?.includes(currentUser?._id);
+  };
   // succeeded notify
   useEffect(() => {
     console.log(userNotifyAlready);
@@ -73,7 +78,8 @@ export default function Search() {
     // if (!userNotifyAlready)
     //   dispatch(addNotify(notify))
     // (!userNotifyAlready) && dispatch(addNotify(notify))
-    addNote_status === "succeeded" && toast.success("הודעה נשלחה למוסר");
+  
+      
   }, [addNote_status]);
 
   // user props update
@@ -100,25 +106,20 @@ export default function Search() {
     };
   }, [notifyClicked]);
 
-  const notifyControl = (notify) => {
+  const notifyControl = async (notify) => {
     dispatch(getUsers());
     console.log(notify);
 
-    const res1 =
-      users
-        ?.find((item) => item._id === notify?.toUserId)
-        .notifications?.find(({ bookID }) => bookID === notify?.bookID)
-        ?.bookID === notify?.bookID;
+    // let isNotifyAlready = await users
+    //   ?.find((item) => item._id === notify?.toUserId)
+    //   .notifications.find(({ bookID, fromUserId }) => {
+    //     return(
+    //       bookID?._id === notify?.bookID && fromUserId?._id === notify?.fromUserId
 
-    const res2 =
-      users
-        ?.find((item) => item._id === notify?.toUserId)
-        .notifications?.find(
-          ({ fromUserId }) => fromUserId === notify?.fromUserId
-        )?.fromUserId === notify?.fromUserId;
-    if (!res1 || !res2) {
-      dispatch(addNotify(notify));
-    }
+    //     )
+    //   });
+    console.log(is_interested());
+    !is_interested() && dispatch(addNotify(notify))&&toast.success("הודעה נשלחה למוסר");;
     setNotify(notify);
   };
 
@@ -177,9 +178,7 @@ export default function Search() {
                           a11y={false}
                           isHalf={false}
                           edit={
-                            currentUser?._id !== item.userID._id
-                              ? true
-                              : false
+                            currentUser?._id !== item.userID._id ? true : false
                           }
                         />
                         <article className="d-flex">

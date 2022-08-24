@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addNotify, getUsersSlice } from '../../shared/redux/features/usersSlice'
 import SendMsg from './userStorey/sendMsg'
+import moment from 'moment'
+
 import styles from "./userStorey/userStore.module.css"
 export default function Delivery({ toOpenModal, note }) {
     const [openMsg, setOpenMsg] = useState(false)
@@ -63,8 +65,9 @@ export default function Delivery({ toOpenModal, note }) {
 
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             {/* <button onClick={() => toOpenModal(false)} type="button" class="btn btn-secondary" data-bs-dismiss="modal">סגור</button> */}
+                            <p>{moment(note.date).format('DD-MM-YYYY, HH:mm')}</p>
                             <button
                                 onClick={() => {
                                     let notify = {
@@ -133,8 +136,9 @@ export default function Delivery({ toOpenModal, note }) {
 
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer d-flex justify-content-between">
                             {/* <button onClick={() => toOpenModal(false)} type="button" class="btn btn-secondary" data-bs-dismiss="modal">סגור</button> */}
+                            <p>{moment(note.date).format('DD-MM-YYYY, HH:mm')}</p>
                             <button
                                 onClick={() => {
                                     toOpenModal(false)

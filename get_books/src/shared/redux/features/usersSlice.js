@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue, createA
 import { toast } from "react-toastify"
 import { AuthWithToken, userID } from "./tokenSlice"
 import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings"
+import moment from "moment"
 
 const USERS_URL = `${API_URL}/users`
 
@@ -213,7 +214,9 @@ const usersSlice = createSlice({
                     // state.users.push(action.payload)
                     state.getUser_status = "succeeded"
                     state.currentUser = action.payload
-                    state.userNotify = action.payload.notifications
+                    state.userNotify = action.payload.notifications.sort((a,b)=>
+                        moment(b.date)-moment(a.date)
+                    )
                     let count = 0;
                     action.payload.notifications.forEach(note => {
                         if (note.isRead === false)
