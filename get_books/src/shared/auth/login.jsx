@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, { login, user_name } from "../redux/features/tokenSlice";
 import { getUser } from "../redux/features/usersSlice";
-import style from "./auth.module.css"
+import style from "./auth.module.css";
 
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
@@ -66,18 +66,9 @@ export default function Login() {
   };
 
   return (
-    <div
-      // style={{ opacity:0.1 }}
-      className={`modal ${closeBtn ? "d-block" : "none" } ${style.modal}`}
-    >
-      <div className={`modal-dialog ${style.modalB} mt-5`}>
-        <div
-          // style={{
-          //   opacity:0.8,
-          //   zIndex: 99,
-          // }}
-          className="modal-content"
-        >
+    <div className={`modal ${closeBtn ? "d-block" : "none"} ${style.modal}`}>
+      <div className={`modal-dialog  mt-5`}>
+        <div className="modal-content">
           <button
             onClick={() => setCloseBtn(false)}
             className="p-3 btn btn-close"
