@@ -65,21 +65,18 @@ export default function Search() {
     };
   }, [innerWidthSize]);
 
-  const is_interested = () => {
-    return deliveries
+  const is_interested = async () => {
+    console.log(deliveries);
+    return await deliveries
       ?.find((a) => a.bookID === notify?.bookID)
       ?.interestedUsersID?.includes(currentUser?._id);
   };
+
   // succeeded notify
   useEffect(() => {
     console.log(userNotifyAlready);
     addNote_status === "succeeded" && console.log(notify);
-    // dispatch(addNotify(notify))
-    // if (!userNotifyAlready)
-    //   dispatch(addNotify(notify))
-    // (!userNotifyAlready) && dispatch(addNotify(notify))
-  
-      
+
   }, [addNote_status]);
 
   // user props update
@@ -110,16 +107,8 @@ export default function Search() {
     dispatch(getUsers());
     console.log(notify);
 
-    // let isNotifyAlready = await users
-    //   ?.find((item) => item._id === notify?.toUserId)
-    //   .notifications.find(({ bookID, fromUserId }) => {
-    //     return(
-    //       bookID?._id === notify?.bookID && fromUserId?._id === notify?.fromUserId
-
-    //     )
-    //   });
-    console.log(is_interested());
-    !is_interested() && dispatch(addNotify(notify))&&toast.success("הודעה נשלחה למוסר");;
+    console.log( await is_interested());
+    (await is_interested()===false) && dispatch(addNotify(notify));
     setNotify(notify);
   };
 
@@ -244,9 +233,13 @@ export default function Search() {
                                   toUserId: item.userID._id,
                                   bookID: item._id,
                                 };
-                                currentUser === null && toast.info("נא התחבר")&& nav("/login")
-                                currentUser !== null &&  dispatch(addInterestedID(item._id));
-                                currentUser !== null && setNotifyClicked(!notifyClicked);
+                                currentUser === null &&
+                                  toast.info("נא התחבר") &&
+                                  nav("/login");
+                                currentUser !== null &&
+                                  dispatch(addInterestedID(item._id));
+                                currentUser !== null &&
+                                  setNotifyClicked(!notifyClicked);
                                 currentUser !== null && notifyControl(notify);
                                 // setOpenModal(true)
                               }}

@@ -48,7 +48,7 @@ export const addInterestedID = createAsyncThunk(
     'delivery/addInterestedID', async (bookID) => {
         try {
             let data = await (await doApiMethod(`${DELIVERY}/addInterestedID/${bookID}`, "PATCH")).data
-            console.log(data)
+            console.log("notify sent",data)
             return data
         }
         catch (err) {

@@ -36,7 +36,7 @@ export const srchBooks = createAsyncThunk(
       let data = await (
         await doApiMethod(`${BOOKS}/srch`, "POST", search_experetion)
       ).data;
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (err) {
       throw err?.response?.data[0]?.message;
@@ -61,29 +61,24 @@ export const sendBookMassage = createAsyncThunk(
     }
   }
 );
-export const swichHide = createAsyncThunk(
-  "books/swichHide",
-  async (id) => {
-    try {
-      console.log(id);
-      const { data } = await doApiMethod(
-        `${BOOKS}/swichHide/${id}`,
-        "PATCH"
-      );
-      console.log(data);
-      return data;
-    } catch (err) {
-      throw err?.response?.data[0]?.message;
-    }
+export const swichHide = createAsyncThunk("books/swichHide", async (id) => {
+  try {
+    console.log(id);
+    const { data } = await doApiMethod(`${BOOKS}/swichHide/${id}`, "PATCH");
+    console.log(data);
+    return data;
+  } catch (err) {
+    throw err?.response?.data[0]?.message;
   }
-);
+});
 
 const booksSlice = createSlice({
   name: "books",
   initialState: {
     books: [],
-    userBooks: [],
     srchRes: [],
+    userBooks: [],
+    userOnDeliveryBooks: [],
     currentBook: null,
     bookJustLoaded: null,
     addBook_status: "idle",
@@ -103,6 +98,10 @@ const booksSlice = createSlice({
         state.userBooks = state.books.filter(
           (item) => item.userID?._id === user_ID
         );
+
+        state.userOnDeliveryBooks = state.userBooks?.filter(
+          (item) => item.hide === true
+        );
         state.myBooks_status = "succeeded";
         console.log("getBooks work");
       } else {
@@ -116,19 +115,17 @@ const booksSlice = createSlice({
       const book_ID = action.payload;
       console.log(action.payload);
       console.log(state.books);
-      // try {
       let res = state.books.find((item) => item._id === book_ID);
-
       state.currentBook = res;
       state.currentBook_status = "succeeded";
       console.log("getBooks work");
-
-      // }
-      // catch (e) {
-      //     state.currentBook = "failed"
-      //     console.log(e)
-      // }
     },
+    logOutFromBooks: (state, action) => {
+
+      state.userBooks = [];
+      state.userOnDeliveryBooks = [];
+
+  },
   },
 
   extraReducers(builder) {
@@ -188,12 +185,12 @@ const booksSlice = createSlice({
           state.srchBooks_status = "succeeded";
           state.error = null;
 
-          let resWithoutHidesBooks = action.payload.filter((item) => 
-            item.hide === false
+          let resWithoutHidesBooks = action.payload.filter(
+            (item) => item.hide === false
           );
           state.srchRes = resWithoutHidesBooks;
 
-          console.log(action.payload);
+          // console.log(action.payload);
           console.log(state.srchBooks_status);
         } else {
           state.srchRes = [];
@@ -245,7 +242,7 @@ const booksSlice = createSlice({
         state.swichHide_status = "failed";
         state.error = action.error;
         console.log("here_error_msg", state.error);
-      })
+      });
   },
 });
 
@@ -255,5 +252,5 @@ export const getAllBooks = (state) => state.books.books;
 export const getMyBooks = (state) => state.books.userBooks;
 export const booksS = (state) => state.books;
 
-export const { myBooks, findBook } = booksSlice.actions;
+export const { myBooks, findBook, logOutFromBooks } = booksSlice.actions;
 export default booksSlice.reducer;

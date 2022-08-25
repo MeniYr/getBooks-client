@@ -21,11 +21,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AuthWithToken, user_from_token } from "../redux/features/tokenSlice";
-import { getUser } from "../redux/features/usersSlice";
+import { getUser, getUsersSlice } from "../redux/features/usersSlice";
 import MyBooks from "../../componets/userCMS/bookStory/myBooks";
 import Logout from "../auth/logOut";
 import Search from "../../componets/search";
-import { booksS } from "../redux/features/bookSlice";
+import { booksS, myBooks } from "../redux/features/bookSlice";
 import { doApiMethod } from "../services/apiService";
 import { DELIVERY } from "../constants/globalinfo/URL`S";
 import Delivery from "../../componets/userCMS/delivery";
@@ -38,10 +38,12 @@ export default function AppRoutes() {
   const dispatch = useDispatch();
   const { books } = useSelector(booksS);
   const { authStatus } = useSelector(user_from_token);
-
+  const { currentUser } =
+    useSelector(getUsersSlice);
   useEffect(() => {
     dispatch(AuthWithToken());
     authStatus === "succeeded" && dispatch(getUser());
+    authStatus === "succeeded" && dispatch(myBooks(currentUser?._id));
     // dispatch(getUser())
     // books.forEach(element => {
 

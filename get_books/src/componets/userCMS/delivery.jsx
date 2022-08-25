@@ -11,22 +11,21 @@ import SendMsg from "./userStorey/sendMsg";
 import moment from "moment";
 
 import styles from "./userStorey/userStore.module.css";
-import { swichHide } from "../../shared/redux/features/bookSlice";
+import { myBooks, swichHide } from "../../shared/redux/features/bookSlice";
 export default function Delivery({ toOpenModal, note }) {
   const [openMsg, setOpenMsg] = useState(false);
   const [deliverClicked, setDliverClicked] = useState(false);
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
+      dispatch(myBooks(currentUser?._id))
     return () => {
       console.log(deliverClicked);
     };
     // const timer = () => {
-    //     setTimeout(() => dispatch(swichHide(note?.bookID._id)), 10000);
-    // };
-    // deliverClicked && timer();
+
   }, [deliverClicked]);
 
   return (
