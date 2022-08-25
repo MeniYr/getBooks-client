@@ -91,15 +91,15 @@ export default function Search() {
   useEffect(() => {
     dispatch(getDeliveries());
     return () => {
-      dispatch(getUsers());
+      currentUser !== null && dispatch(getUsers());
       dispatch(getDeliveries());
     };
   }, []);
 
   // render delivers on notify clicked
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getDeliveries());
+    currentUser !== null && dispatch(getUsers());
+    currentUser !== null && dispatch(getDeliveries());
     // deliverControle()
     return () => {
       dispatch(getUsers());
@@ -244,9 +244,10 @@ export default function Search() {
                                   toUserId: item.userID._id,
                                   bookID: item._id,
                                 };
-                                dispatch(addInterestedID(item._id));
-                                setNotifyClicked(!notifyClicked);
-                                notifyControl(notify);
+                                currentUser === null && toast.info("נא התחבר")&& nav("/login")
+                                currentUser !== null &&  dispatch(addInterestedID(item._id));
+                                currentUser !== null && setNotifyClicked(!notifyClicked);
+                                currentUser !== null && notifyControl(notify);
                                 // setOpenModal(true)
                               }}
                             >

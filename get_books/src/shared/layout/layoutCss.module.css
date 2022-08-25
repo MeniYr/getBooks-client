@@ -1,0 +1,8 @@
+.addBtn {
+    color: rgba(0, 125, 255, 0.3) !important ;
+}
+
+.addBtn:hover {
+    background: rgba(255, 255, 255, 0)!important;
+    color: rgb(0, 125, 255) !important;
+}
