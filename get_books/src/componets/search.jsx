@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
-import { books, booksS } from "../shared/redux/features/bookSlice";
+import { books, booksS, getBooks, myBooks } from "../shared/redux/features/bookSlice";
 import Book from "./userCMS/bookStory/book";
 import { GrFavorite } from "react-icons/gr";
 import { MdOutlineFavorite } from "react-icons/md";
@@ -25,7 +25,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import Modal from "./modal";
-import Delivery from "./userCMS/delivery";
+import Delivery from "../shared/components/delivery";
 // import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 
 export default function Search() {
@@ -38,7 +38,7 @@ export default function Search() {
   const { deliveries } = useSelector(delivery);
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth);
   const [notifyClicked, setNotifyClicked] = useState(false);
-  const [isSameBook, setIsSameBook] = useState(false);
+  const [isDelivered, setIsDelivered] = useState(false);
   const [notify, setNotify] = useState({});
   // const [openModal, setOpenModal] = useState(false)
   const buttonRef = useRef();
@@ -65,18 +65,9 @@ export default function Search() {
     };
   }, [innerWidthSize]);
 
-  const is_interested = async () => {
-    console.log(deliveries);
-    return await deliveries
-      ?.find((a) => a.bookID === notify?.bookID)
-      ?.interestedUsersID?.includes(currentUser?._id);
-  };
-
   // succeeded notify
   useEffect(() => {
-    console.log(userNotifyAlready);
     addNote_status === "succeeded" && console.log(notify);
-
   }, [addNote_status]);
 
   // user props update
@@ -88,28 +79,44 @@ export default function Search() {
   useEffect(() => {
     dispatch(getDeliveries());
     return () => {
-      currentUser !== null && dispatch(getUsers());
       dispatch(getDeliveries());
     };
   }, []);
 
   // render delivers on notify clicked
   useEffect(() => {
-    currentUser !== null && dispatch(getUsers());
-    currentUser !== null && dispatch(getDeliveries());
-    // deliverControle()
+    dispatch(getUsers());
+    dispatch(getDeliveries());
+    dispatch(myBooks(currentUser?._id))
     return () => {
       dispatch(getUsers());
     };
   }, [notifyClicked]);
 
-  const notifyControl = async (notify) => {
-    dispatch(getUsers());
-    console.log(notify);
+  useEffect(() => {
 
-    console.log( await is_interested());
-    (await is_interested()===false) && dispatch(addNotify(notify));
-    setNotify(notify);
+    existDelivery();
+  }, [notify]);
+
+    const existDelivery = () => {
+      let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
+      let userExist = bookHowDeliver?.interestedUsersID?.includes(
+        currentUser?._id
+      );
+      console.log(notify);
+      userExist ? setIsDelivered(true) : setIsDelivered(false);
+    };
+    
+
+
+  const notifyControl = async () => {
+    if (currentUser === null) {
+      toast.info("נא התחבר");
+      nav("/login");
+    } else {
+      console.log(isDelivered);
+      isDelivered && dispatch(addNotify(notify));
+    }
   };
 
   return (
@@ -233,14 +240,14 @@ export default function Search() {
                                   toUserId: item.userID._id,
                                   bookID: item._id,
                                 };
-                                currentUser === null &&
-                                  toast.info("נא התחבר") &&
-                                  nav("/login");
+                                setNotify(notify);
+
                                 currentUser !== null &&
                                   dispatch(addInterestedID(item._id));
                                 currentUser !== null &&
                                   setNotifyClicked(!notifyClicked);
-                                currentUser !== null && notifyControl(notify);
+                                currentUser?._id && notifyControl();
+
                                 // setOpenModal(true)
                               }}
                             >

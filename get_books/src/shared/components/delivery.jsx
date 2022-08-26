@@ -3,30 +3,40 @@ import { useState } from "react";
 import { MdAnimation } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import {
   addNotify,
   getUsersSlice,
-} from "../../shared/redux/features/usersSlice";
-import SendMsg from "./userStorey/sendMsg";
-import moment from "moment";
+} from "../redux/features/usersSlice";
+import SendMsg from "../../componets/userCMS/userStorey/sendMsg";
+import { getBooks, myBooks, swichHide } from "../redux/features/bookSlice";
+import { delivery } from "../redux/features/deliverySlice";
 
-import styles from "./userStorey/userStore.module.css";
-import { myBooks, swichHide } from "../../shared/redux/features/bookSlice";
 export default function Delivery({ toOpenModal, note }) {
   const [openMsg, setOpenMsg] = useState(false);
   const [deliverClicked, setDliverClicked] = useState(false);
+  const [notify, setNotify] = useState({});
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(myBooks(currentUser?._id))
+    
+      dispatch(getBooks())
+      dispatch(myBooks(currentUser._id))
     return () => {
       console.log(deliverClicked);
+      dispatch(myBooks(currentUser._id))
+
     };
     // const timer = () => {
 
   }, [deliverClicked]);
+
+  const onDeliverClick = () =>{
+    dispatch(addNotify(notify));
+    dispatch(swichHide(note?.bookID._id));
+  }
 
   return (
     <div>
@@ -124,9 +134,10 @@ export default function Delivery({ toOpenModal, note }) {
                       toUserId: note.fromUserId._id,
                       bookID: note.bookID._id,
                     };
-                    dispatch(addNotify(notify));
-                    dispatch(swichHide(note?.bookID._id));
-                    setDliverClicked(true);
+                    onDeliverClick()
+                    setNotify(notify)
+                
+                    setDliverClicked(!deliverClicked);
                     toOpenModal(false);
                   }}
                   type="button"

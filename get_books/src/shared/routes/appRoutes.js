@@ -25,30 +25,23 @@ import { getUser, getUsersSlice } from "../redux/features/usersSlice";
 import MyBooks from "../../componets/userCMS/bookStory/myBooks";
 import Logout from "../auth/logOut";
 import Search from "../../componets/search";
-import { booksS, myBooks } from "../redux/features/bookSlice";
+import { booksS, getBooks, myBooks } from "../redux/features/bookSlice";
 import { doApiMethod } from "../services/apiService";
 import { DELIVERY } from "../constants/globalinfo/URL`S";
-import Delivery from "../../componets/userCMS/delivery";
+import Delivery from "../components/delivery";
 import Book from "../../componets/userCMS/bookStory/book";
 import FullBook from "../../componets/userCMS/bookStory/fullBook";
-import BooksOnDeliver from "../layout/booksOnDeliver";
-import Layout from "../layout/layout";
+import BooksOnDeliver from "../../componets/booksOnDeliver";
+import Layout from "../../componets/layout";
+import BooksUserInterested from "../layout/booksUserInterested";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
-  const { books } = useSelector(booksS);
-  const { authStatus } = useSelector(user_from_token);
-  const { currentUser } =
-    useSelector(getUsersSlice);
+  // const { books,userOnDeliveryBooks } = useSelector(booksS);
+  // const { authStatus } = useSelector(user_from_token);
+  // const { currentUser } = useSelector(getUsersSlice);
   useEffect(() => {
-    dispatch(AuthWithToken());
-    authStatus === "succeeded" && dispatch(getUser());
-    authStatus === "succeeded" && dispatch(myBooks(currentUser?._id));
-    // dispatch(getUser())
-    // books.forEach(element => {
 
-    //   (doApiMethod(`${DELIVERY}/create`, "POST", { bookID: element._id, ownerID: element.userID._id }))
-    // });
   }, []);
 
   return (
@@ -56,6 +49,7 @@ export default function AppRoutes() {
       {/* <HeaderClient /> */}
 
       {/* <Routes><Route path="/*" element={<Navbar />} /></Routes> */}
+      {/* <BooksOnDeliver  /> */}
 
       {/* <Outlet /> */}
       <Routes>

@@ -9,19 +9,29 @@ import style_css from "./layoutCss.module.css";
 // import PrimarySearchAppBar from "../shared/layout/navbar";
 
 import BooksOnDeliver from "./booksOnDeliver";
-import BooksUserInterested from "./booksUserInterested";
-import PrimarySearchAppBar from "./navbar";
+import BooksUserInterested from "../shared/layout/booksUserInterested";
+import PrimarySearchAppBar from "../shared/layout/navbar";
+import { getUsersSlice } from "../shared/redux/features/usersSlice";
+import { booksS, myBooks } from "../shared/redux/features/bookSlice";
+import { user_from_token } from "../shared/redux/features/tokenSlice";
 
 export default function Layout() {
   const nav = useNavigate();
+  const { token } = useSelector(user_from_token);
 
-  //   const dispatch = useDispatch();
-  //   const userName = useSelector(user_name);
-  //   const { bookJustLoaded } = useSelector(booksS);
+    const { currentUser } = useSelector(getUsersSlice);
+    const { getBooks_status,userOnDeliveryBooks } = useSelector(booksS);
+
+    const dispatch = useDispatch();
   //   const [isLoginMode, setIsLoginMode] = useState(true);
   //   const [openModal, setOpenModal] = useState(false);
-
-  //   useEffect(() => {}, []);
+  
+  useEffect(() => {
+    // dispatch(myBooks(currentUser?._id))
+console.log(currentUser?._id);
+console.log(token);
+console.log(userOnDeliveryBooks);
+  }, [getBooks_status]);
 
   return (
     <div
@@ -35,7 +45,7 @@ export default function Layout() {
           <BooksUserInterested />
         </div>
         <div className="col-8 border  min-vh-100">
-          <Outlet />
+          <Outlet context={booksS}/>
         </div>
         <div className="col-2 border  min-vh-100">
           <BooksOnDeliver />

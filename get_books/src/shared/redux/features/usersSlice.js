@@ -1,366 +1,360 @@
-import axios from "axios"
-import { API_URL, doApiGet, doApiMethod, TOKEN_NAME } from "../../services/apiService"
-import { createSlice, createAsyncThunk, isRejected, isRejectedWithValue, createAction } from "@reduxjs/toolkit"
-import { toast } from "react-toastify"
-import { AuthWithToken, userID } from "./tokenSlice"
-import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings"
-import moment from "moment"
+import axios from "axios";
+import {
+  API_URL,
+  doApiGet,
+  doApiMethod,
+  TOKEN_NAME,
+} from "../../services/apiService";
+import {
+  createSlice,
+  createAsyncThunk,
+  isRejected,
+  isRejectedWithValue,
+  createAction,
+} from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { AuthWithToken, userID } from "./tokenSlice";
+import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings";
+import moment from "moment";
 
-const USERS_URL = `${API_URL}/users`
+const USERS_URL = `${API_URL}/users`;
 
+export const getUsers = createAsyncThunk("users/getUsers", async () => {
+  try {
+    let data = await (await doApiGet(USERS_URL)).data;
+    return data;
+  } catch (err) {
+    throw err?.response?.data[0]?.message;
+  }
+});
 
-export const getUsers = createAsyncThunk(
-    'users/getUsers', async () => {
-        try {
-            let data = await (await doApiGet(USERS_URL)).data
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    }
-)
+export const delUser = createAsyncThunk("users/delUser", async (idDel) => {
+  try {
+    let data = await (
+      await doApiMethod(`${USERS_URL}/del/${idDel}`, "DELETE")
+    ).data;
+    console.log(data);
+    toast.success("המחיקה הושלמה");
+    return data;
+  } catch (err) {
+    throw err?.response?.data[0]?.message;
+  }
+});
 
-export const delUser = createAsyncThunk(
-    'users/delUser', async (idDel) => {
-        try {
-            let data = await (await doApiMethod(`${USERS_URL}/del/${idDel}`, "DELETE")).data
-            console.log(data)
-            toast.success("המחיקה הושלמה")
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    }
-)
-
-export const getUser = createAsyncThunk(
-    'users/getUser', async () => {
-        try {
-            let data = await (await doApiGet(`${USERS_URL}/userInfo`)).data
-            // console.log(data)
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    }
-)
+export const getUser = createAsyncThunk("users/getUser", async () => {
+  try {
+    let data = await (await doApiGet(`${USERS_URL}/userInfo`)).data;
+    // console.log(data)
+    return data;
+  } catch (err) {
+    throw err?.response?.data[0]?.message;
+  }
+});
 
 export const getUserByID = createAsyncThunk(
-    'users/getUserByID', async (userID) => {
-        try {
-            console.log(userID);
-            let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data
-            // console.log(data)
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
+  "users/getUserByID",
+  async (userID) => {
+    try {
+      console.log(userID);
+      let data = await (await doApiGet(`${USERS_URL}/userId/${userID}`)).data;
+      // console.log(data)
+      return data;
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
     }
-)
+  }
+);
 
 export const addUser = createAsyncThunk(
-    'users/addUser', async (dataBody, { rejectWithValue }) => {
-        try {
-            const { data } = await doApiMethod(`${USERS_URL}/signUp`, "POST", dataBody)
-            // console.log(data)
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-
-    })
+  "users/addUser",
+  async (dataBody, { rejectWithValue }) => {
+    try {
+      const { data } = await doApiMethod(
+        `${USERS_URL}/signUp`,
+        "POST",
+        dataBody
+      );
+      // console.log(data)
+      return data;
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 export const sendMassage = createAsyncThunk(
-    'users/sendMassage', async (dataBody) => {
-        try {
-            let toUserID = dataBody.toUserId;
-            delete dataBody.toUserId
+  "users/sendMassage",
+  async (dataBody) => {
+    try {
+      let toUserID = dataBody.toUserId;
+      delete dataBody.toUserId;
 
-            const { data } = await doApiMethod(`${USERS_URL}/addMsg/${toUserID}`, "POST", dataBody)
-            console.log(data)
-            return data
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    })
+      const { data } = await doApiMethod(
+        `${USERS_URL}/addMsg/${toUserID}`,
+        "POST",
+        dataBody
+      );
+      console.log(data);
+      return data;
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 export const addNotify = createAsyncThunk(
-    'users/addNotify', async (dataBody) => {
-        try {
-            let toUserID = dataBody.toUserId;
-            delete dataBody.toUserId
-            console.log(dataBody);
-            console.log(toUserID);
-            const { data } = await doApiMethod(`${USERS_URL}/addNotify/${toUserID}`, "POST", dataBody)
-            console.log(data)
-            if (data.modifiedCount === 1)
-                return data
-            else
-                throw isRejectedWithValue("תקלה בנתונים")
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    })
+  "users/addNotify",
+  async (dataBody) => {
+    try {
+      let toUserID = dataBody.toUserId;
+      delete dataBody.toUserId;
+      console.log("addNotify:", dataBody);
+      console.log(toUserID);
+      const { data } = await doApiMethod(
+        `${USERS_URL}/addNotify/${toUserID}`,
+        "POST",
+        dataBody
+      );
+      console.log(data);
+      if (data.modifiedCount === 1) return data;
+      else throw isRejectedWithValue("תקלה בנתונים");
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 export const readNotify = createAsyncThunk(
-    'users/readNotify', async (dataBody) => {
-        try {
-           
-            const { data } = await doApiMethod(`${USERS_URL}/readNotify/${dataBody}`, "PUT")
-            console.log(data)
-            if (data.modifiedCount === 1)
-                return data
-            else
-                throw isRejectedWithValue("תקלה בנתונים")
-        }
-        catch (err) {
-            throw err?.response?.data[0]?.message
-        }
-    })
-
-
+  "users/readNotify",
+  async (dataBody) => {
+    try {
+      const { data } = await doApiMethod(
+        `${USERS_URL}/readNotify/${dataBody}`,
+        "PUT"
+      );
+      console.log(data);
+      if (data.modifiedCount === 1) return data;
+      else throw isRejectedWithValue("תקלה בנתונים");
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 const usersSlice = createSlice({
-    name: 'users',
-    initialState: {
-        userByID: "",
-        currentUser: null,
-        users: [],
-        userNotify: [],
-        countNotify: 0,
-        status: 'idle',
-        getUser_status: 'idle',
-        getUsers_status: 'idle',
-        signUp_status: 'idle',
-        addNote_status: 'idle',
-        msg_status: 'idle',
-        userNotifyAlready: false,
-        error: null
+  name: "users",
+  initialState: {
+    userByID: "",
+    currentUser: null,
+    users: [],
+    userNotify: [],
+    countNotify: 0,
+    status: "idle",
+    getUser_status: "idle",
+    getUsers_status: "idle",
+    signUp_status: "idle",
+    addNote_status: "idle",
+    msg_status: "idle",
+    userNotifyAlready: false,
+    error: null,
+  },
+  reducers: {
+    logOutFromUsers: (state, action) => {
+      state.userByID = "";
+      state.currentUser = null;
     },
-    reducers: {
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getUsers.pending, (state, action) => {
+        state.getUsers_status = "loading";
+        console.log(state.getUsers_status);
+      })
 
-        logOutFromUsers: (state, action) => {
+      .addCase(getUsers.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.getUsers_status = "succeeded";
+          state.users = action.payload;
+          console.log(state.getUsers_status);
+        }
 
-            state.userByID = "";
-            state.currentUser = null;
+        // console.log(state.users)
+      })
 
-        },
+      .addCase(getUsers.rejected, (state, action) => {
+        state.getUsers_status = "failed";
+        state.error = action.error;
+        console.log("here", state.error);
+      })
 
-    },
-    extraReducers(builder) {
-        builder
-            .addCase(getUsers.pending, (state, action) => {
-                state.getUsers_status = 'loading'
-                console.log(state.getUsers_status)
-            })
+      .addCase(addUser.pending, (state, action) => {
+        state.signUp_status = "loading";
+        console.log(state.signUp_status);
+      })
 
-            .addCase(getUsers.fulfilled, (state, action) => {
-                if (action.payload) {
-                    state.getUsers_status = 'succeeded';
-                    state.users = action.payload
-                    console.log(state.getUsers_status)
-                }
+      .addCase(addUser.fulfilled, (state, action) => {
+        if (action.payload) {
+          // state.users.push(action.payload)
+          state.signUp_status = "succeeded";
+          console.log(state.signUp_status);
+        }
+      })
 
+      .addCase(addUser.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.signUp_status = "failed";
+        console.log(state.error);
+      })
 
-                // console.log(state.users)
+      .addCase(getUser.pending, (state, action) => {
+        state.getUser_status = "loading";
+        // console.log(state.status)
+      })
 
-            })
+      .addCase(getUser.fulfilled, (state, action) => {
+        // console.log(action.payload)
 
-            .addCase(getUsers.rejected, (state, action) => {
-                state.getUsers_status = "failed"
-                state.error = action.error
-                console.log("here", state.error)
+        if (action.payload) {
+          // state.users.push(action.payload)
+          state.getUser_status = "succeeded";
+          state.currentUser = action.payload;
+          state.userNotify = action.payload.notifications.sort(
+            (a, b) => moment(b.date) - moment(a.date)
+          );
+          let count = 0;
+          action.payload.notifications.forEach((note) => {
+            if (note.isRead === false) count++;
+          });
+          state.countNotify = count;
+          console.log(state.status);
+          console.log(state.currentUser);
+        }
+      })
 
-            })
+      .addCase(getUser.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.getUser_status = "failed";
 
-            .addCase(addUser.pending, (state, action) => {
-                state.signUp_status = 'loading'
-                console.log(state.signUp_status)
-            })
+        console.log(state.error);
+      })
 
-            .addCase(addUser.fulfilled, (state, action) => {
+      .addCase(getUserByID.pending, (state, action) => {
+        state.status = "loading";
+        console.log(state.status);
+      })
 
-                if (action.payload) {
-                    // state.users.push(action.payload)
-                    state.signUp_status = "succeeded"
-                    console.log(state.signUp_status)
+      .addCase(getUserByID.fulfilled, (state, action) => {
+        // console.log(action.payload)
 
-                }
-            })
+        if (action.payload) {
+          // state.users.push(action.payload)
+          state.status = "succeeded";
+          state.userByID = action.payload;
+          console.log(state.status);
+        }
+      })
 
-            .addCase(addUser.rejected, (state, action) => {
-                state.error = action.error.message
-                state.signUp_status = "failed"
-                console.log(state.error)
+      .addCase(getUserByID.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.status = "failed";
+        console.log(state.error);
+      })
 
-            })
+      .addCase(delUser.pending, (state, action) => {
+        state.status = "loading";
+        console.log(state.status);
+      })
 
-            .addCase(getUser.pending, (state, action) => {
-                state.getUser_status = 'loading'
-                // console.log(state.status)
-            })
+      .addCase(delUser.fulfilled, (state, action) => {
+        // console.log(action.payload)
 
-            .addCase(getUser.fulfilled, (state, action) => {
-                // console.log(action.payload)
+        if (action.payload) {
+          // state.users.push(action.payload)
+          state.status = "succeeded";
+          state.userByID = action.payload;
+          console.log(state.status);
+        }
+      })
 
-                if (action.payload) {
-                    // state.users.push(action.payload)
-                    state.getUser_status = "succeeded"
-                    state.currentUser = action.payload
-                    state.userNotify = action.payload.notifications.sort((a,b)=>
-                        moment(b.date)-moment(a.date)
-                    )
-                    let count = 0;
-                    action.payload.notifications.forEach(note => {
-                        if (note.isRead === false)
-                            count++
-                    })
-                    state.countNotify = count
-                    console.log(state.status)
-                    console.log(state.currentUser)
+      .addCase(delUser.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.status = "failed";
+        console.log(state.error);
+      })
 
-                }
-            })
+      .addCase(sendMassage.pending, (state, action) => {
+        state.msg_status = "loading";
+        console.log(state.msg_status);
+      })
 
-            .addCase(getUser.rejected, (state, action) => {
-                state.error = action.error.message
-                state.getUser_status = "failed"
+      .addCase(sendMassage.fulfilled, (state, action) => {
+        // console.log(action.payload)
 
-                console.log(state.error)
+        if (action.payload) {
+          // state.users.push(action.payload)
+          state.msg_status = "succeeded";
+          toast.info("ההודעה נשלחה");
 
-            })
+          console.log(state.msg_status);
+        }
+      })
 
-            .addCase(getUserByID.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
-            })
+      .addCase(sendMassage.rejected, (state, action) => {
+        state.error = action.error.message;
+        console.log(state.error);
+        state.msg_status = "failed";
+      })
 
-            .addCase(getUserByID.fulfilled, (state, action) => {
-                // console.log(action.payload)
+      .addCase(addNotify.pending, (state, action) => {
+        state.addNote_status = "loading";
+        console.log(state.addNote_status);
+      })
 
-                if (action.payload) {
-                    // state.users.push(action.payload)
-                    state.status = "succeeded"
-                    state.userByID = action.payload
-                    console.log(state.status)
+      .addCase(addNotify.fulfilled, (state, action) => {
+        console.log(action.payload);
 
-                }
-            })
+        if (action.payload.modifiedCount === 1) {
+          state.addNote_status = "succeeded";
+          console.log(state.addNote_status);
+        }
+      })
 
-            .addCase(getUserByID.rejected, (state, action) => {
-                state.error = action.error.message
-                state.status = "failed"
-                console.log(state.error)
+      .addCase(addNotify.rejected, (state, action) => {
+        state.error = action.error?.message;
+        state.addNote_status = "failed";
+        console.log(state.error);
+        console.log(state.addNote_status);
+      })
+      .addCase(readNotify.pending, (state, action) => {
+        state.readNotify = "loading";
+        console.log(state.readNotify);
+      })
 
-            })
+      .addCase(readNotify.fulfilled, (state, action) => {
+        console.log(action.payload);
 
-            .addCase(delUser.pending, (state, action) => {
-                state.status = 'loading'
-                console.log(state.status)
-            })
+        if (action.payload.modifiedCount === 1) {
+          state.readNotify = "succeeded";
+          console.log(state.readNotify);
+        }
+      })
 
-            .addCase(delUser.fulfilled, (state, action) => {
-                // console.log(action.payload)
+      .addCase(readNotify.rejected, (state, action) => {
+        state.error = action.error?.message;
+        state.readNotify = "failed";
+        console.log(state.error);
+        console.log(state.readNotify);
+      });
+  },
+});
 
-                if (action.payload) {
-                    // state.users.push(action.payload)
-                    state.status = "succeeded"
-                    state.userByID = action.payload
-                    console.log(state.status)
-
-                }
-            })
-
-            .addCase(delUser.rejected, (state, action) => {
-                state.error = action.error.message
-                state.status = "failed"
-                console.log(state.error)
-
-            })
-
-            .addCase(sendMassage.pending, (state, action) => {
-                state.msg_status = 'loading'
-                console.log(state.msg_status)
-            })
-
-            .addCase(sendMassage.fulfilled, (state, action) => {
-                // console.log(action.payload)
-
-                if (action.payload) {
-                    // state.users.push(action.payload)
-                    state.msg_status = "succeeded"
-                    toast.info("ההודעה נשלחה")
-
-                    console.log(state.msg_status)
-                }
-            })
-
-            .addCase(sendMassage.rejected, (state, action) => {
-                state.error = action.error.message
-                console.log(state.error)
-                state.msg_status = "failed"
-            })
-
-            .addCase(addNotify.pending, (state, action) => {
-                state.addNote_status = 'loading'
-                console.log(state.addNote_status)
-            })
-
-            .addCase(addNotify.fulfilled, (state, action) => {
-                console.log(action.payload)
-
-                if (action.payload.modifiedCount === 1) {
-                    state.addNote_status = "succeeded"
-                    console.log(state.addNote_status)
-
-                }
-            })
-
-            .addCase(addNotify.rejected, (state, action) => {
-                state.error = action.error?.message
-                state.addNote_status = "failed"
-                console.log(state.error)
-                console.log(state.addNote_status)
-            })
-            .addCase(readNotify.pending, (state, action) => {
-                state.readNotify = 'loading'
-                console.log(state.readNotify)
-            })
-
-            .addCase(readNotify.fulfilled, (state, action) => {
-                console.log(action.payload)
-
-                if (action.payload.modifiedCount === 1) {
-                    state.readNotify = "succeeded"
-                    console.log(state.readNotify)
-
-                }
-            })
-
-            .addCase(readNotify.rejected, (state, action) => {
-                state.error = action.error?.message
-                state.readNotify = "failed"
-                console.log(state.error)
-                console.log(state.readNotify)
-            })
-
-    }
-})
-
-
-export const userMsg = (state) => state.users.currentUser?.msg
-export const allUsers = (state) => state.users.users
-export const getUsersSlice = (state) => state.users
-export const getCurrentUser = (state) => state.users.currentUser
-export const userStatus = (state) => state.users.status
+export const userMsg = (state) => state.users.currentUser?.msg;
+export const allUsers = (state) => state.users.users;
+export const getUsersSlice = (state) => state.users;
+export const getCurrentUser = (state) => state.users.currentUser;
+export const userStatus = (state) => state.users.status;
 // export const userById = (state) => state.users.userByID
 
-export const { logOutFromUsers, isUserClickForNotifyAlready } = usersSlice.actions
+export const { logOutFromUsers, isUserClickForNotifyAlready } =
+  usersSlice.actions;
 export default usersSlice.reducer;

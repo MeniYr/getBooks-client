@@ -22,7 +22,7 @@ export const addBook = createAsyncThunk("books/addBook", async (_dataBody) => {
 export const getBooks = createAsyncThunk("books/getBooks", async () => {
   try {
     let data = await (await doApiGet(BOOKS)).data;
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err) {
     throw err?.response?.data[0]?.message;
@@ -93,13 +93,18 @@ const booksSlice = createSlice({
   reducers: {
     myBooks: (state, action) => {
       const user_ID = action.payload;
-
+console.log(user_ID);
       if (user_ID) {
         state.userBooks = state.books.filter(
           (item) => item.userID?._id === user_ID
         );
-
-        state.userOnDeliveryBooks = state.userBooks?.filter(
+console.log(state.books.filter(
+  (item) => item.userID?._id === user_ID
+));
+console.log(state.userBooks?.filter(
+  (item) => item.hide === true
+));
+        state.userOnDeliveryBooks =state.userBooks?.filter(
           (item) => item.hide === true
         );
         state.myBooks_status = "succeeded";
@@ -232,7 +237,7 @@ const booksSlice = createSlice({
         if (action.payload) {
           state.swichHide_status = "succeeded";
           state.error = null;
-
+// getBooks()
           console.log(action.payload);
           console.log(state.swichHide_status);
         }

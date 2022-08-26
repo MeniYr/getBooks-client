@@ -3,16 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.module.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { myStore } from './shared/redux/globalStore/store';
-import { addUser, getUser, getUsers } from './shared/redux/features/usersSlice';
+import { addUser, getCurrentUser, getUser, getUsers } from './shared/redux/features/usersSlice';
 import tokenSlice, { AuthWithToken, login } from './shared/redux/features/tokenSlice';
-import { getBooks } from './shared/redux/features/bookSlice';
+import { getBooks, myBooks } from './shared/redux/features/bookSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-myStore.dispatch(getBooks())
+myStore.dispatch(AuthWithToken());
 myStore.dispatch(getUser())
+myStore.dispatch(getBooks())
 
+// dispatch(getBooks())
+// authStatus === "succeeded" && dispatch(getUser());
+// currentUser?._id && dispatch(myBooks(currentUser?._id));
 
 root.render(
   // <React.StrictMode>

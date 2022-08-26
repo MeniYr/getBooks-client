@@ -16,11 +16,15 @@ import {
 import { doApiMethod } from "../../../shared/services/apiService";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { createDelivery } from "../../../shared/redux/features/deliverySlice";
+import {
+  createDelivery,
+  delivery,
+} from "../../../shared/redux/features/deliverySlice";
 import {
   getCurrentUser,
   getUser,
 } from "../../../shared/redux/features/usersSlice";
+import { CircularProgress } from "@mui/material";
 
 export default function AddBook() {
   const nav = useNavigate();
@@ -32,11 +36,11 @@ export default function AddBook() {
   } = useForm();
   const dispatch = useDispatch();
   const getAllCategories = useSelector(categories);
-  const getStatus = useSelector(addBookStatus);
-  const { error, bookJustLoaded } = useSelector(booksS);
+  const { error, bookJustLoaded, addBook_status } = useSelector(booksS);
   const user_id = useSelector(getCurrentUser);
-  // const [isPublish, setIsPublish] = useState(true)
+
   const [clicked, setClicked] = useState(false);
+  const [loadingImg, setLoadingImg] = useState(false);
   const [saveOnRefresh, setsaveOnRefresh] = useState("");
 
   // get category list
@@ -50,14 +54,13 @@ export default function AddBook() {
   }, []);
 
   useEffect(() => {
-
-    if (window.location.reload)
-    !user_id?._id && nav(-1);
+    if (window.location.reload) !user_id?._id && nav(-1);
     else !user_id?._id && toast.info("נא התחבר") && nav("login");
   }, [window.location.reload, user_id]);
 
   // create delivery
   useEffect(() => {
+    console.log(addBook_status);
     return () => {
       clicked &&
         dispatch(
@@ -73,26 +76,27 @@ export default function AddBook() {
   useEffect(() => {
     clicked && error?.message && toast.error(error?.message);
 
-    if (getStatus === "succeeded" && !error && clicked) {
-      console.log(getStatus);
+    if (addBook_status === "succeeded" && !error && clicked) {
+      console.log(addBook_status);
       toast.success("הספר הועלה בהצלחה");
       nav("/");
     }
-  }, [error, getStatus]);
+  }, [error, addBook_status]);
 
   // submit form
   const onSub = async (_dataBody) => {
-    setClicked(true);
     console.log(_dataBody);
-
+    
     if (_dataBody.image[0])
-      _dataBody.image = await uploadImg(_dataBody.image[0]);
-
+    _dataBody.image = await uploadImg(_dataBody.image[0]);
+    
+    setClicked(true);
     delete _dataBody.deliver;
-    dispatch(addBook(_dataBody)).unwrap();
+    dispatch(addBook(_dataBody));
   };
 
   const uploadImg = async (image) => {
+    setLoadingImg(true);
     {
       console.log(image);
       const formData = new FormData();
@@ -106,6 +110,7 @@ export default function AddBook() {
       let imgUrl = await data.data.secure_url;
       return imgUrl;
     }
+    setLoadingImg(false);
   };
 
   return (
@@ -199,25 +204,14 @@ export default function AddBook() {
             <input onClick={(e) => setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
           </div> */}
 
-          {getStatus === "loading" && (
+          {loadingImg || addBook_status === "loading" ? (
             <button className="btn btn-info mt-3">
               <div>
-                <strong>Loading...</strong>
+                <CircularProgress></CircularProgress>
+                {/* <strong>Loading...</strong> */}
               </div>
-              <div
-                className="spinner-border ms-auto"
-                role="status"
-                aria-hidden="true"
-              ></div>
             </button>
-          )}
-          {getStatus === "idle" && (
-            <button className="btn btn-info mt-3">הוסף</button>
-          )}
-          {getStatus === "failed" && (
-            <button className="btn btn-info mt-3">הוסף</button>
-          )}
-          {getStatus === "succeeded" && (
+          ) : (
             <button className="btn btn-info mt-3">הוסף</button>
           )}
         </form>

@@ -26,7 +26,7 @@ import {
   readNotify,
 } from "../redux/features/usersSlice";
 import Modal from "../../componets/modal";
-import Delivery from "../../componets/userCMS/delivery";
+import Delivery from "../components/delivery";
 
 // search style
 const Search = styled("div")(({ theme }) => ({

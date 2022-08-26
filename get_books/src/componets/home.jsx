@@ -9,22 +9,26 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import BooksOnDeliver from "../shared/layout/booksOnDeliver";
+import BooksOnDeliver from "./booksOnDeliver";
 import BooksUserInterested from "../shared/layout/booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
-import { booksS } from "../shared/redux/features/bookSlice";
-import { user_name } from "../shared/redux/features/tokenSlice";
+import { booksS, myBooks } from "../shared/redux/features/bookSlice";
+import { user_from_token, user_name } from "../shared/redux/features/tokenSlice";
+import { getUsersSlice } from "../shared/redux/features/usersSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const user = useSelector(user_from_token);
 
-  const userName = useSelector(user_name);
+  const { currentUser } = useSelector(getUsersSlice);
   const { bookJustLoaded } = useSelector(booksS);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    user?.logINStatus==="succeeded"&& dispatch(myBooks(user?.id));
+  }, [user]);
 
   return (
     <div
