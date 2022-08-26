@@ -4,13 +4,12 @@ import { MdAnimation } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import {
-  addNotify,
-  getUsersSlice,
-} from "../redux/features/usersSlice";
+import { addNotify, getUsersSlice } from "../redux/features/usersSlice";
 import SendMsg from "../../componets/userCMS/userStorey/sendMsg";
 import { getBooks, myBooks, swichHide } from "../redux/features/bookSlice";
-import { delivery } from "../redux/features/deliverySlice";
+import { changeUserToDeliver, delivery } from "../redux/features/deliverySlice";
+import { myStore } from "../redux/globalStore/store";
+import BooksOnDeliver from "../../componets/booksOnDeliver";
 
 export default function Delivery({ toOpenModal, note }) {
   const [openMsg, setOpenMsg] = useState(false);
@@ -21,22 +20,33 @@ export default function Delivery({ toOpenModal, note }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    
-      dispatch(getBooks())
-      dispatch(myBooks(currentUser._id))
+    dispatch(getBooks());
+    dispatch(myBooks(currentUser?._id));
     return () => {
       console.log(deliverClicked);
-      dispatch(myBooks(currentUser._id))
-
+      console.log(notify);
+      myStore.subscribe(()=>BooksOnDeliver())
+      dispatch(myBooks(currentUser._id));
     };
     // const timer = () => {
-
   }, [deliverClicked]);
 
-  const onDeliverClick = () =>{
-    dispatch(addNotify(notify));
+  useEffect(() => {
+    notify?.bookID && console.log(notify);
+    notify?.bookID && onDeliverClick();
+  }, [notify]);
+
+  const onDeliverClick = () => {
+    console.log(notify);
+    dispatch(
+      changeUserToDeliver({
+        idBook: notify.bookID,
+        idUser: notify.toUserId,
+      })
+    );
+    dispatch(addNotify(notify.toUserId));
     dispatch(swichHide(note?.bookID._id));
-  }
+  };
 
   return (
     <div>
@@ -129,14 +139,15 @@ export default function Delivery({ toOpenModal, note }) {
                 <p>{moment(note.date).format("DD-MM-YYYY, HH:mm")}</p>
                 <button
                   onClick={() => {
-                    let notify = {
+                    let notifyObj = {
                       fromUserId: currentUser?._id,
                       toUserId: note.fromUserId._id,
                       bookID: note.bookID._id,
                     };
-                    onDeliverClick()
-                    setNotify(notify)
-                
+                    console.log(notifyObj);
+                    setNotify(notifyObj);
+                    // onDeliverClick();
+
                     setDliverClicked(!deliverClicked);
                     toOpenModal(false);
                   }}

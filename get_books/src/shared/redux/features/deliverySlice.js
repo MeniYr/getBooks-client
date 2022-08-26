@@ -106,6 +106,20 @@ export const changeOwner = createAsyncThunk(
     }
   }
 );
+export const changeUserToDeliver = createAsyncThunk(
+  "delivery/changeUserToDeliver",
+  async (bodydata) => {
+    try {
+      let data = await (
+        await doApiMethod(`${DELIVERY}/changeUser`, "PUT",bodydata)
+      ).data;
+      console.log(data);
+      return data;
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 const deliverySlice = createSlice({
   name: "delivery",
@@ -117,6 +131,7 @@ const deliverySlice = createSlice({
     changeOwner_status: "idle",
     addInterestedID_status: "idle",
     getDeliveries_status: "idle",
+    changeUserToDeliver_status: "idle",
     delDelivery_status: "idle",
     delInterestedID_status: "idle",
     error: null,
@@ -227,6 +242,25 @@ const deliverySlice = createSlice({
 
       .addCase(changeOwner.rejected, (state, action) => {
         state.changeOwner_status = "failed";
+        state.error = action.error;
+        console.log("here_error_msg", state.error);
+      })
+      .addCase(changeUserToDeliver.pending, (state, action) => {
+        state.changeUserToDeliver_status = "loading";
+        console.log(state.changeUserToDeliver_status);
+      })
+
+      .addCase(changeUserToDeliver.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.changeUserToDeliver_status = "succeeded";
+          state.error = null;
+          console.log(action.payload);
+          console.log(state.changeUserToDeliver_status);
+        }
+      })
+
+      .addCase(changeUserToDeliver.rejected, (state, action) => {
+        state.changeUserToDeliver_status = "failed";
         state.error = action.error;
         console.log("here_error_msg", state.error);
       })

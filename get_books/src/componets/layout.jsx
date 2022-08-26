@@ -27,10 +27,9 @@ export default function Layout() {
   //   const [openModal, setOpenModal] = useState(false);
   
   useEffect(() => {
-    // dispatch(myBooks(currentUser?._id))
-console.log(currentUser?._id);
-console.log(token);
-console.log(userOnDeliveryBooks);
+
+currentUser?._id && dispatch(myBooks(currentUser._id))
+
   }, [getBooks_status]);
 
   return (

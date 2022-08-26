@@ -306,6 +306,7 @@ const usersSlice = createSlice({
       })
 
       .addCase(addNotify.pending, (state, action) => {
+        console.log(action.payload);
         state.addNote_status = "loading";
         console.log(state.addNote_status);
       })

@@ -93,18 +93,13 @@ const booksSlice = createSlice({
   reducers: {
     myBooks: (state, action) => {
       const user_ID = action.payload;
-console.log(user_ID);
+      console.log(user_ID);
       if (user_ID) {
         state.userBooks = state.books.filter(
           (item) => item.userID?._id === user_ID
         );
-console.log(state.books.filter(
-  (item) => item.userID?._id === user_ID
-));
-console.log(state.userBooks?.filter(
-  (item) => item.hide === true
-));
-        state.userOnDeliveryBooks =state.userBooks?.filter(
+
+        state.userOnDeliveryBooks = state.userBooks?.filter(
           (item) => item.hide === true
         );
         state.myBooks_status = "succeeded";
@@ -126,11 +121,9 @@ console.log(state.userBooks?.filter(
       console.log("getBooks work");
     },
     logOutFromBooks: (state, action) => {
-
       state.userBooks = [];
       state.userOnDeliveryBooks = [];
-
-  },
+    },
   },
 
   extraReducers(builder) {
@@ -237,7 +230,7 @@ console.log(state.userBooks?.filter(
         if (action.payload) {
           state.swichHide_status = "succeeded";
           state.error = null;
-// getBooks()
+          // getBooks()
           console.log(action.payload);
           console.log(state.swichHide_status);
         }
