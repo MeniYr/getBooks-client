@@ -13,7 +13,7 @@ import {
   categories,
   getCat,
 } from "../../../shared/redux/features/categoriesSlice";
-import { doApiMethod } from "../../../shared/services/apiService";
+import { doApiGet, doApiMethod } from "../../../shared/services/apiService";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import {
@@ -25,6 +25,8 @@ import {
   getUser,
 } from "../../../shared/redux/features/usersSlice";
 import { CircularProgress } from "@mui/material";
+import { CAT } from "../../../shared/constants/globalinfo/URL`S";
+import { useRef } from "react";
 
 export default function AddBook() {
   const nav = useNavigate();
@@ -41,16 +43,39 @@ export default function AddBook() {
 
   const [clicked, setClicked] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
-  const [saveOnRefresh, setsaveOnRefresh] = useState("");
-
+  const [cat, setCat] = useState([]);
+const addCatRef = useRef()
   // get category list
   const onEntering = async () => {
-    (await user_id?._id.length) > 0 && dispatch(getCat());
+ 
+    if(user_id?._id.length> 0)
+    try {
+      let data = await (await doApiGet(CAT)).data
+      console.log(data)
+      setCat(data)
+  }
+  catch (err) {
+    console.log(err);
+      throw err?.response?.data[0]?.message
+  }
+   
   };
+
+  const addCat = async() =>{
+    try {
+      let data = await (await doApiMethod(`${CAT}/add`, "POST", addCatRef)).data
+      console.log(data)
+     onEntering()
+  }
+  catch (err) {
+    console.log(err);
+      throw err?.response?.data[0]?.message
+  }
+  }
 
   useEffect(() => {
     onEntering();
-    console.log(saveOnRefresh);
+    // console.log(saveOnRefresh);
   }, []);
 
   useEffect(() => {
@@ -187,7 +212,7 @@ export default function AddBook() {
             className="select-control text-center fw-bolder w-100"
           >
             <option>בחר קטגוריה ..</option>
-            {getAllCategories?.map((item) => {
+            {cat?.map((item) => {
               return (
                 <option key={item._id} value={item._id}>
                   {item.category}
@@ -199,10 +224,6 @@ export default function AddBook() {
             <small className="d-block text-danger">choose a category</small>
           )}
 
-          {/* <div className='d-flex py-2'>
-            <label >פרסם את הספר למסירה כעת</label>
-            <input onClick={(e) => setIsPublish(!isPublish)} {...register("deliver")} type="checkbox" checked={isPublish} className='ms-2 border mx-2' />
-          </div> */}
 
           {loadingImg || addBook_status === "loading" ? (
             <button className="btn btn-info mt-3">
@@ -215,6 +236,11 @@ export default function AddBook() {
             <button className="btn btn-info mt-3">הוסף</button>
           )}
         </form>
+         {user_id?.role==="admin"&& <div className='d-flex py-2'>
+            <label >הוסף קטגוריה</label>
+            <input ref={addCatRef} className='ms-2 border mx-2' />
+            <button onClick={addCat}>הוסף</button>
+          </div>}
       </div>
     </div>
   );

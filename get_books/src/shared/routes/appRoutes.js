@@ -39,10 +39,10 @@ export default function AppRoutes() {
   const dispatch = useDispatch();
   // const { books,userOnDeliveryBooks } = useSelector(booksS);
   // const { authStatus } = useSelector(user_from_token);
-  // const { currentUser } = useSelector(getUsersSlice);
+  const { currentUser } = useSelector(getUsersSlice);
   useEffect(() => {
-
-  }, []);
+    dispatch(AuthWithToken());
+  }, [currentUser]);
 
   return (
     <BrowserRouter>
@@ -55,7 +55,7 @@ export default function AppRoutes() {
       <Routes>
         {/* <Navbar /> */}
         {/* user cms */}
-        <Route  element={<Layout />}>
+        <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -72,10 +72,9 @@ export default function AppRoutes() {
           <Route path="/search" element={<Search />} />
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/fullBook/:bookId" element={<FullBook />} />
-          <Route path="/booksOnDeliver" element={ <BooksOnDeliver />} />
+          <Route path="/booksOnDeliver" element={<BooksOnDeliver />} />
         </Route>
 
-       
         {/*  <Route path="/logout" element={<Logout />} />
         <Route path="/userTickets" element={<UserTickets />} />
         <Route path="/addUserTicket" element={<AddUserTicket />} />

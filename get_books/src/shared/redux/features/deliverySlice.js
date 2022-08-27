@@ -109,9 +109,10 @@ export const changeOwner = createAsyncThunk(
 export const changeUserToDeliver = createAsyncThunk(
   "delivery/changeUserToDeliver",
   async (bodydata) => {
+    console.log(bodydata);
     try {
       let data = await (
-        await doApiMethod(`${DELIVERY}/changeUser`, "PUT",bodydata)
+        await doApiMethod(`${DELIVERY}/changeUser`,"PUT",bodydata)
       ).data;
       console.log(data);
       return data;
@@ -247,6 +248,7 @@ const deliverySlice = createSlice({
       })
       .addCase(changeUserToDeliver.pending, (state, action) => {
         state.changeUserToDeliver_status = "loading";
+        console.log(action.payload.idBook);
         console.log(state.changeUserToDeliver_status);
       })
 

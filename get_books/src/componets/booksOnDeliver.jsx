@@ -18,12 +18,12 @@ export default function BooksOnDeliver() {
   const { userOnDeliveryBooks, myBooks_status } = useSelector(booksS);
 
   useEffect(() => {
-    dispatch(getBooks());
-    console.log(userOnDeliveryBooks);
-    console.log(myBooks_status);
     user?._id && dispatch(myBooks(user?._id));
+    // dispatch(getBooks());
+    user?._id && console.log(userOnDeliveryBooks);
+    console.log(myBooks_status);
     // user?._id && dispatch(myBooks(user._id));
-  }, [myBooks_status]);
+  }, [user]);
 
   return (
     <div className="container ">

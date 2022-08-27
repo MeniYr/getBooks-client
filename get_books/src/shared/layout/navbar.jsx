@@ -18,7 +18,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "@mui/material";
-import { srchBooks } from "../redux/features/bookSlice";
+import { getBooks, myBooks, srchBooks } from "../redux/features/bookSlice";
 import { MdHome } from "react-icons/md";
 import {
   getUser,
@@ -74,6 +74,7 @@ export default function PrimarySearchAppBar() {
   React.useEffect(() => {
     console.log(countNotify);
     userLogIn && dispatch(getUser());
+    userLogIn && dispatch(myBooks(currentUser?._id));
     //  console.log(userNotify);
   }, [userLogIn]);
 

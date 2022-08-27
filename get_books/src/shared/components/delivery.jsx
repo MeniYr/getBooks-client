@@ -25,26 +25,24 @@ export default function Delivery({ toOpenModal, note }) {
     return () => {
       console.log(deliverClicked);
       console.log(notify);
-      myStore.subscribe(()=>BooksOnDeliver())
       dispatch(myBooks(currentUser._id));
     };
     // const timer = () => {
   }, [deliverClicked]);
 
   useEffect(() => {
-    notify?.bookID && console.log(notify);
+    // notify?.bookID && console.log(notify);
     notify?.bookID && onDeliverClick();
   }, [notify]);
 
   const onDeliverClick = () => {
     console.log(notify);
-    dispatch(
-      changeUserToDeliver({
-        idBook: notify.bookID,
-        idUser: notify.toUserId,
-      })
-    );
-    dispatch(addNotify(notify.toUserId));
+    let userToDeliver = {
+      idBook: notify.bookID,
+      idUser: notify.toUserId,
+    };
+    dispatch(changeUserToDeliver(userToDeliver));
+    dispatch(addNotify(notify));
     dispatch(swichHide(note?.bookID._id));
   };
 
@@ -149,7 +147,7 @@ export default function Delivery({ toOpenModal, note }) {
                     // onDeliverClick();
 
                     setDliverClicked(!deliverClicked);
-                    toOpenModal(false);
+                    // toOpenModal(false);
                   }}
                   type="button"
                   className="btn btn-primary"
