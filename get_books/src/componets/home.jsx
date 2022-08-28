@@ -19,6 +19,8 @@ import {
   user_name,
 } from "../shared/redux/features/tokenSlice";
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
+import RecentlyAdded from "./userCMS/bookStory/recentlyAdded";
+import style_css from "./layoutCss.module.css";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -40,42 +42,16 @@ export default function Home() {
   return (
     <div
       style={{
-        position: "relative",
-        minHeight: "inherit",
       }}
-      className="border"
+      className="border d-block"
     >
-      {/* <button
-        style={{
-          position: "fixed",
-          bottom: "50px",
-          left: "50px",
-          borderRadius:"50%",
-          width:"60px",
-          height:"60px",
-          // padding:"10px"
-          display:"flex",
-          alignItems:"center",
-          justifyContent:"center",
-          fontSize:"2em"
-        }}
-      >
-        +
-      </button> */}
-      {/* <IconButton
-      onClick={()=>nav("/addBook")}
-        sx={{
-          // border:"2px solid black",
-          position: "fixed",
-          left: "250px",
-          bottom: "50px",
-          zIndex:"99"
-        }}
-        aria-label="add"
-        color="primary"
-      >
-        <MdAddCircleOutline size="60px" />
-      </IconButton> */}
+      <div className={`${style_css.recently} p-2`}>
+
+<RecentlyAdded />
+      </div>
+      <div className={`${style_css.categories} p-2`}>
+        categories
+      </div>
     </div>
   );
 }

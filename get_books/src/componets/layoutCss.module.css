@@ -1,8 +1,17 @@
 .addBtn {
     color: rgba(0, 125, 255, 0.3) !important ;
+    transition: transform 0.2s;
 }
 
 .addBtn:hover {
     background: rgba(255, 255, 255, 0)!important;
     color: rgb(0, 125, 255) !important;
+    transform: scale(1.2);
+}
+
+.recently{
+    min-height: 350px;
+}
+.categories{
+    min-height: 300px;
 }

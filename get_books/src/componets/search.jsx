@@ -33,7 +33,7 @@ export default function Search() {
   const nav = useNavigate();
 
   const { srchBooks_status, srchRes, books } = useSelector(booksS);
-  const { id,error } = useSelector(user_from_token);
+  const { id, error } = useSelector(user_from_token);
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const { deliveries } = useSelector(delivery);
@@ -84,6 +84,12 @@ export default function Search() {
     };
   }, [notifyClicked]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(getBooks());
+    };
+  }, []);
+
   // render delivers on notify clicked
   // useEffect(() => {
   //   // dispatch(getUsers());
@@ -99,26 +105,23 @@ export default function Search() {
   //   existDelivery();
   // }, [notify]);
 
-    // const existDelivery = () => {
-    //   console.log("existDelivery open");
-    //   let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
-    //   let userExist = bookHowDeliver?.interestedUsersID?.includes(
-    //     id
-    //   );
-    //   console.log(notify);
-    //   userExist ? setIsDelivered(true) : setIsDelivered(false);
+  // const existDelivery = () => {
+  //   console.log("existDelivery open");
+  //   let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
+  //   let userExist = bookHowDeliver?.interestedUsersID?.includes(
+  //     id
+  //   );
+  //   console.log(notify);
+  //   userExist ? setIsDelivered(true) : setIsDelivered(false);
 
-    // };
-    
-
+  // };
 
   const notifyControl = async () => {
     if (id === "") {
       toast.info("נא התחבר");
       nav("/login");
     } else {
-
-      notify?.fromUserId===id && dispatch(addNotify(notify));
+      notify?.fromUserId === id && dispatch(addNotify(notify));
     }
   };
 
@@ -176,9 +179,7 @@ export default function Search() {
                           value={rating}
                           a11y={false}
                           isHalf={false}
-                          edit={
-                            id !== item.userID._id ? true : false
-                          }
+                          edit={id !== item.userID._id ? true : false}
                         />
                         <article className="d-flex">
                           <p className="border-start border-opacity-50 ps-1 border-dark">
@@ -229,9 +230,7 @@ export default function Search() {
                               className={`shadow ${
                                 deliveries
                                   ?.find((a) => a.bookID === item._id)
-                                  ?.interestedUsersID?.includes(
-                                    id
-                                  ) ? (
+                                  ?.interestedUsersID?.includes(id) ? (
                                   "bg-info"
                                 ) : (
                                   <></>
@@ -249,18 +248,15 @@ export default function Search() {
 
                                 id !== "" &&
                                   dispatch(addInterestedID(item._id));
-                                  id !== "" &&
-                                  setNotifyClicked(!notifyClicked);
-                                  id !== "" && notifyControl();
+                                id !== "" && setNotifyClicked(!notifyClicked);
+                                id !== "" && notifyControl();
 
                                 // setOpenModal(true)
                               }}
                             >
                               {deliveries
                                 ?.find((a) => a.bookID === item._id)
-                                ?.interestedUsersID?.includes(
-                                  id
-                                ) ? (
+                                ?.interestedUsersID?.includes(id) ? (
                                 <>🔖</>
                               ) : (
                                 <></>
@@ -275,31 +271,30 @@ export default function Search() {
 
                     {/* left */}
                     {/* TODO USER PROFILE */}
-                    {id !== "" &&
-                      id !== item.userID._id && (
-                        <div
-                          className="bg-light d-flex shadow-lg rounded-circle p-4"
-                          style={{
-                            minWidth: "160px",
-                            height: "160px",
-                          }}
-                        >
-                          <div className="my-auto mx-auto text-center text-wrap fw-bolder">
-                            <p className="text-muted ">
-                              משתמש: {item.userID?.name}
-                            </p>
-                            {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
-                            <button
-                              onClick={() => {
-                                nav(`/sendMsg/${item.userID?._id}`);
-                              }}
-                              className="btn btn-outline-info rounded-circle"
-                            >
-                              הודעה
-                            </button>
-                          </div>
+                    {id !== "" && id !== item.userID._id && (
+                      <div
+                        className="bg-light d-flex shadow-lg rounded-circle p-4"
+                        style={{
+                          minWidth: "160px",
+                          height: "160px",
+                        }}
+                      >
+                        <div className="my-auto mx-auto text-center text-wrap fw-bolder">
+                          <p className="text-muted ">
+                            משתמש: {item.userID?.name}
+                          </p>
+                          {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
+                          <button
+                            onClick={() => {
+                              nav(`/sendMsg/${item.userID?._id}`);
+                            }}
+                            className="btn btn-outline-info rounded-circle"
+                          >
+                            הודעה
+                          </button>
                         </div>
-                      )}
+                      </div>
+                    )}
                   </div>
 
                   {i < srchRes.length - 1 && <hr />}

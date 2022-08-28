@@ -12,7 +12,11 @@ export default function BooksUserInterested() {
   const [interestedBooks, setInterestedBooks] = useState([]);
   useEffect(() => {
     const a = () => {
-      let a = deliveries?.interestedUsersID;
+    
+      let a = deliveries.map(item=>{
+        console.log(item)
+    
+      });
       let b = a?.filter((item) => item === id);
       return b;
     };

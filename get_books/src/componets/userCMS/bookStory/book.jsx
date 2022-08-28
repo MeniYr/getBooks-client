@@ -11,7 +11,7 @@ import myStyle from "./books.module.css";
 export default function Book(props) {
     const { currentUser } = useSelector(getUsersSlice)
     let book = props.book
-    console.log(book);
+    // console.log(book);
     const rating = (rate_num) => {
         console.log(rate_num);
         let isInt = Number.isInteger(rate_num);
@@ -38,7 +38,7 @@ export default function Book(props) {
             width: "207px",
             height: "444px"
         }} >
-            <div className=' text-md-end p-2'>
+            <div className='  text-md-end p-2'>
                 <Link to={`/fullBook/${book._id}`}>
                     <img
                         className={`shadow ${myStyle.book}`}

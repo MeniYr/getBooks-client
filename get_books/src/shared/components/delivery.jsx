@@ -22,10 +22,11 @@ export default function Delivery({ toOpenModal, note }) {
   useEffect(() => {
     dispatch(getAllMyBooks());
   }, [deliverClicked]);
-
+  
   useEffect(() => {
     notify?.bookID && onDeliverClick();
   }, [notify]);
+
 
   const onDeliverClick = () => {
     console.log(notify.bookID);

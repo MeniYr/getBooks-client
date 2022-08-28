@@ -18,7 +18,7 @@ export default function FullBook() {
   const { bookId } = useParams();
 
   useEffect(() => {
-    dispatch(getBooks())
+    
     dispatch(findBook(bookId));
     console.log(currentBook);
   }, [bookId,openMsg]);

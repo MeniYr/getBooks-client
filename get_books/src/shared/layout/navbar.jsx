@@ -354,13 +354,26 @@ dispatch(getUser(id))
             variant="h6"
             // noWrap
             component="div"
-            sx={{ display: { xs: "block", sm: "block", md: "block" } }} //style
+            sx={{ display: { xs: "none", sm: "block", md: "block" } }} //style
           >
             <Link
               className="text-white fst-italic fs-2 fw-semibold text-decoration-none"
               to={"/"}
             >
               get books <MdHome />
+            </Link>
+          </Typography>
+          <Typography
+            variant="h6"
+            // noWrap
+            component="div"
+            sx={{ display: { xs: "block", sm: "none", md: "none" } }} //style
+          >
+            <Link
+              className="text-white fst-italic fs-4 fw-semibold text-decoration-none ps-3"
+              to={"/"}
+            >
+               <MdHome />
             </Link>
           </Typography>
 
