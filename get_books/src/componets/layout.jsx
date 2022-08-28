@@ -13,7 +13,7 @@ import BooksUserInterested from "../shared/layout/booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
 import { booksS, getBooks } from "../shared/redux/features/bookSlice";
-import { user_from_token } from "../shared/redux/features/tokenSlice";
+import { AuthWithToken, user_from_token } from "../shared/redux/features/tokenSlice";
 import Footer from "../shared/layout/footer";
 
 export default function Layout() {
@@ -28,15 +28,17 @@ export default function Layout() {
     userBooks,
     swichHide_status,
   } = useSelector(booksS);
+  const { id } = useSelector(user_from_token);
 
   const dispatch = useDispatch();
   //   const [isLoginMode, setIsLoginMode] = useState(true);
   //   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
+    id!==""&&dispatch(AuthWithToken())
     // console.log("קורא ל-getBooks");
     // currentUser?._id && dispatch(getBooks())
-  }, []);
+  }, [id,currentUser]);
 
   return (
     <div>

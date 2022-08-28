@@ -32,11 +32,11 @@ export default function Home() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    id!==""&&dispatch(AuthWithToken())
+  // useEffect(() => {
+    // id!==""&&dispatch(AuthWithToken())
     // currentUser?._id && dispatch(myBooks(id))
     // currentUser?._id && dispatch(myBooks(id));
-  }, [id]);
+  // }, [id]);
 
 
   return (

@@ -27,6 +27,7 @@ import {
 } from "../redux/features/usersSlice";
 import Delivery from "../components/delivery";
 import { delivery } from "../redux/features/deliverySlice";
+import { AuthWithToken } from "../redux/features/tokenSlice";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -76,9 +77,13 @@ export default function PrimarySearchAppBar() {
   const nav = useNavigate();
 
   React.useEffect(() => {
+    // dispatch(AuthWithToken())
     console.log(countNotify);
     console.log();
     id!==""&& dispatch(getUser());
+
+    console.log(id);
+    console.log(currentUser);
     // token!==null  && dispatch(myBooks(currentUser?._id));
     //  console.log(userNotify);
   }, [id,getAllMyBooks_status,userBooks, swichHide_status]);

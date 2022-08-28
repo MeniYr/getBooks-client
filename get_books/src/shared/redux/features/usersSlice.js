@@ -163,6 +163,7 @@ const usersSlice = createSlice({
     logOutFromUsers: (state, action) => {
       state.userByID = "";
       state.currentUser = null;
+      
     },
   },
   extraReducers(builder) {

@@ -29,17 +29,6 @@ export default function Login() {
     console.log(logINStatus);
   }, [error, logINStatus]);
 
-  // useEffect(()=>{
-  //   console.log();
-  //   return (()=>{
-  //     console.log(logIn_status);
-  //     setCloseBtn(true)
-  //     logIn_status==="succeeded"&&dispatch(getUser())
-
-  //   }
-  //   )
-  // },[logIn_status])
-
   useEffect(() => {
     if (userName != "" && clicked) toast.success(`ברוך הבא ${userName}`);
   }, [userName, clicked]);
@@ -62,6 +51,7 @@ export default function Login() {
     dispatch(login(_dataBody));
     setCilcked(true);
     setCloseBtn(false);
+    
     // logIn_status === "succeeded" && dispatch(getUser());
   };
 
