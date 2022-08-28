@@ -25,6 +25,7 @@ export default function Login() {
   } = useForm();
 
   useEffect(() => {
+  
     clicked && logIn_status === "failed" && toast.error("email or user wrong");
     console.log(logIn_status);
   }, [error, logIn_status]);

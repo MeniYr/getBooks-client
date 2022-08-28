@@ -14,6 +14,7 @@ import BooksUserInterested from "../shared/layout/booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
 import { booksS, getBooks } from "../shared/redux/features/bookSlice";
 import {
+  AuthWithToken,
   user_from_token,
   user_name,
 } from "../shared/redux/features/tokenSlice";
@@ -30,6 +31,7 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
+    dispatch(AuthWithToken())
     // currentUser?._id && dispatch(myBooks(id))
     // currentUser?._id && dispatch(myBooks(id));
   }, []);

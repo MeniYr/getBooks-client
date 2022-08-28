@@ -3,39 +3,43 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
+  booksS,
   bookStatus,
   getAllBooks,
+  getAllMyBooks,
   getBooks,
   getMyBooks,
   myBooksStatus,
 } from "../../../shared/redux/features/bookSlice";
-import { userID } from "../../../shared/redux/features/tokenSlice";
+import { userID, user_from_token } from "../../../shared/redux/features/tokenSlice";
 import { getCurrentUser } from "../../../shared/redux/features/usersSlice";
 import Book from "./book";
 
 export default function MyBooks() {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const { books } = useSelector(getAllBooks);
-  const {get_myBooks} = useSelector(getMyBooks);
-  const status = useSelector(myBooksStatus);
-  const user_id = useSelector(getCurrentUser);
+  // const { books } = useSelector(getAllBooks);
+  // const {get_myBooks} = useSelector(getMyBooks);
+  // const status = useSelector(myBooksStatus);
+  const {userBooks,getAllMyBooks_status} = useSelector(booksS);
+  const {id} = useSelector(user_from_token);
 
   useEffect(() => {
-      console.log(get_myBooks);
+
+      // console.log(get_myBooks);
     // user_id?._id.length>0 && dispatch(myBooks());
-    user_id?._id === null && toast.info("נא התחבר") && nav("/login");
+    id === "" && toast.info("נא התחבר") && nav("/login");
   }, []);
 
   useEffect(() => {
-    // user_id?._id !== null && dispatch(myBooks(user_id));
-  }, [user_id]);
+    id !== null && dispatch(getAllMyBooks());
+  }, [id]);
 
   return (
     <div className="container">
-      {books?.getBooks_status === "succeeded" && (
-        <div className="row">
-          {get_myBooks?.map((item) => {
+      {getAllMyBooks_status === "succeeded" && (
+        <div className="d-flex">
+          {userBooks?.map((item) => {
             return (
               <div className="p-2 " key={item._id}>
                 <Book book={item} />
@@ -44,13 +48,13 @@ export default function MyBooks() {
           })}
         </div>
       )}
-      {books?.getBooks_status === "loading" && (
+      {getAllMyBooks_status === "loading" && (
           <div className="d-flex justify-content-center border vh-100 align-items-center">
           <div className="display-6 ">טוען...</div>
       </div>
       )}
-      {books?.getBooks_status === "failed" ||
-        (books === undefined && (
+      {getAllMyBooks_status === "failed" ||
+        (userBooks === undefined && (
           <div className="d-flex justify-content-center border vh-100 align-items-center">
               <div className="display-6 ">בעיה בשרת אנא נסה שוב מאוחר יותר.</div>
           </div>

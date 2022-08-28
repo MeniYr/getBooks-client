@@ -18,26 +18,31 @@ import {
   getUser,
   getUsers,
 } from "../shared/redux/features/usersSlice";
+import Confetti from 'react-confetti'
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
-  const { userOnDeliveryBooks, getAllMyBooks_status, userBooks, swichHide_status } =
-    useSelector(booksS);
+  const {
+    userOnDeliveryBooks,
+    getAllMyBooks_status,
+    userBooks,
+    swichHide_status,
+  } = useSelector(booksS);
   const { id } = useSelector(user_from_token);
   const { changeOwner_status } = useSelector(delivery);
   const [book, setBook] = useState([]);
+  const [deliverClicked, setDeliverClicked] = useState(false);
 
   useEffect(() => {
-
     if (id !== "") {
       dispatch(getAllMyBooks());
     }
-  }, [id,swichHide_status,changeOwner_status]);
+  }, [id, swichHide_status, changeOwner_status]);
 
   useEffect(() => {
     setBook(userBooks.filter((item) => item.hide === true));
-  }, [id,swichHide_status,userBooks]);
+  }, [id, swichHide_status, userBooks]);
 
   return (
     <div className="container ">
@@ -54,6 +59,13 @@ export default function BooksOnDeliver() {
                 className="p-2 mb-2 border border-success my-auto d-flex align-items-center rounded-2"
               >
                 <div className="d-flex  justify-content-between w-100">
+                  {/* <div
+                    onClick={() => {}}
+                    style={{ cursor: "pointer" }}
+                    className="text-secondary col-2 p-o m-0"
+                  >
+                    x
+                  </div> */}
                   <Link
                     to={`/fullBook/${book._id}`}
                     className="text-decoration-none text-body my-auto col-8"
@@ -65,18 +77,28 @@ export default function BooksOnDeliver() {
                   <button
                     onClick={() => {
                       dispatch(changeOwner(book._id));
-                      // dispatch(myBooks(user?._id));
+                     setDeliverClicked(true)
                     }}
                     className="btn btn-warning badge col-4 my-auto"
                   >
                     נמסר
                   </button>
+                    {/* {deliverClicked &&
+                        <Confetti
+                        width="500px"
+                        height="500px"
+                      />
+                    } */}
                 </div>
               </div>
             );
           })}
       </div>
-      {book.length === 0 && <p className="d-flex justify-content-center text-center">עדיין אין 😏</p>}
+      {book.length === 0 && (
+        <p className="d-flex justify-content-center text-center">
+          עדיין אין 😏
+        </p>
+      )}
     </div>
   );
 }

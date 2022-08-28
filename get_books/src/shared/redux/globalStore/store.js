@@ -19,8 +19,6 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-//   whitelist:["currentUser"],
-//   blacklist: ["userBooks"],
 };
 
 const persistedReducer_tokenSlice = persistReducer(persistConfig, tokenSlice);

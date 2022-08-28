@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { delivery, getDeliveries } from "../redux/features/deliverySlice";
+import { user_from_token } from "../redux/features/tokenSlice";
+import { getUsersSlice } from "../redux/features/usersSlice";
 
 export default function BooksUserInterested() {
-  return (
-    <div>
-      BooksUserInterested
-    </div>
-  )
+  const dispatch = useDispatch(getDeliveries());
+  const { id, error } = useSelector(user_from_token);
+  const { deliveries } = useSelector(delivery);
+  const { addNote_status } = useSelector(getUsersSlice);
+  const [interestedBooks, setInterestedBooks] = useState([]);
+  useEffect(() => {
+    const a = () => {
+      let a = deliveries.interestedUsersID;
+      let b = deliveries.filter((item) => item === id);
+      return b;
+    };
+    setInterestedBooks(a());
+    console.log(interestedBooks);
+  }, [deliveries, addNote_status]);
+
+  return <div>BooksUserInterested</div>;
 }
