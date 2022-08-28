@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip, Zoom } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +42,7 @@ export default function Layout() {
     <div>
       <PrimarySearchAppBar />
       <div className="d-md-flex">
-        <div className="col-md-2 border min-vh-100  d-none d-sm-block">
+        <div className="col-md-2 border min-vh-100  d-none d-md-block">
           <BooksUserInterested />
         </div>
         <div
@@ -52,7 +52,8 @@ export default function Layout() {
           className="col-md-8 border  min-vh-100"
         >
           <Outlet  />
-          <IconButton
+          <Tooltip placement="top-end" TransitionComponent={Zoom} title="הוסף ספר">
+            <IconButton
             onClick={() => nav("/addBook")}
             sx={{
               // border:"2px solid black",
@@ -66,8 +67,10 @@ export default function Layout() {
           >
             <MdAddCircleOutline size="60px" />
           </IconButton>
+          </Tooltip>
+          
         </div>
-        <div className="col-md-2 border d-none d-sm-block min-vh-100">
+        <div className="col-md-2 border d-none d-md-block min-vh-100">
           <BooksOnDeliver />
         </div>
       </div>

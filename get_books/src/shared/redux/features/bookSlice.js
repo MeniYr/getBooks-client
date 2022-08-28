@@ -102,30 +102,11 @@ const booksSlice = createSlice({
   },
 
   reducers: {
-    // myBooks: (state, action) => {
-    //   const user_ID = action.payload;
-    //   console.log(user_ID);
-    //   if (user_ID) {
-    //     state.userBooks = state.books.filter(
-    //       (item) => item.userID?._id === user_ID
-    //     );
-
-    //     state.userOnDeliveryBooks = state.userBooks?.filter(
-    //       (item) => item.hide === true
-    //     );
-    //     state.myBooks_status = "succeeded";
-    //     console.log("getBooks work");
-    //   } else {
-    //     state.userBooks = [];
-    //     state.myBooks_status = "failed";
-
-    //     console.log("getBooks not work");
-    //   }
-    // },
+ 
     findBook: (state, action) => {
       const book_ID = action.payload;
       console.log(action.payload);
-      console.log(state.books);
+  
       let res = state.books.find((item) => item._id === book_ID);
       state.currentBook = res;
       state.currentBook_status = "succeeded";

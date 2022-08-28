@@ -26,31 +26,42 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import Delivery from "../shared/components/delivery";
 import { user_from_token } from "../shared/redux/features/tokenSlice";
+import { BOOKS } from "../shared/constants/globalinfo/URL`S";
+import { doApiMethod } from "../shared/services/apiService";
 // import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 
 export default function Search() {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
-  const { srchBooks_status, srchRes, books } = useSelector(booksS);
+  const { srchBooks_status, srchRes, sendBookMassage_status, books } =
+    useSelector(booksS);
   const { id, error } = useSelector(user_from_token);
-  const { addNote_status, currentUser, userNotifyAlready, users } =
+
+  const { addNote_status, msg_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const { deliveries } = useSelector(delivery);
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth);
   const [notifyClicked, setNotifyClicked] = useState(false);
-  const [isDelivered, setIsDelivered] = useState(false);
+
   const [notify, setNotify] = useState({});
-  // const [openModal, setOpenModal] = useState(false)
-  const buttonRef = useRef();
+  const [readMore, setReadMore] = useState(false);
+
   // rating
-  const rating = (rate_num) => {
-    // console.log(rate_num);
-    let isInt = Number.isInteger(rate_num);
-    let num = Number(rate_num);
+  const rating = async (obj) => {
+    console.log(obj.e);
+    let isInt = Number.isInteger(obj.e);
+    let num = Number(obj.e);
     if (!isInt && Math.ceil(num) > num) {
-      return Math.floor(num) + 0.5;
-    } else return num;
+      num = Math.floor(num) + 0.5;
+    }
+    let sendRate = await doApiMethod(
+      `${BOOKS}/addRate/${obj.item._id}`,
+      "PUT",
+      { num }
+    );
+    dispatch(getBooks());
+    console.log(sendRate?.rate);
   };
 
   // screen size check
@@ -82,46 +93,24 @@ export default function Search() {
     return () => {
       dispatch(getDeliveries());
     };
-  }, [notifyClicked]);
+  }, [notifyClicked, notify]);
 
   useEffect(() => {
+    dispatch(getUsers())
     return () => {
       dispatch(getBooks());
     };
-  }, []);
+  }, [deliveries]);
 
-  // render delivers on notify clicked
-  // useEffect(() => {
-  //   // dispatch(getUsers());
-  //   dispatch(getDeliveries());
-  //   // dispatch(myBooks(currentUser?._id))
-  //   return () => {
-  //     // dispatch(getUsers());
-  //   };
-  // }, [notifyClicked]);
-
-  // useEffect(() => {
-
-  //   existDelivery();
-  // }, [notify]);
-
-  // const existDelivery = () => {
-  //   console.log("existDelivery open");
-  //   let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
-  //   let userExist = bookHowDeliver?.interestedUsersID?.includes(
-  //     id
-  //   );
-  //   console.log(notify);
-  //   userExist ? setIsDelivered(true) : setIsDelivered(false);
-
-  // };
-
-  const notifyControl = async () => {
-    if (id === "") {
+  const onClickInterested = () => {
+    if (id !== "") {
+      console.log(notify);
+      notify?.fromUserId === id && dispatch(addNotify(notify));
+      dispatch(addInterestedID(notify?.bookID));
+      setNotifyClicked(!notifyClicked);
+    } else {
       toast.info("נא התחבר");
       nav("/login");
-    } else {
-      notify?.fromUserId === id && dispatch(addNotify(notify));
     }
   };
 
@@ -175,8 +164,8 @@ export default function Search() {
                           count={5}
                           size={30}
                           activeColor="#ffd700"
-                          onClick={(e) => rating(e)}
-                          value={rating}
+                          onClick={(e) => rating({ item, e })}
+                          value={item?.rate / item?.rateQuanity}
                           a11y={false}
                           isHalf={false}
                           edit={id !== item.userID._id ? true : false}
@@ -201,8 +190,24 @@ export default function Search() {
                           }}
                           className="overflow-auto"
                         >
-                          {item.description}
+                          {item.description.length > 300
+                            ? item.description.substring(0, 300) + "..."
+                            : item.description}
                         </p>
+                        {item.description.length > 300 && (
+                          <div>
+                            <button
+                              className="btn btn-outline-info"
+                              onClick={() => setReadMore(!readMore)}
+                            >
+                              {!readMore?"קרא עוד":"הצג פחות"}
+                            </button>
+                            {readMore && (
+                              <p>{item.description.substring(300)}</p>
+                            )}
+                          </div>
+                        )}
+
                         {/* favs */}
                         <div className="d-flex align-items-center justify-content-between">
                           <Tooltip
@@ -221,9 +226,12 @@ export default function Search() {
                             </p>
                           </Tooltip>
                           <br />
-                          {/* 
-                         {deliveries?.find(a => a.bookID === item._id)?.
-                            interestedUsersID?.includes(currentUser?._id) ? "yes" : "not"} */}
+
+                          {deliveries
+                            ?.find((a) => a.bookID === item._id)
+                            ?.interestedUsersID?.includes(id)
+                            ? "yes"
+                            : "not"}
 
                           {id !== item.userID._id && (
                             <IconButton
@@ -245,11 +253,7 @@ export default function Search() {
                                   bookID: item._id,
                                 };
                                 setNotify(notify);
-
-                                id !== "" &&
-                                  dispatch(addInterestedID(item._id));
-                                id !== "" && setNotifyClicked(!notifyClicked);
-                                id !== "" && notifyControl();
+                                onClickInterested();
 
                                 // setOpenModal(true)
                               }}

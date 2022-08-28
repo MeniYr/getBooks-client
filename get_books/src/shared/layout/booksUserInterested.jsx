@@ -10,19 +10,19 @@ export default function BooksUserInterested() {
   const { deliveries } = useSelector(delivery);
   const { addNote_status } = useSelector(getUsersSlice);
   const [interestedBooks, setInterestedBooks] = useState([]);
-  useEffect(() => {
-    const a = () => {
+  // useEffect(() => {
+    // const a = () => {
     
-      let a = deliveries.map(item=>{
-        console.log(item)
+    //   let a = deliveries.find(item=>
+    //     item==="interestedUsersID"
     
-      });
-      let b = a?.filter((item) => item === id);
-      return b;
-    };
-    setInterestedBooks(a());
-    console.log(interestedBooks);
-  }, [deliveries, addNote_status]);
+    //   );
+    //   let b = a?.filter((item) => item === id);
+    //   return a;
+    // };
+  //   setInterestedBooks(a());
+  //   console.log(interestedBooks);
+  // }, [deliveries, addNote_status]);
 
   return <div>BooksUserInterested</div>;
 }

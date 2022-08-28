@@ -3,26 +3,36 @@ import moment from 'moment'
 import ReactStars from 'react-rating-stars-component'
 import { TextareaAutosize, TextField, Tooltip } from '@mui/material'
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUsersSlice } from '../../../shared/redux/features/usersSlice';
 import { Link } from 'react-router-dom';
 import myStyle from "./books.module.css";
+import { doApiMethod } from '../../../shared/services/apiService';
+import { BOOKS } from '../../../shared/constants/globalinfo/URL`S';
+import { getBooks } from '../../../shared/redux/features/bookSlice';
 
 export default function Book(props) {
+    const dispatch = useDispatch()
     const { currentUser } = useSelector(getUsersSlice)
     let book = props.book
     // console.log(book);
-    const rating = (rate_num) => {
-        console.log(rate_num);
-        let isInt = Number.isInteger(rate_num);
-        let num = Number(rate_num);
-        if (!isInt && (Math.ceil(num) > num)) {
-            return Math.floor(num) + 0.5
+  
+    
+    const rating = async (_num) => {
+        console.log(_num);
+        let isInt = Number.isInteger(_num);
+        let num = Number(_num);
+        if (!isInt && Math.ceil(num) > num) {
+          num = Math.floor(num) + 0.5;
         }
-        else
-            return num;
-
-    };
+        let sendRate = await doApiMethod(
+          `${BOOKS}/addRate/${book._id}`,
+          "PUT",
+          { num }
+        );
+        // dispatch(());
+        console.log(sendRate?.rate);
+      };
 
     const [clicked, SetClicked] = useState(false)
 
@@ -58,7 +68,7 @@ export default function Book(props) {
                         size={30}
                         activeColor="#ffd700"
                         onChange={(e) => rating(e)}
-                        value={rating}
+                        value={currentUser?.rate/currentUser?.rateQuanity}
                         a11y={true}
                         isHalf={true}
 

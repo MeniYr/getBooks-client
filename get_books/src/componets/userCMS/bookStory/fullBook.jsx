@@ -5,31 +5,48 @@ import moment from "moment";
 
 import { getUsersSlice } from "../../../shared/redux/features/usersSlice";
 import "./books.module.css";
-import { booksS, findBook, getBooks } from "../../../shared/redux/features/bookSlice";
+import {
+  booksS,
+  findBook,
+  getBooks,
+} from "../../../shared/redux/features/bookSlice";
 import ReactStars from "react-rating-stars-component";
 import SendMsg from "../userStorey/sendMsg";
 import { user_from_token } from "../../../shared/redux/features/tokenSlice";
+import { doApiMethod } from "../../../shared/services/apiService";
+import { BOOKS } from "../../../shared/constants/globalinfo/URL`S";
 
 export default function FullBook() {
   const dispatch = useDispatch();
   const { id } = useSelector(user_from_token);
   const [openMsg, setOpenMsg] = useState(false);
-  const { currentBook } = useSelector(booksS);
+  const { currentBook, sendBookMassage_status, currentBook_status } =
+    useSelector(booksS);
+  const { msg_status } = useSelector(getUsersSlice);
   const { bookId } = useParams();
+  const [ratings, setRating] = useState(0)
 
   useEffect(() => {
-    
-    dispatch(findBook(bookId));
-    console.log(currentBook);
-  }, [bookId,openMsg]);
+    dispatch(getBooks());
+  }, [currentBook]);
 
-  const rating = (rate_num) => {
+  useEffect(() => {
+    dispatch(findBook(bookId));
+    console.log(bookId);
+  }, [bookId, openMsg, sendBookMassage_status, msg_status, currentBook_status]);
+
+  const rating = async (rate_num) => {
     // console.log(rate_num);
     let isInt = Number.isInteger(rate_num);
     let num = Number(rate_num);
     if (!isInt && Math.ceil(num) > num) {
-      return Math.floor(num) + 0.5;
-    } else return num;
+      num = Math.floor(num) + 0.5;
+    }
+    let sendRate = await doApiMethod(
+      `${BOOKS}/addRate/${bookId }`,"PUT", {num}
+    );
+    dispatch(getBooks());
+    console.log(sendRate?.rate)
   };
 
   return (
@@ -76,12 +93,10 @@ export default function FullBook() {
               size={30}
               activeColor="#ffd700"
               onChange={(e) => rating(e)}
-              value={rating}
+              value={currentBook?.rate/currentBook?.rateQuanity}
               a11y={true}
               isHalf={true}
-              edit={
-                id !== currentBook?.userID?._id ? true : false
-              }
+              edit={id !== currentBook?.userID?._id ? true : false}
             />
           </div>
         </div>
