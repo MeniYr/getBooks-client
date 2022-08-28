@@ -5,3 +5,22 @@
 .book:hover {
     opacity: 0.8;
 }
+
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: skyblue;
+    box-shadow: inset  0 0 5px gray;
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #a5ffff7c;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a5ffff;
+}
