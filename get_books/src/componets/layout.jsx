@@ -12,7 +12,7 @@ import BooksOnDeliver from "./booksOnDeliver";
 import BooksUserInterested from "../shared/layout/booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
-import { booksS, getBooks, myBooks } from "../shared/redux/features/bookSlice";
+import { booksS, getBooks} from "../shared/redux/features/bookSlice";
 import { user_from_token } from "../shared/redux/features/tokenSlice";
 
 export default function Layout() {
@@ -20,17 +20,18 @@ export default function Layout() {
   const { token } = useSelector(user_from_token);
 
     const { currentUser } = useSelector(getUsersSlice);
-    const { getBooks_status,userOnDeliveryBooks } = useSelector(booksS);
+    const { getBooks_status,userOnDeliveryBooks,
+      getAllMyBooks_status, userBooks, swichHide_status } = useSelector(booksS);
 
     const dispatch = useDispatch();
   //   const [isLoginMode, setIsLoginMode] = useState(true);
   //   const [openModal, setOpenModal] = useState(false);
   
   useEffect(() => {
+// console.log("קורא ל-getBooks");
+// currentUser?._id && dispatch(getBooks())
 
-currentUser?._id && dispatch(getBooks())
-
-  }, [currentUser]);
+  }, []);
 
   return (
     <div

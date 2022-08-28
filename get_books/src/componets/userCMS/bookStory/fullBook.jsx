@@ -5,18 +5,20 @@ import moment from "moment";
 
 import { getUsersSlice } from "../../../shared/redux/features/usersSlice";
 import "./books.module.css";
-import { booksS, findBook } from "../../../shared/redux/features/bookSlice";
+import { booksS, findBook, getBooks } from "../../../shared/redux/features/bookSlice";
 import ReactStars from "react-rating-stars-component";
 import SendMsg from "../userStorey/sendMsg";
+import { user_from_token } from "../../../shared/redux/features/tokenSlice";
 
 export default function FullBook() {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector(getUsersSlice);
+  const { id } = useSelector(user_from_token);
   const [openMsg, setOpenMsg] = useState(false);
   const { currentBook } = useSelector(booksS);
   const { bookId } = useParams();
 
   useEffect(() => {
+    dispatch(getBooks())
     dispatch(findBook(bookId));
     console.log(currentBook);
   }, [bookId,openMsg]);
@@ -78,7 +80,7 @@ export default function FullBook() {
               a11y={true}
               isHalf={true}
               edit={
-                currentUser?._id !== currentBook?.userID?._id ? true : false
+                id !== currentBook?.userID?._id ? true : false
               }
             />
           </div>

@@ -95,7 +95,7 @@ export default function Login() {
               <label>סיסמא</label>
               <input
                 autoComplete="current-password"
-                {...register("password", { required: true, minLength: 3 })}
+                {...register("password", { required: true, minLength: 0 })}
                 type="password"
                 className="form-control"
               />

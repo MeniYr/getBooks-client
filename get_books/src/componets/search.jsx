@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
-import { books, booksS, getBooks, myBooks } from "../shared/redux/features/bookSlice";
+import { books, booksS, getBooks } from "../shared/redux/features/bookSlice";
 import Book from "./userCMS/bookStory/book";
 import { GrFavorite } from "react-icons/gr";
 import { MdOutlineFavorite } from "react-icons/md";
@@ -24,8 +24,8 @@ import {
 } from "../shared/redux/features/deliverySlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import Modal from "./modal";
 import Delivery from "../shared/components/delivery";
+import { user_from_token } from "../shared/redux/features/tokenSlice";
 // import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 
 export default function Search() {
@@ -33,6 +33,7 @@ export default function Search() {
   const nav = useNavigate();
 
   const { srchBooks_status, srchRes, books } = useSelector(booksS);
+  const { id,error } = useSelector(user_from_token);
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const { deliveries } = useSelector(delivery);
@@ -71,9 +72,9 @@ export default function Search() {
   }, [addNote_status]);
 
   // user props update
-  useEffect(() => {
-    currentUser !== null && dispatch(getUsers());
-  }, []);
+  // useEffect(() => {
+  //   currentUser !== null && dispatch(getUsers());
+  // }, []);
 
   // get delivers
   useEffect(() => {
@@ -81,41 +82,43 @@ export default function Search() {
     return () => {
       dispatch(getDeliveries());
     };
-  }, []);
-
-  // render delivers on notify clicked
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getDeliveries());
-    dispatch(myBooks(currentUser?._id))
-    return () => {
-      dispatch(getUsers());
-    };
   }, [notifyClicked]);
 
-  useEffect(() => {
+  // render delivers on notify clicked
+  // useEffect(() => {
+  //   // dispatch(getUsers());
+  //   dispatch(getDeliveries());
+  //   // dispatch(myBooks(currentUser?._id))
+  //   return () => {
+  //     // dispatch(getUsers());
+  //   };
+  // }, [notifyClicked]);
 
-    existDelivery();
-  }, [notify]);
+  // useEffect(() => {
 
-    const existDelivery = () => {
-      let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
-      let userExist = bookHowDeliver?.interestedUsersID?.includes(
-        currentUser?._id
-      );
-      console.log(notify);
-      userExist ? setIsDelivered(true) : setIsDelivered(false);
-    };
+  //   existDelivery();
+  // }, [notify]);
+
+    // const existDelivery = () => {
+    //   console.log("existDelivery open");
+    //   let bookHowDeliver = deliveries?.find((a) => a.bookID === notify?.bookID);
+    //   let userExist = bookHowDeliver?.interestedUsersID?.includes(
+    //     id
+    //   );
+    //   console.log(notify);
+    //   userExist ? setIsDelivered(true) : setIsDelivered(false);
+
+    // };
     
 
 
   const notifyControl = async () => {
-    if (currentUser === null) {
+    if (id === "") {
       toast.info("נא התחבר");
       nav("/login");
     } else {
-      console.log(isDelivered);
-      isDelivered && dispatch(addNotify(notify));
+
+       dispatch(addNotify(notify));
     }
   };
 
@@ -174,7 +177,7 @@ export default function Search() {
                           a11y={false}
                           isHalf={false}
                           edit={
-                            currentUser?._id !== item.userID._id ? true : false
+                            id !== item.userID._id ? true : false
                           }
                         />
                         <article className="d-flex">
@@ -221,13 +224,13 @@ export default function Search() {
                          {deliveries?.find(a => a.bookID === item._id)?.
                             interestedUsersID?.includes(currentUser?._id) ? "yes" : "not"} */}
 
-                          {currentUser?._id !== item.userID._id && (
+                          {id !== item.userID._id && (
                             <IconButton
                               className={`shadow ${
                                 deliveries
                                   ?.find((a) => a.bookID === item._id)
                                   ?.interestedUsersID?.includes(
-                                    currentUser?._id
+                                    id
                                   ) ? (
                                   "bg-info"
                                 ) : (
@@ -235,18 +238,20 @@ export default function Search() {
                                 )
                               }`}
                               onClick={() => {
+                                error&&toast.info("נא התחבר")&&
+                                nav("/login")
                                 let notify = {
-                                  fromUserId: currentUser?._id,
-                                  toUserId: item.userID._id,
+                                  fromUserId: id,
+                                  toUserId: item?.userID?._id,
                                   bookID: item._id,
                                 };
                                 setNotify(notify);
 
-                                currentUser !== null &&
+                                id !== "" &&
                                   dispatch(addInterestedID(item._id));
-                                currentUser !== null &&
+                                  id !== "" &&
                                   setNotifyClicked(!notifyClicked);
-                                currentUser?._id && notifyControl();
+                                  id !== "" && notifyControl();
 
                                 // setOpenModal(true)
                               }}
@@ -254,7 +259,7 @@ export default function Search() {
                               {deliveries
                                 ?.find((a) => a.bookID === item._id)
                                 ?.interestedUsersID?.includes(
-                                  currentUser?._id
+                                  id
                                 ) ? (
                                 <>🔖</>
                               ) : (
@@ -270,8 +275,8 @@ export default function Search() {
 
                     {/* left */}
                     {/* TODO USER PROFILE */}
-                    {currentUser !== null &&
-                      currentUser?._id !== item.userID._id && (
+                    {id !== "" &&
+                      id !== item.userID._id && (
                         <div
                           className="bg-light d-flex shadow-lg rounded-circle"
                           style={{

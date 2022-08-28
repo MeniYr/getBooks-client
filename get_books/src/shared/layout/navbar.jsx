@@ -18,15 +18,15 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "@mui/material";
-import { getBooks, myBooks, srchBooks } from "../redux/features/bookSlice";
+import { booksS, getBooks, srchBooks } from "../redux/features/bookSlice";
 import { MdHome } from "react-icons/md";
 import {
   getUser,
   getUsersSlice,
   readNotify,
 } from "../redux/features/usersSlice";
-import Modal from "../../componets/modal";
 import Delivery from "../components/delivery";
+import { delivery } from "../redux/features/deliverySlice";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -63,8 +63,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const dispatch = useDispatch();
   const srchRef = React.useRef(null);
-  const userLogIn = useSelector((state) => state.token.token);
+  const {token,userName,id} = useSelector((state) => state.token);
   const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice);
+  const { getBooks_status,userOnDeliveryBooks,
+  getAllMyBooks_status, userBooks, swichHide_status } = useSelector(booksS);
+ const {changeOwner_status } = useSelector(delivery);
+
   // const [openLogin, setOpenLogin] = React.useState(false)
   const [openModal, setOpenModal] = React.useState(false);
   const [notify, setNotify] = React.useState({});
@@ -73,10 +77,11 @@ export default function PrimarySearchAppBar() {
 
   React.useEffect(() => {
     console.log(countNotify);
-    userLogIn && dispatch(getUser());
-    userLogIn && dispatch(myBooks(currentUser?._id));
+    console.log();
+    dispatch(getUser());
+    // token!==null  && dispatch(myBooks(currentUser?._id));
     //  console.log(userNotify);
-  }, [userLogIn]);
+  }, [id,getAllMyBooks_status,userBooks, swichHide_status]);
 
   // run search resault
   const search = () => {
@@ -97,6 +102,7 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
   const handleNoteMenuOpen = (event) => {
+dispatch(getUser(id))
     setNoteEl(event.currentTarget);
   };
 
@@ -187,37 +193,42 @@ export default function PrimarySearchAppBar() {
             sx={{
               width: 250,
             }}
-            key={item._id}
+            key={item?._id}
             onClick={() => {
               item?.isRead === false &&
-                dispatch(readNotify(item?._id)) &&
-                dispatch(getUser());
+                dispatch(readNotify(item?._id))
+                //&& dispatch(getUser());
               setOpenModal(true);
               setNotify(item);
               handleNoteMenuClose();
             }}
           >
-            {item.fromUserId._id !== item.bookID.userID && (
+            {item?.fromUserId?._id !== item?.bookID?.userID && (
               <p
                 className={`text-wrap p-0 m-0 ${
-                  item.isRead === false ? "opacity-100" : "opacity-50"
+                  item?.isRead === false ? "opacity-100" : "opacity-50"
                 }`}
               >
-                {item.fromUserId.name} מעוניין בספר {item.bookID.name}
+                {item?.fromUserId.name} {item?.isForDeliver===true? " מסר לך ספר ":" מעוניין בספר " }{item.bookID.name}
               </p>
             )}
-            {item.fromUserId._id === item.bookID.userID && (
+            {item?.fromUserId._id === item?.bookID.userID && (
               <p
                 className={`text-wrap p-0 m-0 ${
-                  item.isRead === false ? "opacity-100" : "opacity-50"
+                  item?.isRead === false ? "opacity-100" : "opacity-50"
                 }`}
               >
-                {item.fromUserId.name} אישר מסירת ספר {item.bookID.name}
+                {item?.fromUserId.name} אישר מסירת ספר {item?.bookID.name}
               </p>
             )}
           </MenuItem>
         );
       })}
+      {userNotify?.length===0&&
+      <div className="d-flex justify-content-center text-center">
+        <p>עדיין אין התראות 🙃</p>
+        </div>
+        }
     </Menu>
   );
 
@@ -297,7 +308,7 @@ export default function PrimarySearchAppBar() {
       {/* login */}
       <MenuItem className="d-flex justify-content-center">
         <p>{currentUser?.name}</p>
-        {userLogIn === null ? (
+        {token === null ? (
           <Link
             className="btn w-100 btn-success d-md-inline-flex align-items-center"
             color={"white"}
@@ -393,7 +404,7 @@ export default function PrimarySearchAppBar() {
             }}
           >
             {/* massages */}
-            {userLogIn !== null && (
+            {token !== null && (
               <>
                 <IconButton
                   size="large"
@@ -439,7 +450,7 @@ export default function PrimarySearchAppBar() {
             )}
             {/* {openLogin&&<Login />} */}
             {/* <button onClick={()=>setOpenLogin(true)}>לחץ</button> */}
-            {userLogIn === null ? (
+            {token === null ? (
               <Link
                 className="text-bolder  text-decoration-none d-md-inline-flex align-items-center badge"
                 color={"white"}
@@ -454,7 +465,7 @@ export default function PrimarySearchAppBar() {
                   color={"white"}
                   to={"/logOut"}
                 >
-                  {currentUser?.name}{" "}
+                  {userName}{" "}
                 </Link>
               </Tooltip>
             )}

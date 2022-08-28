@@ -12,7 +12,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import BooksOnDeliver from "./booksOnDeliver";
 import BooksUserInterested from "../shared/layout/booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
-import { booksS, getBooks, myBooks } from "../shared/redux/features/bookSlice";
+import { booksS, getBooks } from "../shared/redux/features/bookSlice";
 import {
   user_from_token,
   user_name,
@@ -22,17 +22,17 @@ import { getUsersSlice } from "../shared/redux/features/usersSlice";
 export default function Home() {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const user = useSelector(user_from_token);
+  // const user = useSelector();
 
-  const { currentUser } = useSelector(getUsersSlice);
+  const { id } = useSelector(user_from_token);
   const { bookJustLoaded } = useSelector(booksS);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    currentUser?._id && dispatch(myBooks(currentUser?._id))
-    // currentUser?._id && dispatch(myBooks(currentUser?._id));
-  }, [currentUser]);
+    // currentUser?._id && dispatch(myBooks(id))
+    // currentUser?._id && dispatch(myBooks(id));
+  }, []);
 
   return (
     <div

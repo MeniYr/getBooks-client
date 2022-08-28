@@ -9,10 +9,6 @@ import {
   books,
   booksS,
 } from "../../../shared/redux/features/bookSlice";
-import {
-  categories,
-  getCat,
-} from "../../../shared/redux/features/categoriesSlice";
 import { doApiGet, doApiMethod } from "../../../shared/services/apiService";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -37,7 +33,6 @@ export default function AddBook() {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const getAllCategories = useSelector(categories);
   const { error, bookJustLoaded, addBook_status } = useSelector(booksS);
   const user_id = useSelector(getCurrentUser);
 

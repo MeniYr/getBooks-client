@@ -95,6 +95,7 @@ export const srchBooksOnDlvrs = createAsyncThunk(
 export const changeOwner = createAsyncThunk(
   "delivery/changeOwner",
   async (bookId) => {
+    console.log("call changeOwner with bookId=> ", bookId);
     try {
       let data = await (
         await doApiMethod(`${DELIVERY}/changeOwner/${bookId}`, "PATCH")
@@ -109,7 +110,7 @@ export const changeOwner = createAsyncThunk(
 export const changeUserToDeliver = createAsyncThunk(
   "delivery/changeUserToDeliver",
   async (bodydata) => {
-    console.log(bodydata);
+    console.log("call changeUserToDeliver with bookId=> ", bodydata);
     try {
       let data = await (
         await doApiMethod(`${DELIVERY}/changeUser`,"PUT",bodydata)
@@ -248,7 +249,7 @@ const deliverySlice = createSlice({
       })
       .addCase(changeUserToDeliver.pending, (state, action) => {
         state.changeUserToDeliver_status = "loading";
-        console.log(action.payload.idBook);
+        console.log(action.payload);
         console.log(state.changeUserToDeliver_status);
       })
 

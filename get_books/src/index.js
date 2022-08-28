@@ -15,7 +15,7 @@ import tokenSlice, {
   AuthWithToken,
   login,
 } from "./shared/redux/features/tokenSlice";
-import { getBooks, myBooks } from "./shared/redux/features/bookSlice";
+import { getBooks } from "./shared/redux/features/bookSlice";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -31,13 +31,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 let persistor = persistStore(myStore);
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={myStore}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
       </PersistGate>
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

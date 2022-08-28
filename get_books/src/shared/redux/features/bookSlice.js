@@ -29,6 +29,16 @@ export const getBooks = createAsyncThunk("books/getBooks", async () => {
   }
 });
 
+export const getAllMyBooks = createAsyncThunk("books/getAllMyBooks", async () => {
+  try {
+    let data = await (await doApiGet(`${BOOKS}/myBooks`)).data;
+    console.log("call => getAllMyBooks");
+    return data;
+  } catch (err) {
+    throw err?.response?.data[0]?.message;
+  }
+});
+
 export const srchBooks = createAsyncThunk(
   "books/srchBooks",
   async (search_experetion) => {
@@ -85,32 +95,32 @@ const booksSlice = createSlice({
     getBooks_status: "idle",
     srchBooks_status: "idle",
     sendBookMassage_status: "idle",
-    myBooks_status: "idle",
+    getAllMyBooks_status: "idle",
     currentBook_status: "idle",
     error: null,
   },
 
   reducers: {
-    myBooks: (state, action) => {
-      const user_ID = action.payload;
-      console.log(user_ID);
-      if (user_ID) {
-        state.userBooks = state.books.filter(
-          (item) => item.userID?._id === user_ID
-        );
+    // myBooks: (state, action) => {
+    //   const user_ID = action.payload;
+    //   console.log(user_ID);
+    //   if (user_ID) {
+    //     state.userBooks = state.books.filter(
+    //       (item) => item.userID?._id === user_ID
+    //     );
 
-        state.userOnDeliveryBooks = state.userBooks?.filter(
-          (item) => item.hide === true
-        );
-        state.myBooks_status = "succeeded";
-        console.log("getBooks work");
-      } else {
-        state.userBooks = [];
-        state.myBooks_status = "failed";
+    //     state.userOnDeliveryBooks = state.userBooks?.filter(
+    //       (item) => item.hide === true
+    //     );
+    //     state.myBooks_status = "succeeded";
+    //     console.log("getBooks work");
+    //   } else {
+    //     state.userBooks = [];
+    //     state.myBooks_status = "failed";
 
-        console.log("getBooks not work");
-      }
-    },
+    //     console.log("getBooks not work");
+    //   }
+    // },
     findBook: (state, action) => {
       const book_ID = action.payload;
       console.log(action.payload);
@@ -238,6 +248,28 @@ const booksSlice = createSlice({
 
       .addCase(swichHide.rejected, (state, action) => {
         state.swichHide_status = "failed";
+        state.error = action.error;
+        console.log("here_error_msg", state.error);
+      })
+      .addCase(getAllMyBooks.pending, (state, action) => {
+        state.getAllMyBooks_status = "loading";
+        console.log(state.getAllMyBooks_status);
+      })
+
+      .addCase(getAllMyBooks.fulfilled, (state, action) => {
+        if (action.payload) {
+          console.log(action.payload);
+          state.getAllMyBooks_status = "succeeded";
+          state.userBooks=action.payload;
+          state.error = null;
+          // getBooks()
+          console.log(action.payload);
+          console.log(state.getAllMyBooks_status);
+        }
+      })
+
+      .addCase(getAllMyBooks.rejected, (state, action) => {
+        state.getAllMyBooks_status = "failed";
         state.error = action.error;
         console.log("here_error_msg", state.error);
       });

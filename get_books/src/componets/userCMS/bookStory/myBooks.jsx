@@ -7,7 +7,6 @@ import {
   getAllBooks,
   getBooks,
   getMyBooks,
-  myBooks,
   myBooksStatus,
 } from "../../../shared/redux/features/bookSlice";
 import { userID } from "../../../shared/redux/features/tokenSlice";
@@ -24,12 +23,12 @@ export default function MyBooks() {
 
   useEffect(() => {
       console.log(get_myBooks);
-    user_id?._id.length>0 && dispatch(myBooks());
+    // user_id?._id.length>0 && dispatch(myBooks());
     user_id?._id === null && toast.info("נא התחבר") && nav("/login");
   }, []);
 
   useEffect(() => {
-    user_id?._id !== null && dispatch(myBooks(user_id));
+    // user_id?._id !== null && dispatch(myBooks(user_id));
   }, [user_id]);
 
   return (

@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { booksS, getBooks, myBooks } from "../shared/redux/features/bookSlice";
+import {
+  booksS,
+  getAllMyBooks,
+  getBooks,
+} from "../shared/redux/features/bookSlice";
 import {
   changeOwner,
+  delivery,
   getDeliveries,
 } from "../shared/redux/features/deliverySlice";
+import { user_from_token } from "../shared/redux/features/tokenSlice";
 import {
   getCurrentUser,
   getUser,
@@ -15,22 +22,29 @@ import {
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
-  const { userOnDeliveryBooks, myBooks_status } = useSelector(booksS);
+  const { userOnDeliveryBooks, getAllMyBooks_status, userBooks, swichHide_status } =
+    useSelector(booksS);
+  const { id } = useSelector(user_from_token);
+  const { changeOwner_status } = useSelector(delivery);
+  const [book, setBook] = useState([]);
 
   useEffect(() => {
-    user?._id && dispatch(myBooks(user?._id));
-    // dispatch(getBooks());
-    user?._id && console.log(userOnDeliveryBooks);
-    console.log(myBooks_status);
-    // user?._id && dispatch(myBooks(user._id));
-  }, [user]);
+
+    if (id !== "") {
+      dispatch(getAllMyBooks());
+    }
+  }, [id,swichHide_status,changeOwner_status]);
+
+  useEffect(() => {
+    setBook(userBooks.filter((item) => item.hide === true));
+  }, [id,swichHide_status,userBooks]);
 
   return (
     <div className="container ">
       <div className="row p-2 d-flex justify-content-center text-center">
         <p className="">בתהליך מסירה</p>
-        {myBooks_status === "succeeded" &&
-          userOnDeliveryBooks?.map((book) => {
+        {getAllMyBooks_status === "succeeded" &&
+          book?.map((book) => {
             return (
               <div
                 key={book._id}
@@ -62,6 +76,7 @@ export default function BooksOnDeliver() {
             );
           })}
       </div>
+      {book.length === 0 && <p className="d-flex justify-content-center text-center">עדיין אין 😏</p>}
     </div>
   );
 }

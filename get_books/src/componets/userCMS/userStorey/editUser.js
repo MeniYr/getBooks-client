@@ -46,7 +46,7 @@ const dispatch = useDispatch()
       let resp = await doApiMethod(url, "PUT", _dataBody);
       console.log(resp.data)
       if (resp.data.modifiedCount == 1) {
-        toast.success("user updated");
+        toast.success("המשתמש עודכן");
         dispatch(getUser())
         nav(-1);
       }
@@ -61,7 +61,7 @@ const dispatch = useDispatch()
   return (
     <div className='container'>
       {/* <ClientAuthComp /> */}
-      <h1 className='mx-auto col-md-4'>Edit user</h1>
+      <h1 className='mx-auto col-md-4'>ערוך משתמש</h1>
       {user.name ?
         <form onSubmit={handleSubmit(onSub)} className='col-md-6  mx-auto'>
 
@@ -100,13 +100,13 @@ const dispatch = useDispatch()
 
 
           <label>עיר:</label>
-          <input {...register("city", { required: true, minLength: 2 })} type="text" className='form-control' />
+          <input defaultValue={user.city}{...register("city", { required: true, minLength: 2 })} type="text" className='form-control' />
           {errors.address && <small className='d-block text-danger'>
             Enter a valid city (min 2 chars)
           </small>}
 
           <label>רחוב:</label>
-          <input {...register("street", { required: true, minLength: 2 })} type="text" className='form-control' />
+          <input defaultValue={user.street}{...register("street", { required: true, minLength: 2 })} type="text" className='form-control' />
           {errors.address && <small className='d-block text-danger'>
             Enter a valid street (min 2 chars)
           </small>}

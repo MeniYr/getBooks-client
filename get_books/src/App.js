@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { myBooks } from "./shared/redux/features/bookSlice";
 import { getCurrentUser } from "./shared/redux/features/usersSlice";
 import AppRoutes from "./shared/routes/appRoutes";
 

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { addNotify, getUsersSlice } from "../redux/features/usersSlice";
 import SendMsg from "../../componets/userCMS/userStorey/sendMsg";
-import { getBooks, myBooks, swichHide } from "../redux/features/bookSlice";
+import { getAllBooks, getAllMyBooks, getBooks, swichHide } from "../redux/features/bookSlice";
 import { changeUserToDeliver, delivery } from "../redux/features/deliverySlice";
 import { myStore } from "../redux/globalStore/store";
 import BooksOnDeliver from "../../componets/booksOnDeliver";
@@ -20,47 +20,41 @@ export default function Delivery({ toOpenModal, note }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBooks());
-    dispatch(myBooks(currentUser?._id));
-    return () => {
-      console.log(deliverClicked);
-      console.log(notify);
-      dispatch(myBooks(currentUser._id));
-    };
-    // const timer = () => {
+    dispatch(getAllMyBooks());
   }, [deliverClicked]);
 
   useEffect(() => {
-    // notify?.bookID && console.log(notify);
     notify?.bookID && onDeliverClick();
   }, [notify]);
 
   const onDeliverClick = () => {
-    console.log(notify);
+    console.log(notify.bookID);
+    console.log(notify.toUserId);
     let userToDeliver = {
-      idBook: notify.bookID,
-      idUser: notify.toUserId,
+      idBook: notify?.bookID,
+      idUser: notify?.toUserId,
     };
     dispatch(changeUserToDeliver(userToDeliver));
     dispatch(addNotify(notify));
     dispatch(swichHide(note?.bookID._id));
+    toOpenModal(false);
   };
 
   return (
     <div>
       {note.fromUserId._id !== note.bookID.userID && (
-        <div class={`modal  d-block`} tabIndex="-1">
-          <div class="modal-dialog ">
-            <div class="modal-content d-flex justify-content-center">
+        <div className={`modal  d-block`} tabIndex="-1">
+          <div className="modal-dialog ">
+            <div className="modal-content d-flex justify-content-center">
               <button
                 onClick={() => toOpenModal(false)}
                 type="button"
-                class="btn-close me-auto ps-2 pt-2"
+                className="btn-close me-auto ps-2 pt-2"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
-              <div class="modal-header mx-auto">
-                <h5 class="modal-title">
+              <div className="modal-header mx-auto">
+                <h5 className="modal-title">
                   מסירת ספר -{" "}
                   <Link
                     onClick={() => toOpenModal(false)}
@@ -71,7 +65,7 @@ export default function Delivery({ toOpenModal, note }) {
                   </Link>
                 </h5>
               </div>
-              <div class="modal-body ">
+              <div className="modal-body ">
                 <div className=" d-md-flex p-2 ">
                   <div className="p-2 ">
                     <img
@@ -132,7 +126,7 @@ export default function Delivery({ toOpenModal, note }) {
                   )}
                 </div>
               </div>
-              <div class="modal-footer d-flex justify-content-between">
+              <div className="modal-footer d-flex justify-content-between">
                 {/* <button onClick={() => toOpenModal(false)} type="button" class="btn btn-secondary" data-bs-dismiss="modal">סגור</button> */}
                 <p>{moment(note.date).format("DD-MM-YYYY, HH:mm")}</p>
                 <button
@@ -141,13 +135,14 @@ export default function Delivery({ toOpenModal, note }) {
                       fromUserId: currentUser?._id,
                       toUserId: note.fromUserId._id,
                       bookID: note.bookID._id,
+                      isForDeliver:true
                     };
                     console.log(notifyObj);
                     setNotify(notifyObj);
                     // onDeliverClick();
 
                     setDliverClicked(!deliverClicked);
-                    // toOpenModal(false);
+                    // 
                   }}
                   type="button"
                   className="btn btn-primary"
@@ -160,18 +155,18 @@ export default function Delivery({ toOpenModal, note }) {
         </div>
       )}
       {note.fromUserId._id === note.bookID.userID && (
-        <div class={`modal  d-block`} tabIndex="-1">
-          <div class="modal-dialog ">
-            <div class="modal-content d-flex justify-content-center">
+        <div className={`modal  d-block`} tabIndex="-1">
+          <div className="modal-dialog ">
+            <div className="modal-content d-flex justify-content-center">
               <button
                 onClick={() => toOpenModal(false)}
                 type="button"
-                class="btn-close me-auto ps-2 pt-2"
+                className="btn-close me-auto ps-2 pt-2"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
-              <div class="modal-header mx-auto">
-                <h5 class="modal-title">
+              <div className="modal-header mx-auto">
+                <h5 className="modal-title">
                   קבלת ספר -{" "}
                   <Link
                     onClick={() => toOpenModal(false)}
@@ -182,7 +177,7 @@ export default function Delivery({ toOpenModal, note }) {
                   </Link>
                 </h5>
               </div>
-              <div class="modal-body ">
+              <div className="modal-body ">
                 <div className=" d-md-flex p-2 ">
                   <div className="p-2 ">
                     <img
@@ -243,7 +238,7 @@ export default function Delivery({ toOpenModal, note }) {
                   )}
                 </div>
               </div>
-              <div class="modal-footer d-flex justify-content-between">
+              <div className="modal-footer d-flex justify-content-between">
                 {/* <button onClick={() => toOpenModal(false)} type="button" class="btn btn-secondary" data-bs-dismiss="modal">סגור</button> */}
                 <p>{moment(note.date).format("DD-MM-YYYY, HH:mm")}</p>
                 <button
@@ -251,7 +246,7 @@ export default function Delivery({ toOpenModal, note }) {
                     toOpenModal(false);
                   }}
                   type="button"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                 >
                   סגור
                 </button>
