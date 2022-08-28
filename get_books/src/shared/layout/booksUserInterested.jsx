@@ -12,8 +12,8 @@ export default function BooksUserInterested() {
   const [interestedBooks, setInterestedBooks] = useState([]);
   useEffect(() => {
     const a = () => {
-      let a = deliveries.interestedUsersID;
-      let b = deliveries.filter((item) => item === id);
+      let a = deliveries?.interestedUsersID;
+      let b = a?.filter((item) => item === id);
       return b;
     };
     setInterestedBooks(a());

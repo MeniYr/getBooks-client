@@ -43,6 +43,7 @@ export const delUser = createAsyncThunk("users/delUser", async (idDel) => {
 
 export const getUser = createAsyncThunk("users/getUser", async () => {
   try {
+    console.log(localStorage[TOKEN_NAME]);
     let data = await (await doApiGet(`${USERS_URL}/userInfo`)).data;
     // console.log(data)
     return data;

@@ -118,7 +118,7 @@ export default function Search() {
       nav("/login");
     } else {
 
-       dispatch(addNotify(notify));
+      notify?.fromUserId===id && dispatch(addNotify(notify));
     }
   };
 
@@ -238,8 +238,8 @@ export default function Search() {
                                 )
                               }`}
                               onClick={() => {
-                                error&&toast.info("נא התחבר")&&
-                                nav("/login")
+                                // error&&toast.info("נא התחבר")&&
+                                // nav("/login")
                                 let notify = {
                                   fromUserId: id,
                                   toUserId: item?.userID?._id,
@@ -278,7 +278,7 @@ export default function Search() {
                     {id !== "" &&
                       id !== item.userID._id && (
                         <div
-                          className="bg-light d-flex shadow-lg rounded-circle"
+                          className="bg-light d-flex shadow-lg rounded-circle p-4"
                           style={{
                             minWidth: "160px",
                             height: "160px",

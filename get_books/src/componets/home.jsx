@@ -31,10 +31,11 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    dispatch(AuthWithToken())
+    id!==""&&dispatch(AuthWithToken())
     // currentUser?._id && dispatch(myBooks(id))
     // currentUser?._id && dispatch(myBooks(id));
-  }, []);
+  }, [id]);
+
 
   return (
     <div

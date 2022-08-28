@@ -25,7 +25,7 @@ export const login = createAsyncThunk(
             console.log(data)
             if (data.token) {
                 console.log(data.token)
-                localStorage[TOKEN_NAME] = data.token
+                localStorage.setItem(TOKEN_NAME,data.token);
                 return data
             }
         }
@@ -52,6 +52,7 @@ const tokenSlice = createSlice({
     },
     reducers: {
         logOutFromToken: (state, action) => {
+            console.log("here");
             localStorage.removeItem(TOKEN_NAME)
             state.token =null;
             state.userName="";
@@ -82,9 +83,9 @@ const tokenSlice = createSlice({
                 state.authStatus = 'failed'
                 state.error = action.error
                 console.log("AuthWithToken.rejected", state.error)
-                localStorage.removeItem(TOKEN_NAME)
-                state.token = null
-
+                // localStorage.removeItem(TOKEN_NAME)
+                // state.token = null
+logOutFromToken()
             })
 
             .addCase(login.pending, (state, action) => {

@@ -38,7 +38,9 @@ export default function MyBooks() {
   return (
     <div className="container">
       {getAllMyBooks_status === "succeeded" && (
-        <div className="d-flex">
+        <div style={{
+
+        }} className="flex-wrap d-flex ">
           {userBooks?.map((item) => {
             return (
               <div className="p-2 " key={item._id}>

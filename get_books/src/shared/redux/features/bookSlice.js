@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { BOOKS } from "../../constants/globalinfo/URL`S";
 
-import { doApiGet, doApiMethod } from "../../services/apiService";
+import { doApiGet, doApiMethod, TOKEN_NAME } from "../../services/apiService";
 
 export const addBook = createAsyncThunk("books/addBook", async (_dataBody) => {
   try {
@@ -31,6 +31,7 @@ export const getBooks = createAsyncThunk("books/getBooks", async () => {
 
 export const getAllMyBooks = createAsyncThunk("books/getAllMyBooks", async () => {
   try {
+    console.log(localStorage[TOKEN_NAME]);
     let data = await (await doApiGet(`${BOOKS}/myBooks`)).data;
     console.log("call => getAllMyBooks");
     return data;
@@ -253,6 +254,7 @@ const booksSlice = createSlice({
       })
       .addCase(getAllMyBooks.pending, (state, action) => {
         state.getAllMyBooks_status = "loading";
+        console.log(localStorage[TOKEN_NAME]);
         console.log(state.getAllMyBooks_status);
       })
 

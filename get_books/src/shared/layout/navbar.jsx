@@ -78,7 +78,7 @@ export default function PrimarySearchAppBar() {
   React.useEffect(() => {
     console.log(countNotify);
     console.log();
-    dispatch(getUser());
+    id!==""&& dispatch(getUser());
     // token!==null  && dispatch(myBooks(currentUser?._id));
     //  console.log(userNotify);
   }, [id,getAllMyBooks_status,userBooks, swichHide_status]);

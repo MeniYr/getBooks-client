@@ -11,8 +11,7 @@ import style from "./auth.module.css";
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch();
-  const logIn_status = useSelector((state) => state.token.logINStatus);
-  const error = useSelector((state) => state.token.error);
+  const {logINStatus,error,id, token} = useSelector((state) => state.token);
   const userName = useSelector(user_name);
   const [clicked, setCilcked] = useState(false);
   const [closeBtn, setCloseBtn] = useState(true);
@@ -26,9 +25,9 @@ export default function Login() {
 
   useEffect(() => {
   
-    clicked && logIn_status === "failed" && toast.error("email or user wrong");
-    console.log(logIn_status);
-  }, [error, logIn_status]);
+    clicked && logINStatus === "failed" && toast.error("email or user wrong");
+    console.log(logINStatus);
+  }, [error, logINStatus]);
 
   // useEffect(()=>{
   //   console.log();
@@ -47,23 +46,23 @@ export default function Login() {
 
   useEffect(() => {
     return () => {
-      clicked && dispatch(getUser());
+      clicked && token && dispatch(getUser());
     };
   }, [clicked]);
 
   useEffect(() => {
-    logIn_status === "succeeded" &&
+    logINStatus === "succeeded" &&
       clicked &&
       toast.success(`ברוך הבא ${userName}`) &&
       nav(-1);
     !closeBtn && nav("/");
-  }, [closeBtn, logIn_status]);
+  }, [closeBtn, logINStatus]);
 
   const onSub = (_dataBody) => {
     dispatch(login(_dataBody));
     setCilcked(true);
     setCloseBtn(false);
-    logIn_status === "succeeded" && dispatch(getUser());
+    // logIn_status === "succeeded" && dispatch(getUser());
   };
 
   return (

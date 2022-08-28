@@ -40,9 +40,9 @@ export default function AppRoutes() {
   // const { books,userOnDeliveryBooks } = useSelector(booksS);
   // const { authStatus } = useSelector(user_from_token);
   const { currentUser } = useSelector(getUsersSlice);
-  useEffect(() => {
-    dispatch(AuthWithToken());
-  }, [currentUser]);
+  // useEffect(() => {
+  //   dispatch(AuthWithToken());
+  // }, [currentUser]);
 
   return (
     <BrowserRouter>
