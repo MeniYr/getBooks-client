@@ -26,15 +26,15 @@ import { current } from "@reduxjs/toolkit";
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
-  const user = useSelector(getCurrentUser);
+  // const user = useSelector(getCurrentUser);
   const {
     userOnDeliveryBooks,
     getAllMyBooks_status,
     userBooks,
     swichHide_status,
-    currentUser
+    currentUser,
   } = useSelector(booksS);
-  const { id } = useSelector(user_from_token);
+  // const { id } = useSelector(user_from_token);
   const { changeOwner_status } = useSelector(delivery);
   const [book, setBook] = useState([]);
   const [dateCulc, setDateCulc] = useState("");
@@ -43,15 +43,21 @@ export default function BooksOnDeliver() {
   const dateRef = useRef();
 
   useEffect(() => {
-    if (currentUser!==null) {
-      dispatch(getAllMyBooks());
-    }
-  }, [currentUser, refresh,swichHide_status,userOnDeliveryBooks, changeOwner_status]);
+    if(currentUser) 
+    dispatch(getUser())
+    dispatch(getAllMyBooks());
+  }, [
+    currentUser,
+    refresh,
+    swichHide_status,
+    userOnDeliveryBooks,
+    changeOwner_status,
+  ]);
 
   useEffect(() => {
     setBook(userBooks.filter((item) => item.hide === true));
     culcDays();
-  }, [currentUser,refresh, swichHide_status,userOnDeliveryBooks, userBooks]);
+  }, [currentUser, refresh, swichHide_status, userOnDeliveryBooks, userBooks]);
 
   const culcDays = () => {
     let first = new Date(moment(book?.created_at)).getUTCDate();
@@ -65,6 +71,7 @@ export default function BooksOnDeliver() {
       <div className="row p-2 d-flex justify-content-center text-center">
         <p className="">בתהליך מסירה</p>
         {getAllMyBooks_status === "succeeded" &&
+          currentUser !== null &&
           book?.map((book) => {
             return (
               <div
@@ -75,23 +82,11 @@ export default function BooksOnDeliver() {
                 className="p-2 mb-2 border border-success my-auto d-flex align-items-center rounded-2"
               >
                 <div className="d-flex  justify-content-between w-100">
-                  {/* <div
-                    onClick={() => {}}
-                    style={{ cursor: "pointer" }}
-                    className="text-secondary col-2 p-o m-0"
-                  >
-                    x
-                  </div> */}
-                  {/* <div className="badge badge-success">
-   
-   </div> */}
                   <Tooltip
                     title="ימים שעברו"
                     className={`${dateCulc > 1 && "bg-warning"} ${
                       dateCulc > 2 && "bg-danger"
-                    } ${
-                      dateCulc < 1 && "bg-success"
-                    } badge my-auto  m-0 `}
+                    } ${dateCulc < 1 && "bg-success"} badge my-auto  m-0 `}
                   >
                     <p class=""> {dateCulc}</p>
                   </Tooltip>
@@ -107,14 +102,21 @@ export default function BooksOnDeliver() {
                     onClick={() => {
                       dispatch(changeOwner(book._id));
                       setDeliverClicked(true);
-                      setRefresh(!refresh)
+                      setRefresh(!refresh);
                     }}
                     className="btn btn-warning badge  my-auto"
                   >
                     נמסר
                   </button>
                 </div>
-                  {deliverClicked && <Confetti numberOfPieces={50} recycle={false} width="500px" height="500px" />}
+                {deliverClicked && (
+                  <Confetti
+                    numberOfPieces={50}
+                    recycle={false}
+                    width="500px"
+                    height="500px"
+                  />
+                )}
               </div>
             );
           })}

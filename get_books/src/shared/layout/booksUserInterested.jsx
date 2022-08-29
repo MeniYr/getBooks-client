@@ -8,21 +8,32 @@ export default function BooksUserInterested() {
   const dispatch = useDispatch(getDeliveries());
   const { id, error } = useSelector(user_from_token);
   const { deliveries } = useSelector(delivery);
-  const { addNote_status } = useSelector(getUsersSlice);
+  const { addNote_status,currentUser } = useSelector(getUsersSlice);
   const [interestedBooks, setInterestedBooks] = useState([]);
-  // useEffect(() => {
-    // const a = () => {
-    
-    //   let a = deliveries.find(item=>
-    //     item==="interestedUsersID"
-    
-    //   );
-    //   let b = a?.filter((item) => item === id);
-    //   return a;
-    // };
-  //   setInterestedBooks(a());
-  //   console.log(interestedBooks);
-  // }, [deliveries, addNote_status]);
 
-  return <div>BooksUserInterested</div>;
+  useEffect(() => {
+  dispatch(getDeliveries())
+    const a = () =>{
+      let array=[];
+      if(deliveries){
+         array =  [...deliveries];
+         for (let i = 0; i < array.length; i++) {
+        
+       console.log(array[i]?.interestedBooks?.filter((item) => item.interestedUsersID === currentUser?._id))
+
+      };  
+    }
+      }
+     
+a()
+
+
+    // setInterestedBooks(a());
+    console.log(interestedBooks);
+  }, [addNote_status]);
+
+
+  return (
+    <div>ספרים שהתעניינתי בהם</div>
+  )
 }

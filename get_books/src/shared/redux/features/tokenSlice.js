@@ -3,7 +3,7 @@ import {
   createSlice,
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
-import { persistor } from "../../..";
+import { persistor, reset } from "../../..";
 import {
   API_URL,
   doApiGet,
@@ -95,7 +95,7 @@ const tokenSlice = createSlice({
         // localStorage.removeItem(TOKEN_NAME)
         state.id = ""
         state.token = null
-        persistor.purge()
+         reset()
         // logOutFromToken();
       })
 

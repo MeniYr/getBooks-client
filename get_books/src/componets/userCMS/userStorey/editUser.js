@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { API_URL, doApiGet, doApiMethod } from '../../../shared/services/apiService';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'
-import ClientAuthComp from '../../../shared/auth/clientAuthComp';
 import { getUser, getUsers } from '../../../shared/redux/features/usersSlice';
 
 
@@ -60,7 +59,6 @@ const dispatch = useDispatch()
 
   return (
     <div className='container'>
-      {/* <ClientAuthComp /> */}
       <h1 className='mx-auto col-md-4'>ערוך משתמש</h1>
       {user.name ?
         <form onSubmit={handleSubmit(onSub)} className='col-md-6  mx-auto'>

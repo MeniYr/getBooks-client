@@ -4,20 +4,21 @@ import { AuthWithToken, user_from_token } from '../../../shared/redux/features/t
 import styles from "./account.module.css"
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify"
+import { getUsersSlice } from '../../../shared/redux/features/usersSlice';
 
 
 export default function MyAccount() {
     const dispatch = useDispatch()
-    const checkErrorAuth = useSelector(user_from_token).error
+    const {currentUser} = useSelector(getUsersSlice)
     const nav = useNavigate()
 
     useEffect(() => {
-        if (checkErrorAuth != null) {
+        if (!currentUser) {
             toast.warning("please log in")
             nav("/login")
         }
 
-    }, [checkErrorAuth])
+    }, [currentUser])
 
     return (
         <div className='container'>

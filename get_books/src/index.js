@@ -21,8 +21,9 @@ import { persistStore } from "redux-persist";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 export const persistor = persistStore(myStore);
-export const reset = () => {
-  persistor.purge();
+
+export const reset = async () => {
+ await persistor.purge();
 };
 root.render(
   // <React.StrictMode>

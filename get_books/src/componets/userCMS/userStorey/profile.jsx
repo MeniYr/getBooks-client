@@ -3,29 +3,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthWithToken, user_from_token } from '../../../shared/redux/features/tokenSlice'
-import { getCurrentUser, getUser } from '../../../shared/redux/features/usersSlice'
+import { getCurrentUser, getUser, getUsersSlice } from '../../../shared/redux/features/usersSlice'
 import UserItem from './userItem'
 
 
 export default function Profile() {
 
     const dispatch = useDispatch()
-    const user = useSelector(getCurrentUser)
-    const checkErrorAuth = useSelector(user_from_token).error
+    // const user = useSelector(getCurrentUser)
+    const {currentUser} = useSelector(getUsersSlice)
     const nav = useNavigate()
 
     useEffect(() => {
         dispatch(AuthWithToken())
 
-        if (checkErrorAuth != null) {
+        if (!currentUser) {
             toast.warning("please log in")
             nav("/login")
         }
 
-    }, [checkErrorAuth])
+    }, [currentUser])
     return (
         <div className='container d-flex justify-content-center text-center'>
-            {user != null && <UserItem item={user} />}
+            {currentUser && <UserItem item={currentUser} />}
 
         </div>
     )

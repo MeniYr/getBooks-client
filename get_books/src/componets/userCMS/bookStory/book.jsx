@@ -38,17 +38,17 @@ export default function Book(props) {
 
     let imageStyle = {
         borderRadius: "5px",
-        width: "177px",
-        height: "279px"
+        width: "170px",
+        height: "220px"
     }
 
     return (
 
         <div style={{
             width: "207px",
-            height: "444px"
+            height: "380px"
         }} >
-            <div className='p-2'>
+            <div className='p-2  d-grid h-100'>
                 <Link to={`/fullBook/${book._id}`}>
                     <img
                         className={`shadow ${myStyle.book}`}
@@ -60,7 +60,7 @@ export default function Book(props) {
                 </Link>
 
                 <h4 className='fs-5 p-2 text-md-end '>{book.name}</h4>
-                <div className='text-md-end'>
+                <div className='text-md-end my-auto'>
                     {/* <span className='fw-bolder'>מחבר: </span>{book.author} */}
                     {/* <br />  */}
                     <ReactStars
@@ -71,7 +71,6 @@ export default function Book(props) {
                         value={book?.rate/book?.rateQuanity}
                         a11y={true}
                         isHalf={true}
-
                         edit={currentUser!==null&& currentUser?._id !== book.userID?._id ? true : false}
                     />
 

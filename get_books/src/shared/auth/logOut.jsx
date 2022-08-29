@@ -16,7 +16,7 @@ export default function Logout() {
         logOut()
     }, [])
     
-    const logOut = () => {
+    const logOut = async () => {
        
         console.log("logout");
         dispatch(logOutFromUsers())

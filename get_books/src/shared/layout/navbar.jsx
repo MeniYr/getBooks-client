@@ -65,11 +65,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const dispatch = useDispatch();
   const srchRef = React.useRef(null);
-  const {token,userName,id} = useSelector((state) => state.token);
+  const { token, userName, id } = useSelector((state) => state.token);
   const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice);
-  const { getBooks_status,userOnDeliveryBooks,
-  getAllMyBooks_status, userBooks, swichHide_status } = useSelector(booksS);
- const {changeOwner_status,changeUserToDeliver_status } = useSelector(delivery);
+  const {
+    getBooks_status,
+    userOnDeliveryBooks,
+    getAllMyBooks_status,
+    userBooks,
+    swichHide_status,
+  } = useSelector(booksS);
+  const { changeOwner_status, changeUserToDeliver_status } =
+    useSelector(delivery);
 
   // const [openLogin, setOpenLogin] = React.useState(false)
   const [openModal, setOpenModal] = React.useState(false);
@@ -79,11 +85,22 @@ export default function PrimarySearchAppBar() {
   const nav = useNavigate();
 
   React.useEffect(() => {
-  dispatch(getUser())
+    currentUser && dispatch(getUser());
     console.log(countNotify);
-    console.log(refresh);
-
-  }, [getAllMyBooks_status,userBooks,changeUserToDeliver_status,refresh, swichHide_status]);
+    console.log(
+      getAllMyBooks_status,
+      userBooks,
+      changeUserToDeliver_status,
+      refresh,
+      swichHide_status
+    );
+  }, [
+    getAllMyBooks_status,
+    userBooks,
+    changeUserToDeliver_status,
+    refresh,
+    swichHide_status,
+  ]);
 
   // run search resault
   const search = () => {
@@ -104,8 +121,8 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
   const handleNoteMenuOpen = (event) => {
-    setRefresh(!refresh)
-dispatch(getUser(id))
+    setRefresh(!refresh);
+    dispatch(getUser(id));
     setNoteEl(event.currentTarget);
   };
 
@@ -134,42 +151,6 @@ dispatch(getUser(id))
 
   // burger menu
   const menuId = "primary-search-account-menu";
-  // const renderMenu = (
-  //   <Menu
-  //     // anchorPosition={{
-  //     //   top:700}
-  //     // }
-  //     anchorEl={anchorEl}
-  //     anchorOrigin={{
-  //       vertical: "bottom",
-  //       horizontal: "right",
-  //     }}
-  //     id={menuId}
-  //     keepMounted
-  //     transformOrigin={{
-  //       vertical: "top",
-  //       horizontal: "right",
-  //     }}
-  //     open={isMenuOpen}
-  //     onClose={handleMenuClose}
-  //   >
-  //     {/* <MenuItem onClick={handleMenuClose}>
-  //       <Link className="text-decoration-none text-black" to={"/allUsers"}>
-  //         כל המשתמשים{" "}
-  //       </Link>
-  //     </MenuItem> */}
-  //     <MenuItem onClick={handleMenuClose}>
-  //       <Link className="text-decoration-none text-black" to={"/addBook"}>
-  //         הוספת ספר
-  //       </Link>
-  //     </MenuItem>
-  //     <MenuItem onClick={handleMenuClose}>
-  //       <Link className="text-decoration-none text-black" to={"/myBooks"}>
-  //         הספרים שלי
-  //       </Link>{" "}
-  //     </MenuItem>
-  //   </Menu>
-  // );
 
   // notify menu
 
@@ -198,9 +179,8 @@ dispatch(getUser(id))
             }}
             key={item?._id}
             onClick={() => {
-              item?.isRead === false &&
-                dispatch(readNotify(item?._id))
-                //&& dispatch(getUser());
+              item?.isRead === false && dispatch(readNotify(item?._id));
+              //&& dispatch(getUser());
               setOpenModal(true);
               setNotify(item);
               handleNoteMenuClose();
@@ -212,7 +192,11 @@ dispatch(getUser(id))
                   item?.isRead === false ? "opacity-100" : "opacity-50"
                 }`}
               >
-                {item?.fromUserId?.name} {item?.isForDeliver===true? " מסר לך ספר ":" מעוניין בספר " }{item?.bookID?.name}
+                {item?.fromUserId?.name}{" "}
+                {item?.isForDeliver === true
+                  ? " מסר לך ספר "
+                  : " מעוניין בספר "}
+                {item?.bookID?.name}
               </p>
             )}
             {item?.fromUserId?._id === item?.bookID?.userID && (
@@ -227,11 +211,11 @@ dispatch(getUser(id))
           </MenuItem>
         );
       })}
-      {userNotify?.length===0&&
-      <div className="d-flex justify-content-center text-center">
-        <p>עדיין אין התראות 🙃</p>
+      {userNotify?.length === 0 && (
+        <div className="d-flex justify-content-center text-center">
+          <p>עדיין אין התראות 🙃</p>
         </div>
-        }
+      )}
     </Menu>
   );
 
@@ -363,7 +347,7 @@ dispatch(getUser(id))
               className="text-white fst-italic fs-2 fw-semibold text-decoration-none"
               to={"/"}
             >
-              get books <MdHome />
+              Get books <MdHome />
             </Link>
           </Typography>
           <Typography
@@ -376,7 +360,7 @@ dispatch(getUser(id))
               className="text-white fst-italic fs-4 fw-semibold text-decoration-none ps-3"
               to={"/"}
             >
-               <MdHome />
+              <MdHome />
             </Link>
           </Typography>
 

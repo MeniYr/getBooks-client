@@ -7,7 +7,7 @@ import { booksS, getBooks } from "../../../shared/redux/features/bookSlice";
 import Book from "./book";
 import style_css from "./books.module.css";
 
-export default function RecentlyAdded() {
+export default function HighRetes() {
   const { addBook_status, books, getBooks_status } = useSelector(booksS);
   const [newBooks, setNewBooks] = useState([]);
   const dispatch = useDispatch();
@@ -15,8 +15,11 @@ export default function RecentlyAdded() {
   useEffect(() => {
     dispatch(getBooks());
     const q = () => {
-      let array = [...books]
-      return array.splice(0,7);
+      let array = [...books];
+      array = array.filter((item) => 
+        (item?.rate / item.rateQuanity) > 3
+      );
+      return array.splice(0, 7);
     };
     q();
     setNewBooks(q());
@@ -25,12 +28,12 @@ export default function RecentlyAdded() {
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
   return (
     <div className="container">
-      <h3 className="pt-2 ">הועלו לאחרונה</h3>
+      <h3 className="pt-2 ">דירוג גבוה</h3>
       {newBooks && (
-        <div style={{ overflowY: "scroll" }} className="d-md-flex   ">
+        <div style={{ overflowY: "scroll" }} className=" d-md-flex   ">
           {newBooks?.map((item) => {
             return (
-              <div className="p-2  col-md-3" key={item._id}>
+              <div className="p-2 col-md-3" key={item._id}>
                 <Book book={item} />
               </div>
             );

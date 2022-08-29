@@ -21,6 +21,7 @@ import {
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
 import RecentlyAdded from "./userCMS/bookStory/recentlyAdded";
 import style_css from "./layoutCss.module.css";
+import HighRetes from "./userCMS/bookStory/highRatingBooks";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -33,24 +34,18 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
 
   // useEffect(() => {
-    // id!==""&&dispatch(AuthWithToken())
-    // currentUser?._id && dispatch(myBooks(id))
-    // currentUser?._id && dispatch(myBooks(id));
+  // id!==""&&dispatch(AuthWithToken())
+  // currentUser?._id && dispatch(myBooks(id))
+  // currentUser?._id && dispatch(myBooks(id));
   // }, [id]);
 
-
   return (
-    <div
-      style={{
-      }}
-      className="border d-block"
-    >
+    <div style={{}} className=" shadow p-2 bg-gradient m-2 mt-3  d-block">
       <div className={`${style_css.recently} p-2`}>
-
-<RecentlyAdded />
+        <RecentlyAdded />
       </div>
       <div className={`${style_css.categories} p-2`}>
-        דירוג מעל הממוצע
+        <HighRetes />
       </div>
     </div>
   );

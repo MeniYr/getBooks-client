@@ -10,6 +10,7 @@ import tokenSlice, {
   user_name,
 } from "../redux/features/tokenSlice";
 import { getUser } from "../redux/features/usersSlice";
+import { TOKEN_NAME } from "../services/apiService";
 import style from "./auth.module.css";
 
 export default function Login() {
@@ -38,12 +39,11 @@ export default function Login() {
 
   useEffect(() => {
     return () => {
-      if (logINStatus === "succeeded") {
-        dispatch(getUser());
-        // dispatch(AuthWithToken());
-      }
+    
+      localStorage[TOKEN_NAME]&&dispatch(getUser());
+      
     };
-  }, [clicked, closeBtn]);
+  }, [clicked, closeBtn,logINStatus]);
 
   useEffect(() => {
     logINStatus === "succeeded" &&
