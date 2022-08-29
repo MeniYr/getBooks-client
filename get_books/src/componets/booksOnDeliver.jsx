@@ -22,6 +22,7 @@ import Confetti from "react-confetti";
 import { useRef } from "react";
 import moment from "moment";
 import { Tooltip } from "@mui/material";
+import { current } from "@reduxjs/toolkit";
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
@@ -31,30 +32,32 @@ export default function BooksOnDeliver() {
     getAllMyBooks_status,
     userBooks,
     swichHide_status,
+    currentUser
   } = useSelector(booksS);
   const { id } = useSelector(user_from_token);
   const { changeOwner_status } = useSelector(delivery);
   const [book, setBook] = useState([]);
   const [dateCulc, setDateCulc] = useState("");
   const [deliverClicked, setDeliverClicked] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const dateRef = useRef();
 
   useEffect(() => {
-    if (id !== "") {
+    if (currentUser!==null) {
       dispatch(getAllMyBooks());
     }
-  }, [id, swichHide_status, changeOwner_status]);
+  }, [currentUser, refresh,swichHide_status,userOnDeliveryBooks, changeOwner_status]);
 
   useEffect(() => {
     setBook(userBooks.filter((item) => item.hide === true));
     culcDays();
-  }, [id, swichHide_status, userBooks]);
+  }, [currentUser,refresh, swichHide_status,userOnDeliveryBooks, userBooks]);
 
   const culcDays = () => {
     let first = new Date(moment(book?.created_at)).getUTCDate();
     let now = new Date().getUTCDate();
- 
-    setDateCulc(now-first);
+
+    setDateCulc(now - first);
   };
 
   return (
@@ -82,33 +85,36 @@ export default function BooksOnDeliver() {
                   {/* <div className="badge badge-success">
    
    </div> */}
-                  <Tooltip title="ימים שעברו" className={`${dateCulc>1&&"bg-warning"} ${dateCulc>2&&"bg-danger"} ${dateCulc<1&&"bg-success"} badge  my-auto col-1 ms-0`}>
-                    <p class=" "> {dateCulc}</p>
+                  <Tooltip
+                    title="ימים שעברו"
+                    className={`${dateCulc > 1 && "bg-warning"} ${
+                      dateCulc > 2 && "bg-danger"
+                    } ${
+                      dateCulc < 1 && "bg-success"
+                    } badge my-auto  m-0 `}
+                  >
+                    <p class=""> {dateCulc}</p>
                   </Tooltip>
                   <Link
                     to={`/fullBook/${book._id}`}
-                    className="text-decoration-none text-body my-auto col-7 "
+                    className="text-decoration-none text-body my-auto fs-6 fw-semibold col-7 "
                   >
-                    {book.name.length > 16
-                      ? book.name.substring(0, 16) + "..."
+                    {book.name.length > 10
+                      ? book.name.substring(0, 10) + "..."
                       : book.name}
                   </Link>
                   <button
                     onClick={() => {
                       dispatch(changeOwner(book._id));
                       setDeliverClicked(true);
+                      setRefresh(!refresh)
                     }}
-                    className="btn btn-warning badge col-2 my-auto"
+                    className="btn btn-warning badge  my-auto"
                   >
                     נמסר
                   </button>
-                  {/* {deliverClicked &&
-                        <Confetti
-                        width="500px"
-                        height="500px"
-                      />
-                    } */}
                 </div>
+                  {deliverClicked && <Confetti numberOfPieces={50} recycle={false} width="500px" height="500px" />}
               </div>
             );
           })}

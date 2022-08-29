@@ -28,6 +28,7 @@ import {
 import Delivery from "../components/delivery";
 import { delivery } from "../redux/features/deliverySlice";
 import { AuthWithToken } from "../redux/features/tokenSlice";
+import ReactConfetti from "react-confetti";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -68,21 +69,21 @@ export default function PrimarySearchAppBar() {
   const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice);
   const { getBooks_status,userOnDeliveryBooks,
   getAllMyBooks_status, userBooks, swichHide_status } = useSelector(booksS);
- const {changeOwner_status } = useSelector(delivery);
+ const {changeOwner_status,changeUserToDeliver_status } = useSelector(delivery);
 
   // const [openLogin, setOpenLogin] = React.useState(false)
   const [openModal, setOpenModal] = React.useState(false);
   const [notify, setNotify] = React.useState({});
+  const [refresh, setRefresh] = React.useState(false);
 
   const nav = useNavigate();
 
   React.useEffect(() => {
-    currentUser===null&&dispatch(getUser())
+  dispatch(getUser())
     console.log(countNotify);
-    console.log(id);
-    console.log(currentUser);
+    console.log(refresh);
 
-  }, [id,getAllMyBooks_status,userBooks, swichHide_status]);
+  }, [getAllMyBooks_status,userBooks,changeUserToDeliver_status,refresh, swichHide_status]);
 
   // run search resault
   const search = () => {
@@ -103,6 +104,7 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
   const handleNoteMenuOpen = (event) => {
+    setRefresh(!refresh)
 dispatch(getUser(id))
     setNoteEl(event.currentTarget);
   };
@@ -445,6 +447,7 @@ dispatch(getUser(id))
                     </Tooltip>
                   </Badge>
                 </IconButton>
+                {/* { <ReactConfetti numberOfPieces={10} recycle={false} width="500px" height="500px" />} */}
 
                 {/* personal aria */}
                 <IconButton

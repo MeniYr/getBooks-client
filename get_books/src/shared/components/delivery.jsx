@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { MdAnimation } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+
 import moment from "moment";
+
 import { addNotify, getUsersSlice } from "../redux/features/usersSlice";
 import SendMsg from "../../componets/userCMS/userStorey/sendMsg";
 import { getAllBooks, getAllMyBooks, getBooks, swichHide } from "../redux/features/bookSlice";
@@ -100,7 +102,7 @@ export default function Delivery({ toOpenModal, note }) {
                   <p className="fs-4 pt-3 px-2">שם: {note.fromUserId.name}</p>
                   <p className="fs-4 pt-3  ">עיר: {note.fromUserId.city}</p>
                 </div>
-                <div className="d-md-flex  text-wrap ">
+                <div className="d-md-flex justify-content-between ">
                   <div>
                     {openMsg && (
                       <SendMsg msgClose={setOpenMsg} id={note.fromUserId._id} />
@@ -110,12 +112,12 @@ export default function Delivery({ toOpenModal, note }) {
                     <div className="px-2">
                       <p className="fs-4">
                         {" "}
-                        מספר ליצירת קשר: {note.fromUserId.phone}
+                        מספר ליצירת קשר: <a href={`tel:${note.fromUserId.phone}`}>{note.fromUserId.phone}</a> 
                       </p>
                     </div>
                   )}
                   {note.fromUserId.isShareMail === true && (
-                    <div className="px-2">
+                    <div className="px-2 text-end">
                       <p className="fs-4">
                         {" "}
                         כתובת אימייל:{" "}

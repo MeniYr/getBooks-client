@@ -11,8 +11,14 @@ import {
   getMyBooks,
   myBooksStatus,
 } from "../../../shared/redux/features/bookSlice";
-import { userID, user_from_token } from "../../../shared/redux/features/tokenSlice";
-import { getCurrentUser, getUsersSlice } from "../../../shared/redux/features/usersSlice";
+import {
+  userID,
+  user_from_token,
+} from "../../../shared/redux/features/tokenSlice";
+import {
+  getCurrentUser,
+  getUsersSlice,
+} from "../../../shared/redux/features/usersSlice";
 import Book from "./book";
 
 export default function MyBooks() {
@@ -21,29 +27,23 @@ export default function MyBooks() {
   // const { books } = useSelector(getAllBooks);
   // const {get_myBooks} = useSelector(getMyBooks);
   // const status = useSelector(myBooksStatus);
-  const {userBooks,getAllMyBooks_status} = useSelector(booksS);
+  const { userBooks, getAllMyBooks_status } = useSelector(booksS);
   // const {id} = useSelector(user_from_token);
-  
-  const {currentUser} = useSelector(getUsersSlice);
 
-
-  useEffect(() => {
-
-      // console.log(get_myBooks);
-    // user_id?._id.length>0 && dispatch(myBooks());
-    currentUser===null && toast.info("נא התחבר") && nav("/login");
-  }, []);
+  const { currentUser } = useSelector(getUsersSlice);
 
   useEffect(() => {
     currentUser !== null && dispatch(getAllMyBooks());
-  }, [currentUser]);
+  }, []);
+
+  useEffect(() => {
+    currentUser === null && toast.info("נא התחבר") && nav("/login");
+  }, []);
 
   return (
     <div className="container">
       {getAllMyBooks_status === "succeeded" && (
-        <div style={{
-
-        }} className="flex-wrap d-flex ">
+        <div style={{}} className="flex-wrap d-flex ">
           {userBooks?.map((item) => {
             return (
               <div className="p-2 " key={item._id}>
@@ -54,14 +54,14 @@ export default function MyBooks() {
         </div>
       )}
       {getAllMyBooks_status === "loading" && (
-          <div className="d-flex justify-content-center border vh-100 align-items-center">
+        <div className="d-flex justify-content-center border vh-100 align-items-center">
           <div className="display-6 ">טוען...</div>
-      </div>
+        </div>
       )}
       {getAllMyBooks_status === "failed" ||
         (userBooks === undefined && (
           <div className="d-flex justify-content-center border vh-100 align-items-center">
-              <div className="display-6 ">בעיה בשרת אנא נסה שוב מאוחר יותר.</div>
+            <div className="display-6 ">בעיה בשרת אנא נסה שוב מאוחר יותר.</div>
           </div>
         ))}
     </div>

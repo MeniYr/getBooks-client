@@ -35,9 +35,6 @@ export default function RecentlyAdded() {
               </div>
             );
           })}
-          <>
-            <MdArrowLeft />
-          </>
         </div>
       )}
       {getBooks_status === "loading" && (
