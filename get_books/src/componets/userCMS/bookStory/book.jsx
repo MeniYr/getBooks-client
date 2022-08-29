@@ -31,7 +31,7 @@ export default function Book(props) {
           { num }
         );
         // dispatch(());
-        console.log(sendRate?.rate);
+        console.log(sendRate.data);
       };
 
     const [clicked, SetClicked] = useState(false)
@@ -67,12 +67,12 @@ export default function Book(props) {
                         count={5}
                         size={30}
                         activeColor="#ffd700"
-                        onChange={(e) => rating(e)}
-                        value={currentUser?.rate/currentUser?.rateQuanity}
+                        onChange={(e) =>currentUser!==null&& rating(e)}
+                        value={book?.rate/book?.rateQuanity}
                         a11y={true}
                         isHalf={true}
 
-                        edit={currentUser?._id !== book.userID?._id ? true : false}
+                        edit={currentUser!==null&& currentUser?._id !== book.userID?._id ? true : false}
                     />
 
                 </div>

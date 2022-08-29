@@ -20,7 +20,6 @@ export default function Layout() {
   const nav = useNavigate();
   const { token } = useSelector(user_from_token);
 
-  const { currentUser } = useSelector(getUsersSlice);
   const {
     getBooks_status,
     userOnDeliveryBooks,
@@ -29,16 +28,10 @@ export default function Layout() {
     swichHide_status,
   } = useSelector(booksS);
   const { id } = useSelector(user_from_token);
-
   const dispatch = useDispatch();
-  //   const [isLoginMode, setIsLoginMode] = useState(true);
-  //   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    id!==""&&dispatch(AuthWithToken())
-    // console.log("קורא ל-getBooks");
-    // currentUser?._id && dispatch(getBooks())
-  }, [id,currentUser]);
+  // useEffect(() => {
+  // }, []);
 
   return (
     <div>
@@ -75,8 +68,12 @@ export default function Layout() {
         <div className="col-md-2 border d-none d-md-block min-vh-100">
           <BooksOnDeliver />
         </div>
+      </div >
+      <div>
+      <hr />
+          <Footer />
       </div>
-      <Footer />
+    
     </div>
   );
 }

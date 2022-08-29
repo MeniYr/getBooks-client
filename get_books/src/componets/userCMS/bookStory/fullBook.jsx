@@ -92,11 +92,11 @@ export default function FullBook() {
               count={5}
               size={30}
               activeColor="#ffd700"
-              onChange={(e) => rating(e)}
+               onChange={(e) =>id!==""&& rating(e)}
               value={currentBook?.rate/currentBook?.rateQuanity}
               a11y={true}
               isHalf={true}
-              edit={id !== currentBook?.userID?._id ? true : false}
+              edit={id!==""&& id !== currentBook?.userID?._id ? true : false}
             />
           </div>
         </div>

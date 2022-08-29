@@ -28,26 +28,33 @@ import Delivery from "../shared/components/delivery";
 import { user_from_token } from "../shared/redux/features/tokenSlice";
 import { BOOKS } from "../shared/constants/globalinfo/URL`S";
 import { doApiMethod } from "../shared/services/apiService";
+import useExist_notify from "../shared/hooks/useExist_notify";
+import UseExist_notify from "../shared/hooks/useExist_notify";
 // import { delivery, getDeliveries } from '../shared/redux/features/deliverySlice'
 
 export default function Search() {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
+  // selectors
   const { srchBooks_status, srchRes, sendBookMassage_status, books } =
     useSelector(booksS);
   const { id, error } = useSelector(user_from_token);
-
   const { addNote_status, msg_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
   const { deliveries } = useSelector(delivery);
+
+  // states
   const [innerWidthSize, setInnerWidthSize] = useState(window.innerWidth);
   const [notifyClicked, setNotifyClicked] = useState(false);
-
   const [notify, setNotify] = useState({});
   const [readMore, setReadMore] = useState(false);
 
-  // rating
+  //
+  // HooksMade
+  // const getNotify = UseNotify(notify);
+
+  // rating func
   const rating = async (obj) => {
     console.log(obj.e);
     let isInt = Number.isInteger(obj.e);
@@ -77,32 +84,25 @@ export default function Search() {
     };
   }, [innerWidthSize]);
 
-  // succeeded notify
-  useEffect(() => {
-    addNote_status === "succeeded" && console.log(notify);
-  }, [addNote_status]);
-
-  // user props update
-  // useEffect(() => {
-  //   currentUser !== null && dispatch(getUsers());
-  // }, []);
-
   // get delivers
   useEffect(() => {
     dispatch(getDeliveries());
     return () => {
       dispatch(getDeliveries());
     };
-  }, [notifyClicked, notify]);
+  }, [notifyClicked, notify, addNote_status]);
 
   useEffect(() => {
-    dispatch(getUsers())
+    // dispatch(getUsers());
     return () => {
       dispatch(getBooks());
     };
   }, [deliveries]);
 
   const onClickInterested = () => {
+    // console.log(exist.loading);
+    // console.log(exist.error);
+    // exist.error && toast.info("נא התחבר");
     if (id !== "") {
       console.log(notify);
       notify?.fromUserId === id && dispatch(addNotify(notify));
@@ -164,11 +164,13 @@ export default function Search() {
                           count={5}
                           size={30}
                           activeColor="#ffd700"
-                          onClick={(e) => rating({ item, e })}
+                          onChange={(e) => id !== "" && rating({ item, e })}
                           value={item?.rate / item?.rateQuanity}
                           a11y={false}
                           isHalf={false}
-                          edit={id !== item.userID._id ? true : false}
+                          edit={
+                            id !== "" && id !== item.userID._id ? true : false
+                          }
                         />
                         <article className="d-flex">
                           <p className="border-start border-opacity-50 ps-1 border-dark">
@@ -200,7 +202,7 @@ export default function Search() {
                               className="btn btn-outline-info"
                               onClick={() => setReadMore(!readMore)}
                             >
-                              {!readMore?"קרא עוד":"הצג פחות"}
+                              {!readMore ? "קרא עוד" : "הצג פחות"}
                             </button>
                             {readMore && (
                               <p>{item.description.substring(300)}</p>
@@ -252,6 +254,7 @@ export default function Search() {
                                   toUserId: item?.userID?._id,
                                   bookID: item._id,
                                 };
+
                                 setNotify(notify);
                                 onClickInterested();
 

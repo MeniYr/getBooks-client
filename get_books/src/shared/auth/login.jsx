@@ -4,14 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // import { ClientContext } from '../../context/clientContext';
-import tokenSlice, { login, user_name } from "../redux/features/tokenSlice";
+import tokenSlice, {
+  AuthWithToken,
+  login,
+  user_name,
+} from "../redux/features/tokenSlice";
 import { getUser } from "../redux/features/usersSlice";
 import style from "./auth.module.css";
 
 export default function Login() {
   // const {setUser,doApiUserInfo} = useContext(ClientContext)
   const dispatch = useDispatch();
-  const {logINStatus,error,id, token} = useSelector((state) => state.token);
+  const { logINStatus, error, id, token } = useSelector((state) => state.token);
   const userName = useSelector(user_name);
   const [clicked, setCilcked] = useState(false);
   const [closeBtn, setCloseBtn] = useState(true);
@@ -24,20 +28,22 @@ export default function Login() {
   } = useForm();
 
   useEffect(() => {
-  
     clicked && logINStatus === "failed" && toast.error("email or user wrong");
     console.log(logINStatus);
   }, [error, logINStatus]);
 
-  useEffect(() => {
-    if (userName != "" && clicked) toast.success(`ברוך הבא ${userName}`);
-  }, [userName, clicked]);
+  // useEffect(() => {
+  //   if (userName != "" && clicked) toast.success(`ברוך הבא ${userName}`);
+  // }, [userName, clicked]);
 
   useEffect(() => {
     return () => {
-      clicked && token && dispatch(getUser());
+      if (logINStatus === "succeeded") {
+        dispatch(getUser());
+        // dispatch(AuthWithToken());
+      }
     };
-  }, [clicked]);
+  }, [clicked, closeBtn]);
 
   useEffect(() => {
     logINStatus === "succeeded" &&
@@ -50,9 +56,7 @@ export default function Login() {
   const onSub = (_dataBody) => {
     dispatch(login(_dataBody));
     setCilcked(true);
-    setCloseBtn(false);
-    
-    // logIn_status === "succeeded" && dispatch(getUser());
+    logINStatus === "succeeded" && setCloseBtn(false);
   };
 
   return (

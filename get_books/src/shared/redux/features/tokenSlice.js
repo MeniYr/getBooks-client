@@ -10,6 +10,7 @@ import {
   TOKEN_NAME,
   USER_PROP,
 } from "../../services/apiService";
+import { logOutFromUsers } from "./usersSlice";
 
 export const AuthWithToken = createAsyncThunk(
   "token/AuthWithToken",
@@ -90,8 +91,9 @@ const tokenSlice = createSlice({
         state.error = action.error;
         console.log("AuthWithToken.rejected", state.error);
         // localStorage.removeItem(TOKEN_NAME)
-        // state.token = null
-        logOutFromToken();
+        state.id = ""
+        state.token = null
+        // logOutFromToken();
       })
 
       .addCase(login.pending, (state, action) => {
@@ -105,7 +107,7 @@ const tokenSlice = createSlice({
         if (action.payload) {
           state.logINStatus = "succeeded";
           state.error = null;
-          state.token = localStorage[TOKEN_NAME] || action.payload.token;
+          state.token = action.payload.token;
           state.role = action.payload.user.role;
           state.id = action.payload.user.userID;
           state.userName = action.payload.user.name;

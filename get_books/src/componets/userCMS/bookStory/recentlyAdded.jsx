@@ -8,32 +8,35 @@ import Book from "./book";
 import style_css from "./books.module.css";
 
 export default function RecentlyAdded() {
-  const { addBook_status,books, getBooks_status } = useSelector(booksS);
-const [pageNumber, setPageNumber] = useState(1)
+  const { addBook_status, books, getBooks_status } = useSelector(booksS);
+  const [newBooks, setNewBooks] = useState([]);
   const dispatch = useDispatch();
 
- 
-
   useEffect(() => {
-      dispatch(getBooks());
-      
-    }, [addBook_status]);
-    
-    // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
+    dispatch(getBooks());
+    const q = () => {
+      return books?.slice(-7);
+    };
+    setNewBooks(q());
+    q();
+  }, [addBook_status]);
+
+  // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
   return (
     <div className="container">
       <h3 className="pt-2 ">הועלו לאחרונה</h3>
-      {books && (
-        <div   style={{overflowY:"scroll"}} className=" d-md-flex   ">
-          {books?.map((item) => {
+      {newBooks && (
+        <div style={{ overflowY: "scroll" }} className=" d-md-flex   ">
+          {newBooks?.map((item) => {
             return (
               <div className="p-2 col-md-3" key={item._id}>
                 <Book book={item} />
               </div>
-            
             );
-        })}
-        <><MdArrowLeft/></>
+          })}
+          <>
+            <MdArrowLeft />
+          </>
         </div>
       )}
       {getBooks_status === "loading" && (

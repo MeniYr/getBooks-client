@@ -50,7 +50,7 @@ export default function Home() {
 <RecentlyAdded />
       </div>
       <div className={`${style_css.categories} p-2`}>
-        categories
+        דירוג מעל הממוצע
       </div>
     </div>
   );

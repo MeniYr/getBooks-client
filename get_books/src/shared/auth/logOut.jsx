@@ -11,6 +11,7 @@ export default function Logout() {
     const nav = useNavigate()
 
     useEffect(() => {
+        // localStorage["persist:root"]=""
         logOut()
     }, [])
     
