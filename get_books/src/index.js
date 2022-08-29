@@ -28,8 +28,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 // authStatus === "succeeded" && dispatch(getUser());
 // currentUser?._id && dispatch(myBooks(currentUser?._id));
 
-let persistor = persistStore(myStore);
-
+export const persistor = persistStore(myStore);
 root.render(
   // <React.StrictMode>
     <Provider store={myStore}>

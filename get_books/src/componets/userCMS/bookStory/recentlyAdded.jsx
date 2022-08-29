@@ -15,10 +15,11 @@ export default function RecentlyAdded() {
   useEffect(() => {
     dispatch(getBooks());
     const q = () => {
-      return books?.slice(-7);
+      let array = [...books]
+      return array.splice(0,7);
     };
-    setNewBooks(q());
     q();
+    setNewBooks(q());
   }, [addBook_status]);
 
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)

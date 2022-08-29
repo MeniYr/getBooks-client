@@ -93,20 +93,19 @@ export default function Search() {
   }, [notifyClicked, notify, addNote_status]);
 
   useEffect(() => {
-    // dispatch(getUsers());
-    return () => {
-      dispatch(getBooks());
-    };
-  }, [deliveries]);
+    // (getUsers());
+    dispatch(getBooks());
+ 
+  }, []);
 
-  const onClickInterested = () => {
+  const onClickInterested = (note) => {
     // console.log(exist.loading);
     // console.log(exist.error);
     // exist.error && toast.info("נא התחבר");
-    if (id !== "") {
-      console.log(notify);
-      notify?.fromUserId === id && dispatch(addNotify(notify));
-      dispatch(addInterestedID(notify?.bookID));
+    if (currentUser !== null) {
+      console.log(note);
+      dispatch(addNotify(note));
+      dispatch(addInterestedID(note?.bookID));
       setNotifyClicked(!notifyClicked);
     } else {
       toast.info("נא התחבר");
@@ -164,12 +163,17 @@ export default function Search() {
                           count={5}
                           size={30}
                           activeColor="#ffd700"
-                          onChange={(e) => id !== "" && rating({ item, e })}
+                          onChange={(e) =>
+                            currentUser !== null && rating({ item, e })
+                          }
                           value={item?.rate / item?.rateQuanity}
                           a11y={false}
                           isHalf={false}
                           edit={
-                            id !== "" && id !== item.userID._id ? true : false
+                            currentUser !== null &&
+                            currentUser?._id !== item.userID._id
+                              ? true
+                              : false
                           }
                         />
                         <article className="d-flex">
@@ -231,16 +235,18 @@ export default function Search() {
 
                           {deliveries
                             ?.find((a) => a.bookID === item._id)
-                            ?.interestedUsersID?.includes(id)
+                            ?.interestedUsersID?.includes(currentUser?._id)
                             ? "yes"
                             : "not"}
 
-                          {id !== item.userID._id && (
+                          {currentUser?._id !== item.userID._id && (
                             <IconButton
                               className={`shadow ${
                                 deliveries
                                   ?.find((a) => a.bookID === item._id)
-                                  ?.interestedUsersID?.includes(id) ? (
+                                  ?.interestedUsersID?.includes(
+                                    currentUser?._id
+                                  ) ? (
                                   "bg-info"
                                 ) : (
                                   <></>
@@ -250,20 +256,22 @@ export default function Search() {
                                 // error&&toast.info("נא התחבר")&&
                                 // nav("/login")
                                 let notify = {
-                                  fromUserId: id,
+                                  fromUserId: currentUser?._id,
                                   toUserId: item?.userID?._id,
                                   bookID: item._id,
                                 };
 
                                 setNotify(notify);
-                                onClickInterested();
+                                onClickInterested(notify);
 
                                 // setOpenModal(true)
                               }}
                             >
                               {deliveries
                                 ?.find((a) => a.bookID === item._id)
-                                ?.interestedUsersID?.includes(id) ? (
+                                ?.interestedUsersID?.includes(
+                                  currentUser?._id
+                                ) ? (
                                 <>🔖</>
                               ) : (
                                 <></>
@@ -278,30 +286,31 @@ export default function Search() {
 
                     {/* left */}
                     {/* TODO USER PROFILE */}
-                    {id !== "" && id !== item.userID._id && (
-                      <div
-                        className="bg-light d-flex shadow-lg rounded-circle p-4"
-                        style={{
-                          minWidth: "160px",
-                          height: "160px",
-                        }}
-                      >
-                        <div className="my-auto mx-auto text-center text-wrap fw-bolder">
-                          <p className="text-muted ">
-                            משתמש: {item.userID?.name}
-                          </p>
-                          {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
-                          <button
-                            onClick={() => {
-                              nav(`/sendMsg/${item.userID?._id}`);
-                            }}
-                            className="btn btn-outline-info rounded-circle"
-                          >
-                            הודעה
-                          </button>
+                    {currentUser !== null &&
+                      currentUser?._id !== item.userID._id && (
+                        <div
+                          className="bg-light d-flex shadow-lg rounded-circle p-4"
+                          style={{
+                            minWidth: "160px",
+                            height: "160px",
+                          }}
+                        >
+                          <div className="my-auto mx-auto text-center text-wrap fw-bolder">
+                            <p className="text-muted ">
+                              משתמש: {item.userID?.name}
+                            </p>
+                            {/* <p className='text-muted '> עיר: {item.userID?.city}</p> */}
+                            <button
+                              onClick={() => {
+                                nav(`/sendMsg/${item.userID?._id}`);
+                              }}
+                              className="btn btn-outline-info rounded-circle"
+                            >
+                              הודעה
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
 
                   {i < srchRes.length - 1 && <hr />}

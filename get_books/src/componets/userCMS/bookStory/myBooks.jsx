@@ -12,7 +12,7 @@ import {
   myBooksStatus,
 } from "../../../shared/redux/features/bookSlice";
 import { userID, user_from_token } from "../../../shared/redux/features/tokenSlice";
-import { getCurrentUser } from "../../../shared/redux/features/usersSlice";
+import { getCurrentUser, getUsersSlice } from "../../../shared/redux/features/usersSlice";
 import Book from "./book";
 
 export default function MyBooks() {
@@ -22,18 +22,21 @@ export default function MyBooks() {
   // const {get_myBooks} = useSelector(getMyBooks);
   // const status = useSelector(myBooksStatus);
   const {userBooks,getAllMyBooks_status} = useSelector(booksS);
-  const {id} = useSelector(user_from_token);
+  // const {id} = useSelector(user_from_token);
+  
+  const {currentUser} = useSelector(getUsersSlice);
+
 
   useEffect(() => {
 
       // console.log(get_myBooks);
     // user_id?._id.length>0 && dispatch(myBooks());
-    id === "" && toast.info("נא התחבר") && nav("/login");
+    currentUser===null && toast.info("נא התחבר") && nav("/login");
   }, []);
 
   useEffect(() => {
-    id !== null && dispatch(getAllMyBooks());
-  }, [id]);
+    currentUser !== null && dispatch(getAllMyBooks());
+  }, [currentUser]);
 
   return (
     <div className="container">

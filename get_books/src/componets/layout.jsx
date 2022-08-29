@@ -30,8 +30,8 @@ export default function Layout() {
   const { id } = useSelector(user_from_token);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  // }, []);
+  useEffect(() => {
+  }, []);
 
   return (
     <div>

@@ -3,6 +3,7 @@ import {
   createSlice,
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
+import { persistor } from "../../..";
 import {
   API_URL,
   doApiGet,
@@ -80,6 +81,7 @@ const tokenSlice = createSlice({
 
       .addCase(AuthWithToken.fulfilled, (state, action) => {
         if (action.payload) {
+          console.log(action.payload);
           state.authStatus = "succeeded";
           state.role = action.payload.role;
           // console.log(state.token)
@@ -93,6 +95,7 @@ const tokenSlice = createSlice({
         // localStorage.removeItem(TOKEN_NAME)
         state.id = ""
         state.token = null
+        persistor.purge()
         // logOutFromToken();
       })
 

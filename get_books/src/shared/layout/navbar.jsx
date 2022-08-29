@@ -77,15 +77,11 @@ export default function PrimarySearchAppBar() {
   const nav = useNavigate();
 
   React.useEffect(() => {
-    // dispatch(AuthWithToken())
+    currentUser===null&&dispatch(getUser())
     console.log(countNotify);
-    console.log();
-    id!==""&& dispatch(getUser());
-
     console.log(id);
     console.log(currentUser);
-    // token!==null  && dispatch(myBooks(currentUser?._id));
-    //  console.log(userNotify);
+
   }, [id,getAllMyBooks_status,userBooks, swichHide_status]);
 
   // run search resault
@@ -483,7 +479,7 @@ dispatch(getUser(id))
                   color={"white"}
                   to={"/logOut"}
                 >
-                  {userName}{" "}
+                  {currentUser?.name}{" "}
                 </Link>
               </Tooltip>
             )}

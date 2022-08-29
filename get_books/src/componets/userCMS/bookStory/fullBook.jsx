@@ -22,7 +22,7 @@ export default function FullBook() {
   const [openMsg, setOpenMsg] = useState(false);
   const { currentBook, sendBookMassage_status, currentBook_status } =
     useSelector(booksS);
-  const { msg_status } = useSelector(getUsersSlice);
+  const { msg_status, currentUser } = useSelector(getUsersSlice);
   const { bookId } = useParams();
   const [ratings, setRating] = useState(0)
 
@@ -92,11 +92,11 @@ export default function FullBook() {
               count={5}
               size={30}
               activeColor="#ffd700"
-               onChange={(e) =>id!==""&& rating(e)}
+               onChange={(e) =>currentUser!==null&& rating(e)}
               value={currentBook?.rate/currentBook?.rateQuanity}
               a11y={true}
               isHalf={true}
-              edit={id!==""&& id !== currentBook?.userID?._id ? true : false}
+              edit={currentUser!==null&& currentUser?._id !== currentBook?.userID?._id ? true : false}
             />
           </div>
         </div>
