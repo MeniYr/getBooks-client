@@ -20,22 +20,17 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// myStore.dispatch(AuthWithToken());
-// myStore.dispatch(getUser());
-// myStore.dispatch(getBooks());
-
-// dispatch(getBooks())
-// authStatus === "succeeded" && dispatch(getUser());
-// currentUser?._id && dispatch(myBooks(currentUser?._id));
-
 export const persistor = persistStore(myStore);
+export const reset = () => {
+  persistor.purge();
+};
 root.render(
   // <React.StrictMode>
-    <Provider store={myStore}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
+  <Provider store={myStore}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
   // </React.StrictMode>
 );
 

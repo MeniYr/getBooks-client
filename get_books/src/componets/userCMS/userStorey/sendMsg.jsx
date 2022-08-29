@@ -56,7 +56,7 @@ export default function SendMsg({ id, bookId, msgClose }) {
     toUserId && dispatch(sendMassage(msg));
 
     bookId && dispatch(sendBookMassage(bookMsg));
-    msgClose(false);
+    id?msgClose(false):nav(-1)
   };
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function SendMsg({ id, bookId, msgClose }) {
       >
         <div className="modal-content">
           <button
-            onClick={() => msgClose(false)}
+            onClick={() => id?msgClose(false):nav(-1) }
             className="p-3 btn btn-close"
           ></button>
           <div className="modal-header">
