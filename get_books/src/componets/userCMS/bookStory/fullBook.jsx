@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 
@@ -24,7 +24,10 @@ export default function FullBook() {
     useSelector(booksS);
   const { msg_status, currentUser } = useSelector(getUsersSlice);
   const { bookId } = useParams();
-  const [ratings, setRating] = useState(0)
+  const [ratings, setRating] = useState(0);
+  const [readMore, setReadMore] = useState(false);
+
+  const nav = useNavigate();
 
   useEffect(() => {
     dispatch(getBooks());
@@ -42,11 +45,11 @@ export default function FullBook() {
     if (!isInt && Math.ceil(num) > num) {
       num = Math.floor(num) + 0.5;
     }
-    let sendRate = await doApiMethod(
-      `${BOOKS}/addRate/${bookId }`,"PUT", {num}
-    );
+    let sendRate = await doApiMethod(`${BOOKS}/addRate/${bookId}`, "PUT", {
+      num,
+    });
     dispatch(getBooks());
-    console.log(sendRate?.rate)
+    console.log(sendRate?.rate);
   };
 
   return (
@@ -92,17 +95,23 @@ export default function FullBook() {
               count={5}
               size={30}
               activeColor="#ffd700"
-               onChange={(e) =>currentUser!==null&& rating(e)}
-              value={currentBook?.rate/currentBook?.rateQuanity}
+              onChange={(e) => currentUser !== null && rating(e)}
+              value={currentBook?.rate / currentBook?.rateQuanity}
               a11y={true}
               isHalf={true}
-              edit={currentUser!==null&& currentUser?._id !== currentBook?.userID?._id ? true : false}
+              edit={
+                currentUser !== null &&
+                currentUser?._id !== currentBook?.userID?._id
+                  ? true
+                  : false
+              }
             />
           </div>
         </div>
 
-        <div className="mt-5">
-          <div className="d-flex justify-content-between px-5">
+        <div className="d-md-flex mt-5">
+          <div className="d-block col-md-3 px-5">
+            <hr />
             <p>
               <span className="fw-bolder">עמודים: </span> {currentBook?.pages}
             </p>
@@ -114,48 +123,94 @@ export default function FullBook() {
               <span className="fw-bolder"> הועלה בתאריך: </span>{" "}
               {moment(currentBook?.created_at).format("DD/MM/YYYY")}
             </p>
-          </div>
-          <p className="overflow-auto text-center mx-auto w-75 border border-3 rounded-2 ">
-            {currentBook?.description.length > 1000
-              ? currentBook?.description.substring(0, 1000) + "..."
-              : currentBook?.description}
-          </p>
-        </div>
-        <div
-          onClick={() => {
-            setOpenMsg(true);
-          }}
-          className="btn"
-        >
-          הוסף תגובה
-        </div>
-        {openMsg && (
-          <SendMsg
-            bookId={currentBook?._id}
-            msgClose={setOpenMsg}
-            id={currentBook?.userID._id}
-          />
-        )}
-        <div>
-          {currentBook?.comments.map((comment) => {
-            return (
-              <div
-                className="border mx-auto rounded-3 w-75 p-2 m-4 text-center"
-                key={comment._id}
+            <div className="">
+              <span className="fw-bolder">משתמש:</span>{" "}
+              {currentBook?.userID.name}
+              <button
+                onClick={() => {
+                  nav(`/sendMsg/${currentBook.userID?._id}`);
+                }}
+                className="btn badge text-black m-3 btn-outline-info rounded-circle"
               >
-                <h2>{moment(comment.date).format("DD-MM-YYYY, HH:mm")}</h2>
-                <h2>
-                  <span className="fw-bolder">מאת: </span>{" "}
-                  {comment.fromUser.name}
-                </h2>
-                <p className="display-5 w-75 mx-auto border-3">
-                  {" "}
-                  <span className="fw-bolder">תוכן: </span>
-                  {comment.msg}
-                </p>
+                הודעה
+              </button>
+            </div>
+          </div>
+          <div className="col-md-9">
+            <hr />
+            <p className="overflow-auto text-center mx-auto w-75  rounded-2 ">
+              {currentBook?.description.length > 1000
+                ? currentBook?.description.substring(0, 1000) + "..."
+                : currentBook?.description}
+            </p>
+            {currentBook?.description.length > 300 && (
+              <div>
+                <button
+                  className="btn btn-outline-info"
+                  onClick={() => setReadMore(!readMore)}
+                >
+                  {!readMore ? "קרא עוד" : "סגור "}
+                </button>
+                {readMore && (
+                  <p className="p-4">
+                    {currentBook?.description.substring(300)}
+                  </p>
+                )}
               </div>
-            );
-          })}
+            )}
+          </div>
+        </div>
+
+        <hr className="my-4" />
+
+        <div className="d-md-flex  ">
+          <div className="col-md-3">
+            <div
+              onClick={() => {
+                setOpenMsg(true);
+              }}
+              className="btn"
+            >
+              הוסף תגובה
+            </div>
+            {openMsg && (
+              <SendMsg
+                bookId={currentBook?._id}
+                msgClose={setOpenMsg}
+                id={currentBook?.userID._id}
+              />
+            )}
+          </div>
+
+          <div className="col-md-9">
+            <p className="initialism fw-semibold fs-5 fst-italic">
+              תגובות גולשים
+            </p>
+            <hr />
+            {currentBook?.comments.map((comment, i) => {
+              return (
+                <div>
+                  <div
+                    className=" mx-auto d-md-flex p-2 m-4 text-end"
+                    key={comment._id}
+                  >
+                    <div className="col-md-4 border-start">
+                      <h2>
+                        <span className="fw-bolder">מאת: </span>{" "}
+                        {comment.fromUser.name}
+                      </h2>
+                      <h2>{moment(comment.date).format("DD-MM-YYYY")}</h2>
+                    </div>
+
+                    <div className="col-md-9 me-md-4 ">
+                      <p className="fs-3 mx-auto "> {comment.msg}</p>
+                    </div>
+                  </div>
+                  {i<currentBook?.comments.length&&<hr className="display-1" />}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

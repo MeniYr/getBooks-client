@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { REHYDRATE } from "redux-persist";
+import { persist, re, reset } from "../..";
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, {
   AuthWithToken,
@@ -29,6 +31,7 @@ export default function Login() {
   } = useForm();
 
   useEffect(() => {
+    reset()
     clicked && logINStatus === "failed" && toast.error("email or user wrong");
     console.log(logINStatus);
   }, [error, logINStatus]);
@@ -39,24 +42,22 @@ export default function Login() {
 
   useEffect(() => {
     return () => {
-    
-      localStorage[TOKEN_NAME]&&dispatch(getUser());
-      
+      localStorage[TOKEN_NAME] && dispatch(getUser());
+      localStorage[TOKEN_NAME] &&re();
     };
-  }, [clicked, closeBtn,logINStatus]);
+  }, [clicked, closeBtn, logINStatus]);
 
   useEffect(() => {
-    logINStatus === "succeeded" &&
-      clicked &&
-      toast.success(`ברוך הבא ${userName}`) &&
-      nav(-1);
+    clicked &&
+      logINStatus === "succeeded" &&
+      setCloseBtn(false) &&
+      toast.success(`ברוך הבא ${userName}`);
     !closeBtn && nav("/");
   }, [closeBtn, logINStatus]);
 
   const onSub = (_dataBody) => {
     dispatch(login(_dataBody));
     setCilcked(true);
-    logINStatus === "succeeded" && setCloseBtn(false);
   };
 
   return (

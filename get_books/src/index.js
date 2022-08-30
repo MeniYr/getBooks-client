@@ -25,6 +25,13 @@ export const persistor = persistStore(myStore);
 export const reset = async () => {
  await persistor.purge();
 };
+export const register = async () => {
+ await persistor.flush()
+};
+export const re = async () => {
+  persistor.persist()
+};
+
 root.render(
   // <React.StrictMode>
   <Provider store={myStore}>

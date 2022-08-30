@@ -17,6 +17,7 @@ import {
   getCurrentUser,
   getUser,
   getUsers,
+  getUsersSlice,
 } from "../shared/redux/features/usersSlice";
 import Confetti from "react-confetti";
 import { useRef } from "react";
@@ -26,13 +27,12 @@ import { current } from "@reduxjs/toolkit";
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
-  // const user = useSelector(getCurrentUser);
+  const { currentUser } = useSelector(getUsersSlice);
   const {
     userOnDeliveryBooks,
     getAllMyBooks_status,
     userBooks,
     swichHide_status,
-    currentUser,
   } = useSelector(booksS);
   // const { id } = useSelector(user_from_token);
   const { changeOwner_status } = useSelector(delivery);
@@ -43,21 +43,27 @@ export default function BooksOnDeliver() {
   const dateRef = useRef();
 
   useEffect(() => {
-    if(currentUser) 
-    dispatch(getUser())
+    if (currentUser) dispatch(getUser());
     dispatch(getAllMyBooks());
+  }, [refresh, swichHide_status, userOnDeliveryBooks, changeOwner_status]);
+
+  useEffect(() => {
+    let array = [];
+    if (userBooks.length > 0) {
+      array = [...userBooks];
+      console.log(array);
+      setBook(array.filter((item) => item.hide === true));
+    }
+
+    culcDays();
+    userBooks.length > 0 && console.log(book);
   }, [
     currentUser,
     refresh,
     swichHide_status,
     userOnDeliveryBooks,
-    changeOwner_status,
+    getAllMyBooks_status,
   ]);
-
-  useEffect(() => {
-    setBook(userBooks.filter((item) => item.hide === true));
-    culcDays();
-  }, [currentUser, refresh, swichHide_status, userOnDeliveryBooks, userBooks]);
 
   const culcDays = () => {
     let first = new Date(moment(book?.created_at)).getUTCDate();
@@ -67,11 +73,11 @@ export default function BooksOnDeliver() {
   };
 
   return (
-    <div className="container ">
+    <div className="container position-relative">
       <div className="row p-2 d-flex justify-content-center text-center">
         <p className="">בתהליך מסירה</p>
         {getAllMyBooks_status === "succeeded" &&
-          currentUser !== null &&
+          currentUser &&
           book?.map((book) => {
             return (
               <div
@@ -79,7 +85,7 @@ export default function BooksOnDeliver() {
                 style={{
                   height: "50px",
                 }}
-                className="p-2 mb-2 border border-success my-auto d-flex align-items-center rounded-2"
+                className="p-2  mb-2 border border-success my-auto d-flex align-items-center rounded-2"
               >
                 <div className="d-flex  justify-content-between w-100">
                   <Tooltip
@@ -111,10 +117,11 @@ export default function BooksOnDeliver() {
                 </div>
                 {deliverClicked && (
                   <Confetti
-                    numberOfPieces={50}
+                  className="position-fixed"
+                    numberOfPieces={700}
                     recycle={false}
-                    width="500px"
-                    height="500px"
+                    // width="500px"
+                    // height="500px"
                   />
                 )}
               </div>

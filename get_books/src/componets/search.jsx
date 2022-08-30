@@ -233,12 +233,6 @@ export default function Search() {
                           </Tooltip>
                           <br />
 
-                          {deliveries
-                            ?.find((a) => a.bookID === item._id)
-                            ?.interestedUsersID?.includes(currentUser?._id)
-                            ? "yes"
-                            : "not"}
-
                           {currentUser?._id !== item.userID._id && (
                             <IconButton
                               className={`shadow ${

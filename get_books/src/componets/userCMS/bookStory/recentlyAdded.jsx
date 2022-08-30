@@ -15,8 +15,8 @@ export default function RecentlyAdded() {
   useEffect(() => {
     dispatch(getBooks());
     const q = () => {
-      let array = [...books]
-      return array.splice(0,7);
+      let array = [...books];
+      return array.splice(0, 7);
     };
     q();
     setNewBooks(q());
@@ -30,9 +30,11 @@ export default function RecentlyAdded() {
         <div style={{ overflowY: "scroll" }} className="d-md-flex   ">
           {newBooks?.map((item) => {
             return (
-              <div className="p-2  col-md-3" key={item._id}>
-                <Book book={item} />
-              </div>
+              item.hide === false && (
+                <div className="p-2  col-md-3" key={item._id}>
+                  <Book book={item} />
+                </div>
+              )
             );
           })}
         </div>

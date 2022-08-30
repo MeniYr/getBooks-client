@@ -18,10 +18,11 @@ import {
   user_from_token,
 } from "../shared/redux/features/tokenSlice";
 import Footer from "../shared/layout/footer";
+import { re, register, reset } from "..";
 
 export default function Layout() {
   const nav = useNavigate();
-  const { token, logINStatus } = useSelector(user_from_token);
+  const { token, logINStatus,id } = useSelector(user_from_token);
   const { currentUser } = useSelector(getUsersSlice);
 
   const {
@@ -40,6 +41,9 @@ export default function Layout() {
   useEffect(() => {
     logINStatus === "succeeded" && !currentUser && dispatch(getUser());
   }, [logINStatus, currentUser]);
+  useEffect(()=>{
+id!==currentUser?._id && register() && dispatch(getUser())
+  },[id])
 
   return (
     <div>

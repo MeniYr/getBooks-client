@@ -57,7 +57,7 @@ const tokenSlice = createSlice({
     error: null,
     userName: "",
     role: "",
-    id: "",
+    id: null,
   },
   reducers: {
     logOutFromToken: (state, action) => {

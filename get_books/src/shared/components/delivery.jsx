@@ -102,7 +102,7 @@ export default function Delivery({ toOpenModal, note }) {
                   <p className="fs-4 pt-3 px-2">שם: {note.fromUserId.name}</p>
                   <p className="fs-4 pt-3  ">עיר: {note.fromUserId.city}</p>
                 </div>
-                <div className="d-md-flex justify-content-between ">
+                <div className="d-md-grid ">
                   <div>
                     {openMsg && (
                       <SendMsg msgClose={setOpenMsg} id={note.fromUserId._id} />
