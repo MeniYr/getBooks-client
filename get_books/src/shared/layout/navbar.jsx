@@ -280,6 +280,7 @@ export default function PrimarySearchAppBar() {
               }`}
             >
               {moment(item?.date).format("DD-MM-YYYY, HH:mm")}{" "}
+              <br/>
               {item.fromUserId?.name}
             </p>
           </MenuItem>
