@@ -1,5 +1,5 @@
 import React from 'react'
-import myStyle from "../../componets/layoutCss.module.css"
+import myStyle from "./layoutCss.module.css"
 export default function Footer() {
   return (
     <div className='container-fluid shadow'>

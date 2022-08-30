@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import BooksOnDeliver from "./booksOnDeliver";
-import BooksUserInterested from "../shared/layout/booksUserInterested";
+import BooksUserInterested from "./booksUserInterested";
 import PrimarySearchAppBar from "../shared/layout/navbar";
 import { booksS, getBooks } from "../shared/redux/features/bookSlice";
 import {
@@ -20,7 +20,7 @@ import {
 } from "../shared/redux/features/tokenSlice";
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
 import RecentlyAdded from "./userCMS/bookStory/recentlyAdded";
-import style_css from "./layoutCss.module.css";
+import style_css from "../shared/layout/layoutCss.module.css";
 import HighRetes from "./userCMS/bookStory/highRatingBooks";
 
 export default function Home() {
@@ -44,6 +44,7 @@ export default function Home() {
       <div className={`${style_css.recently} p-2`}>
         <RecentlyAdded />
       </div>
+      <hr />
       <div className={`${style_css.categories} p-2`}>
         <HighRetes />
       </div>

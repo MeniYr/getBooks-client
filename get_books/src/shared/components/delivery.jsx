@@ -148,7 +148,7 @@ export default function Delivery({ toOpenModal, note }) {
                     // 
                   }}
                   type="button"
-                  className="btn btn-primary"
+                  className={`btn btn-primary ${note?.bookID?.hide===true?"d-none":"d-block"}`}
                 >
                   מסור
                 </button>

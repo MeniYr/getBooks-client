@@ -2,14 +2,14 @@ import { Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { booksS } from "../redux/features/bookSlice";
+import { booksS, getBooks } from "../shared/redux/features/bookSlice";
 import {
   changeOwner,
   delivery,
   getDeliveries,
-} from "../redux/features/deliverySlice";
-import { user_from_token } from "../redux/features/tokenSlice";
-import { getUsersSlice } from "../redux/features/usersSlice";
+} from "../shared/redux/features/deliverySlice";
+import { user_from_token } from "../shared/redux/features/tokenSlice";
+import { getUsersSlice } from "../shared/redux/features/usersSlice";
 
 export default function BooksUserInterested() {
   const dispatch = useDispatch(getDeliveries());
@@ -26,10 +26,17 @@ export default function BooksUserInterested() {
     swichHide_status,
   } = useSelector(booksS);
 
+  useEffect(()=>{
+// dispatch(getBooks())
+a()
+  },[deliveries])
+
   useEffect(() => {
     dispatch(getDeliveries());
-    // dispatch(getDeliveries());
-    const a = () => {
+    a();
+
+  }, [addNote_status, getAllMyBooks_status,addInterestedID_status ]);
+const a = () => {
       let array = [];
       if (deliveries?.length > 0) {
         console.log(deliveries);
@@ -45,11 +52,6 @@ export default function BooksUserInterested() {
         setInterestedBooksId(arr)
       }
     };
-
-    a();
-
-  }, [addNote_status, getAllMyBooks_status,addInterestedID_status]);
-
   return (
     <div className="container ">
       <div className="row p-2 d-flex justify-content-center text-center">

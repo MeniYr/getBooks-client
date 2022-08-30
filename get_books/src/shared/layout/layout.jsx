@@ -8,17 +8,17 @@ import style_css from "./layoutCss.module.css";
 // import BooksUserInterested from "../shared/layout/booksUserInterested";
 // import PrimarySearchAppBar from "../shared/layout/navbar";
 
-import BooksOnDeliver from "./booksOnDeliver";
-import BooksUserInterested from "../shared/layout/booksUserInterested";
-import PrimarySearchAppBar from "../shared/layout/navbar";
-import { getUser, getUsersSlice } from "../shared/redux/features/usersSlice";
-import { booksS, getBooks } from "../shared/redux/features/bookSlice";
+import BooksOnDeliver from "../../componets/booksOnDeliver";
+import BooksUserInterested from "../../componets/booksUserInterested";
+import PrimarySearchAppBar from "./navbar";
+import { getUser, getUsersSlice } from "../redux/features/usersSlice";
+import { booksS, getBooks } from "../redux/features/bookSlice";
 import {
   AuthWithToken,
   user_from_token,
-} from "../shared/redux/features/tokenSlice";
-import Footer from "../shared/layout/footer";
-import { re, register, reset } from "..";
+} from "../redux/features/tokenSlice";
+import Footer from "./footer";
+import { re, register, reset } from "../..";
 
 export default function Layout() {
   const nav = useNavigate();

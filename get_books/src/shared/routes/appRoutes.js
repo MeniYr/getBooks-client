@@ -32,8 +32,8 @@ import Delivery from "../components/delivery";
 import Book from "../../componets/userCMS/bookStory/book";
 import FullBook from "../../componets/userCMS/bookStory/fullBook";
 import BooksOnDeliver from "../../componets/booksOnDeliver";
-import Layout from "../../componets/layout";
-import BooksUserInterested from "../layout/booksUserInterested";
+import Layout from "../layout/layout";
+import BooksUserInterested from "../../componets/booksUserInterested";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
