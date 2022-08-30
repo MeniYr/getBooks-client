@@ -134,6 +134,7 @@ const deliverySlice = createSlice({
     addInterestedID_status: "idle",
     getDeliveries_status: "idle",
     changeUserToDeliver_status: "idle",
+    addInterestedID_status: "idle",
     delDelivery_status: "idle",
     delInterestedID_status: "idle",
     error: null,
@@ -264,6 +265,26 @@ const deliverySlice = createSlice({
 
       .addCase(changeUserToDeliver.rejected, (state, action) => {
         state.changeUserToDeliver_status = "failed";
+        state.error = action.error;
+        console.log("here_error_msg", state.error);
+      })
+      .addCase(addInterestedID.pending, (state, action) => {
+        state.addInterestedID_status = "loading";
+        console.log(action.payload);
+        console.log(state.addInterestedID_status);
+      })
+
+      .addCase(addInterestedID.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.addInterestedID_status = "succeeded";
+          state.error = null;
+          console.log(action.payload);
+          console.log(state.addInterestedID_status);
+        }
+      })
+
+      .addCase(addInterestedID.rejected, (state, action) => {
+        state.addInterestedID_status = "failed";
         state.error = action.error;
         console.log("here_error_msg", state.error);
       })

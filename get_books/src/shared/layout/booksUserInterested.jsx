@@ -14,10 +14,12 @@ import { getUsersSlice } from "../redux/features/usersSlice";
 export default function BooksUserInterested() {
   const dispatch = useDispatch(getDeliveries());
   const { id, error } = useSelector(user_from_token);
-  const { deliveries } = useSelector(delivery);
+  const { deliveries,addInterestedID_status } = useSelector(delivery);
   const { addNote_status, currentUser } = useSelector(getUsersSlice);
-  const [interestedBooks, setInterestedBooks] = useState([]);
+  const [interestedBooksId, setInterestedBooksId] = useState([]);
+  const [newBooks, setNewBooks] = useState([]);
   const {
+    books,
     userOnDeliveryBooks,
     getAllMyBooks_status,
     userBooks,
@@ -26,6 +28,7 @@ export default function BooksUserInterested() {
 
   useEffect(() => {
     dispatch(getDeliveries());
+    // dispatch(getDeliveries());
     const a = () => {
       let array = [];
       if (deliveries?.length > 0) {
@@ -34,21 +37,18 @@ export default function BooksUserInterested() {
         // let exist = false;
         let arr=[];
         for (let i = 0; i < array?.length; i++) {
-          let book = array[i]?.interestedUsersID;
+          let book = deliveries[i]?.interestedUsersID;
           if (book.includes(currentUser?._id)) {
-           arr.push(array[i]?.bookID)
+           arr.push(deliveries[i]?.bookID)
           }
         }
-        setInterestedBooks(arr)
-        console.log(interestedBooks);
+        setInterestedBooksId(arr)
       }
     };
 
     a();
 
-    // setInterestedBooks(a());
-    interestedBooks?.length > 0 && console.log(interestedBooks);
-  }, [addNote_status, getAllMyBooks_status]);
+  }, [addNote_status, getAllMyBooks_status,addInterestedID_status]);
 
   return (
     <div className="container ">
@@ -56,9 +56,9 @@ export default function BooksUserInterested() {
         <p className="">ספרים שהתעניינתי</p>
         {getAllMyBooks_status === "succeeded" &&
           currentUser &&
-          interestedBooks?.map((book) => {
+          books?.map((book) => {
             return (
-              <div
+             interestedBooksId.includes(book._id) && <div
                 key={book?._id}
                 style={{
                   height: "50px",
@@ -66,30 +66,27 @@ export default function BooksUserInterested() {
                 className="p-2 mb-2 border border-success my-auto d-flex align-items-center rounded-2"
               >
                 <div className="d-flex  justify-content-between w-100">
-                  <Link
+                  <div>
+                                    <Link
                     to={`/fullBook/${book._id}`}
                     className="text-decoration-none text-body my-auto fs-6 fw-semibold col-7 "
                   >
-                    {book?.name?.length > 10
-                      ? book.name.substring(0, 10) + "..."
+                    {book?.name?.length > 18
+                      ? book.name.substring(0, 18) + "..."
                       : book.name}
-                  </Link>
-                  {/* <button
-                    onClick={() => {
-                      dispatch(changeOwner(book._id));
-                      setDeliverClicked(true);
-                      setRefresh(!refresh);
-                    }}
-                    className="btn btn-warning badge  my-auto"
-                  >
-                    נמסר
-                  </button> */}
+                  </Link>  
+                  </div>
+
+                  <div>
+<img src={book.image} width="35px" height="35px" alt="book photo" />
+                  </div>
+                
                 </div>
               </div>
             );
           })}
       </div>
-      {interestedBooks?.length === 0 && (
+      {interestedBooksId?.length === 0 && (
         <p className="d-flex justify-content-center text-center">
           עדיין אין 😏
         </p>
