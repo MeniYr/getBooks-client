@@ -4,7 +4,7 @@ import { logOutFromToken } from '../redux/features/tokenSlice'
 import { logOutFromUsers } from '../redux/features/usersSlice'
 import { useNavigate } from 'react-router-dom'
 import { logOutFromBooks } from '../redux/features/bookSlice'
-import { persistor, reset } from '../..'
+import { pause, persistor, re, register, reset } from '../..'
 
 
 export default function Logout() {
@@ -12,17 +12,19 @@ export default function Logout() {
     const nav = useNavigate()
 
     useEffect(() => {
-        reset()
+        // register()
+        // re()
         logOut()
     }, [])
     
- const logOut = async () => {
-       
+    const logOut = async () => {
+        
         console.log("logout");
         dispatch(logOutFromUsers())
         dispatch(logOutFromToken())
         dispatch(logOutFromBooks())
         nav("/")
+        await reset()
     }
 
     return (

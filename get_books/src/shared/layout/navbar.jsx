@@ -23,12 +23,15 @@ import { MdHome } from "react-icons/md";
 import {
   getUser,
   getUsersSlice,
+  readMassage,
   readNotify,
 } from "../redux/features/usersSlice";
 import Delivery from "../components/delivery";
 import { delivery } from "../redux/features/deliverySlice";
 import { AuthWithToken } from "../redux/features/tokenSlice";
 import ReactConfetti from "react-confetti";
+import NotifyMsgNavbar from "../components/notifyMsgNavbar";
+import moment from "moment";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -79,8 +82,11 @@ export default function PrimarySearchAppBar() {
 
   // const [openLogin, setOpenLogin] = React.useState(false)
   const [openModal, setOpenModal] = React.useState(false);
+  const [openMsgModal, setOpenMsgModal] = React.useState(false);
   const [notify, setNotify] = React.useState({});
+  const [msg, setMSg] = React.useState({});
   const [refresh, setRefresh] = React.useState(false);
+  const [msgRefresh, setMsgRefresh] = React.useState(false);
 
   const nav = useNavigate();
 
@@ -99,6 +105,7 @@ export default function PrimarySearchAppBar() {
     userBooks,
     changeUserToDeliver_status,
     refresh,
+    msgRefresh,
     swichHide_status,
   ]);
 
@@ -110,20 +117,29 @@ export default function PrimarySearchAppBar() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [noteEl, setNoteEl] = React.useState(null);
+  const [msgEl, setMsgEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isNoteMenuOpen = Boolean(noteEl);
+  const isMsgMenuOpen = Boolean(msgEl);
 
   // handles
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleNoteMenuOpen = (event) => {
     setRefresh(!refresh);
-    dispatch(getUser(id));
+    dispatch(getUser(currentUser?._id));
     setNoteEl(event.currentTarget);
+  };
+
+  const handleMsgMenuOpen = (event) => {
+    setMsgRefresh(!refresh);
+    // dispatch(getUser(currentUser?._id));
+    setMsgEl(event.currentTarget);
   };
 
   const handlePersonalAriaMenuOpen = (event) => {
@@ -144,8 +160,14 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
   const handleNoteMenuClose = () => {
     setNoteEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMsgMenuClose = () => {
+    setMsgEl(null);
     handleMobileMenuClose();
   };
 
@@ -219,6 +241,58 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  // msg menu
+
+  const msgMenuId = "primary-search-account-menu";
+  const renderMsgMenu = (
+    <Menu
+      anchorEl={msgEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      id={msgMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMsgMenuOpen}
+      onClose={handleMsgMenuClose}
+    >
+      {currentUser?.msg?.map((item) => {
+        return (
+          <MenuItem
+            sx={{
+              width: 250,
+            }}
+            key={item?._id}
+            onClick={() => {
+              item?.isRead === false && dispatch(readMassage(item?._id));
+              setOpenMsgModal(true);
+              setMSg(item);
+              handleMsgMenuClose();
+            }}
+          >
+            <p
+              className={`text-wrap p-0 m-0 ${
+                item?.isRead === false ? "opacity-100" : "opacity-50"
+              }`}
+            >
+              {moment(item?.date).format("DD-MM-YYYY, HH:mm")}{" "}
+              {item.fromUserId?.name}
+            </p>
+          </MenuItem>
+        );
+      })}
+      {userNotify?.length === 0 && (
+        <div className="d-flex justify-content-center text-center">
+          <p>עדיין אין התראות 🙃</p>
+        </div>
+      )}
+    </Menu>
+  );
+
   // mobile menu
 
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -240,7 +314,8 @@ export default function PrimarySearchAppBar() {
     >
       {/* Messages */}
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+        
+        <IconButton onClick={handleMsgMenuOpen} size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
@@ -319,6 +394,7 @@ export default function PrimarySearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {openModal && <Delivery toOpenModal={setOpenModal} note={notify} />}
+      {openMsgModal && <NotifyMsgNavbar toOpenModal={setOpenMsgModal} msg={msg} />}
       <AppBar position="static">
         <Toolbar>
           {/* menu */}
@@ -410,6 +486,7 @@ export default function PrimarySearchAppBar() {
                   size="large"
                   aria-label="show 4 new mails"
                   color="inherit"
+                  onClick={handleMsgMenuOpen}
                 >
                   <Badge badgeContent={4} color="error">
                     <Tooltip title="הודעות">
@@ -493,7 +570,7 @@ export default function PrimarySearchAppBar() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {/* {renderMenu} */}
+      {renderMsgMenu}
       {renderNoteMenu}
     </Box>
   );

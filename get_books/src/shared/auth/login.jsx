@@ -31,7 +31,7 @@ export default function Login() {
   } = useForm();
 
   useEffect(() => {
-    reset()
+    // reset()
     clicked && logINStatus === "failed" && toast.error("email or user wrong");
     console.log(logINStatus);
   }, [error, logINStatus]);
@@ -43,7 +43,7 @@ export default function Login() {
   useEffect(() => {
     return () => {
       localStorage[TOKEN_NAME] && dispatch(getUser());
-      localStorage[TOKEN_NAME] &&re();
+      // token &&register();
     };
   }, [clicked, closeBtn, logINStatus]);
 

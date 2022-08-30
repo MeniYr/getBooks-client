@@ -42,7 +42,7 @@ export default function Layout() {
     logINStatus === "succeeded" && !currentUser && dispatch(getUser());
   }, [logINStatus, currentUser]);
   useEffect(()=>{
-id!==currentUser?._id && register() && dispatch(getUser())
+id!==currentUser?._id  && dispatch(getUser())
   },[id])
 
   return (

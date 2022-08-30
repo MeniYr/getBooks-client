@@ -134,7 +134,7 @@ const addCatRef = useRef()
   };
 
   return (
-    <div className="d-flex justify-content-md-center container col-md-6">
+    <div className="d-flex justify-content-md-center container col-md-8 pb-3">
       <div>
         <h1 className="display-5 mt-5 mb-4 fw-bolder text-danger text-md-center">
           add book

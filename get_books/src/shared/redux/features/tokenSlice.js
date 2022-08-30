@@ -3,7 +3,8 @@ import {
   createSlice,
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
-import { persistor, reset } from "../../..";
+import { PURGE } from "redux-persist";
+import { persistor, register, reset } from "../../..";
 import {
   API_URL,
   doApiGet,
@@ -66,13 +67,21 @@ const tokenSlice = createSlice({
       state.token = null;
       state.userName = "";
       state.role = "";
-      state.id = "";
+      state.id = null;
       state.logINStatus = "idle";
     },
   },
 
   extraReducers(builder) {
     builder
+    .addCase(PURGE, (state) => {
+      console.log("here");
+        state.token = null;
+        state.userName = "";
+        state.role = "";
+        state.id = null;
+        state.logINStatus = "idle";
+    })
       .addCase(AuthWithToken.pending, (state, action) => {
         state.authStatus = "loading";
         // console.log(state.authStatus)
@@ -94,8 +103,8 @@ const tokenSlice = createSlice({
         console.log("AuthWithToken.rejected", state.error);
         // localStorage.removeItem(TOKEN_NAME)
         state.id = ""
-        state.token = null
-         reset()
+        // state.token = null
+        //  reset()
         // logOutFromToken();
       })
 
@@ -108,13 +117,14 @@ const tokenSlice = createSlice({
 
       .addCase(login.fulfilled, (state, action) => {
         if (action.payload) {
+          console.log(action.payload);
           state.logINStatus = "succeeded";
           state.error = null;
-          state.token = action.payload.token;
+          state.token=localStorage[TOKEN_NAME];
           state.role = action.payload.user.role;
           state.id = action.payload.user.userID;
           state.userName = action.payload.user.name;
-
+// register()
           console.log(action.payload.token);
           console.log(state.id);
           console.log(action.payload);

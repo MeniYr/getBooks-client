@@ -34,7 +34,7 @@ export default function BooksOnDeliver() {
     userBooks,
     swichHide_status,
   } = useSelector(booksS);
-  // const { id } = useSelector(user_from_token);
+  const { logINStatus } = useSelector(user_from_token);
   const { changeOwner_status } = useSelector(delivery);
   const [book, setBook] = useState([]);
   const [dateCulc, setDateCulc] = useState("");
@@ -45,7 +45,7 @@ export default function BooksOnDeliver() {
   useEffect(() => {
     if (currentUser) dispatch(getUser());
     dispatch(getAllMyBooks());
-  }, [refresh, swichHide_status, userOnDeliveryBooks, changeOwner_status]);
+  }, [refresh, swichHide_status, userOnDeliveryBooks, changeOwner_status,logINStatus]);
 
   useEffect(() => {
     let array = [];

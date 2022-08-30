@@ -13,7 +13,7 @@ import { getUsersSlice } from "../shared/redux/features/usersSlice";
 
 export default function BooksUserInterested() {
   const dispatch = useDispatch(getDeliveries());
-  const { id, error } = useSelector(user_from_token);
+  const { id, error,logINStatus } = useSelector(user_from_token);
   const { deliveries,addInterestedID_status } = useSelector(delivery);
   const { addNote_status, currentUser } = useSelector(getUsersSlice);
   const [interestedBooksId, setInterestedBooksId] = useState([]);
@@ -35,7 +35,7 @@ a()
     dispatch(getDeliveries());
     a();
 
-  }, [addNote_status, getAllMyBooks_status,addInterestedID_status ]);
+  }, [addNote_status, getAllMyBooks_status,addInterestedID_status,logINStatus ]);
 const a = () => {
       let array = [];
       if (deliveries?.length > 0) {

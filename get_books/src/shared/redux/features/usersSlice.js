@@ -102,6 +102,21 @@ export const sendMassage = createAsyncThunk(
     }
   }
 );
+export const readMassage = createAsyncThunk(
+  "users/readMassage",
+  async (dataBody) => {
+    try {
+      let idMsg = dataBody;
+      const { data } = await doApiMethod(
+        `${USERS_URL}/readMsg/${idMsg}`,"PUT"
+      );
+      console.log(data);
+      return data;
+    } catch (err) {
+      throw err?.response?.data[0]?.message;
+    }
+  }
+);
 
 export const addNotify = createAsyncThunk(
   "users/addNotify",
@@ -347,6 +362,27 @@ const usersSlice = createSlice({
         state.readNotify = "failed";
         console.log(state.error);
         console.log(state.readNotify);
+      })
+      .addCase(readMassage.pending, (state, action) => {
+        state.readMsg_status = "loading";
+        console.log(state.readMsg_status);
+      })
+
+      .addCase(readMassage.fulfilled, (state, action) => {
+        console.log(action.payload);
+
+        if (action.payload.modifiedCount === 1) {
+          state.readMsg_status = "succeeded";
+          console.log(state.readMsg_status);
+          state.error=null
+        }
+      })
+
+      .addCase(readMassage.rejected, (state, action) => {
+        state.error = action.error?.message;
+        state.readMsg_status = "failed";
+        console.log(state.error);
+        console.log(state.readMsg_status);
       });
   },
 });

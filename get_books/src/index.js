@@ -23,13 +23,24 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 export const persistor = persistStore(myStore);
 
 export const reset = async () => {
+
+  persistor.pause()
+  await persistor.flush()
  await persistor.purge();
+//  persistor.pause()
+//  pause()
 };
-export const register = async () => {
- await persistor.flush()
-};
-export const re = async () => {
-  persistor.persist()
+// export const register = async () => {
+//  await persistor.getState()
+// };
+// export const re = async () => {
+
+//   //  pause()
+
+// };
+export const pause = async () => {
+
+
 };
 
 root.render(
