@@ -19,6 +19,7 @@ import {
 import {
   getCurrentUser,
   getUser,
+  getUsersSlice,
 } from "../../../shared/redux/features/usersSlice";
 import { CircularProgress } from "@mui/material";
 import { CAT } from "../../../shared/constants/globalinfo/URL`S";
@@ -35,31 +36,32 @@ export default function AddBook() {
   const dispatch = useDispatch();
   const { error, bookJustLoaded, addBook_status } = useSelector(booksS);
   const user_id = useSelector(getCurrentUser);
+  const { currentUser } = useSelector(getUsersSlice);
 
   const [clicked, setClicked] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
   const [cat, setCat] = useState([]);
-const addCatRef = useRef()
+  const addCatRef = useRef();
   // get category list
   const onEntering = async () => {
- 
-    if(user_id?._id.length> 0)
-    try {
-      let data = await (await doApiGet(CAT)).data
-      console.log(data)
-      setCat(data)
-  }
-  catch (err) {
-    console.log(err);
-      throw err?.response?.data[0]?.message
-  }
-   
+    if (user_id?._id.length > 0)
+      try {
+        let data = await (await doApiGet(CAT)).data;
+        console.log(data);
+        setCat(data);
+      } catch (err) {
+        console.log(err);
+        throw err?.response?.data[0]?.message;
+      }
   };
-
-
+  // useEffect(() => {
+  //   // currentUser===null &&
+  // }, []);
 
   useEffect(() => {
-    onEntering();
+    if (!currentUser) {
+      toast.info("נא התחבר") && nav("login");
+    } else onEntering();
     // console.log(saveOnRefresh);
   }, []);
 
@@ -96,10 +98,10 @@ const addCatRef = useRef()
   // submit form
   const onSub = async (_dataBody) => {
     console.log(_dataBody);
-    
+
     if (_dataBody.image[0])
-    _dataBody.image = await uploadImg(_dataBody.image[0]);
-    
+      _dataBody.image = await uploadImg(_dataBody.image[0]);
+
     setClicked(true);
     delete _dataBody.deliver;
     dispatch(addBook(_dataBody));
@@ -209,7 +211,6 @@ const addCatRef = useRef()
             <small className="d-block text-danger">choose a category</small>
           )}
 
-
           {loadingImg || addBook_status === "loading" ? (
             <button className="btn btn-info mt-3">
               <div>
@@ -221,7 +222,6 @@ const addCatRef = useRef()
             <button className="btn btn-info mt-3">הוסף</button>
           )}
         </form>
-
       </div>
     </div>
   );

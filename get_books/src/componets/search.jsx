@@ -117,19 +117,19 @@ export default function Search() {
     <div className="container d-flex align-items-center justify-content-center mt-5 pb-5">
       <div
         style={{
-          width: innerWidthSize < 768 ? "auto" : "auto",
+          width: "auto",
         }}
         className="row"
       >
-        <div className="p-2 ">
+        <div className=" p-2 ">
           {srchBooks_status === "succeeded" &&
             srchRes?.length > 0 &&
             srchRes?.map((item, i) => {
               return (
                 <div key={item._id}>
-                  <div className="d-md-flex p-2 ">
+                  <div className="d-md-flex flex-wrap  justify-content-center p-2 ">
                     {/* right */}
-                    <div className="d-md-flex ">
+                    <div className="d-md-flex flex-wrap justify-content-center">
                       {/* img */}
                       <div className="ps-3">
                         <Link

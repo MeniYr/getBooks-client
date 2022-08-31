@@ -38,6 +38,7 @@ import ReactConfetti from "react-confetti";
 import NotifyMsgNavbar from "../components/notifyMsgNavbar";
 import moment from "moment";
 import { GrBook } from "react-icons/gr";
+import { useEffect } from "react";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -75,7 +76,14 @@ export default function PrimarySearchAppBar() {
   const dispatch = useDispatch();
   const srchRef = React.useRef(null);
   const { token, userName, id } = useSelector((state) => state.token);
-  const { userNotify, userMsg, countNotify, countMsg, currentUser, readMsg_status } = useSelector(getUsersSlice);
+  const {
+    userNotify,
+    userMsg,
+    countNotify,
+    countMsg,
+    currentUser,
+    readMsg_status,
+  } = useSelector(getUsersSlice);
   const {
     getBooks_status,
     userOnDeliveryBooks,
@@ -96,10 +104,24 @@ export default function PrimarySearchAppBar() {
 
   const nav = useNavigate();
 
+  useEffect(() => {
+    const notifyCheck = () => {
+      setInterval(() => {
+        if (currentUser) {
+          console.log("interval");
+          dispatch(getUser());
+        }
+      }, 600000);
+    };
+
+    notifyCheck();
+    return () => clearInterval(notifyCheck);
+  }, []);
+
   React.useEffect(() => {
     currentUser && dispatch(getUser());
-    console.log("countNotify",countNotify);
-    console.log("countMsg",countMsg);
+    console.log("countNotify", countNotify);
+    console.log("countMsg", countMsg);
     console.log(
       getAllMyBooks_status,
       userBooks,
@@ -115,7 +137,6 @@ export default function PrimarySearchAppBar() {
     msgRefresh,
     readMsg_status,
     swichHide_status,
-
   ]);
 
   // run search resault
@@ -211,7 +232,6 @@ export default function PrimarySearchAppBar() {
             key={item?._id}
             onClick={() => {
               item?.isRead === false && dispatch(readNotify(item?._id));
-              //&& dispatch(getUser());
               setOpenModal(true);
               setNotify(item);
               handleNoteMenuClose();
@@ -322,14 +342,8 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       {/* Messages */}
-      <MenuItem
-        onClick={handleMsgMenuOpen}>
-        <IconButton
-        
-          size="large"
-          aria-label="show 4 new mails"
-          color="inherit"
-        >
+      <MenuItem onClick={handleMsgMenuOpen}>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={countMsg} color="error">
             <MailIcon />
           </Badge>
@@ -353,7 +367,7 @@ export default function PrimarySearchAppBar() {
 
       {/* myAccount */}
       <MenuItem
-      className="d-flex"
+        className="d-flex"
         onClick={handleMyBooksMenuOpen}
         sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
       >
@@ -361,7 +375,6 @@ export default function PrimarySearchAppBar() {
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
-   
         >
           <MdOutlineBookmarks />
         </IconButton>
@@ -403,7 +416,9 @@ export default function PrimarySearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {openModal && <Delivery toOpenModal={setOpenModal} note={notify} />}
-      {openMsgModal &&   <NotifyMsgNavbar toOpenModal={setOpenMsgModal} msg={msg} />}
+      {openMsgModal && (
+        <NotifyMsgNavbar toOpenModal={setOpenMsgModal} msg={msg} />
+      )}
       <AppBar position="static">
         <Toolbar>
           {/* menu */}
@@ -426,7 +441,7 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             // noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block", md: "block" } }} //style
+            sx={{ display: { xs: "none", sm: "none", md: "none", lg:"block" } }} //style
           >
             <Link
               className="text-white fst-italic fs-2 fw-semibold text-decoration-none"
@@ -439,7 +454,7 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             // noWrap
             component="div"
-            sx={{ display: { xs: "block", sm: "none", md: "none" } }} //style
+            sx={{ display: { xs: "block", sm: "block", md: "block", lg:"none" } }} //style
           >
             <Link
               className="text-white fst-italic fs-4 fw-semibold text-decoration-none ps-3"

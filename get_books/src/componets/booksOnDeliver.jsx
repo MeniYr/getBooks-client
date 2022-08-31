@@ -74,7 +74,7 @@ export default function BooksOnDeliver() {
 
   return (
     <div className="container position-relative">
-      <div className="row p-2 d-flex justify-content-center text-center">
+      <div className="row p-2 d-md-flex  justify-content-center text-center">
         <p className="">בתהליך מסירה</p>
         {getAllMyBooks_status === "succeeded" &&
           currentUser &&
@@ -83,11 +83,11 @@ export default function BooksOnDeliver() {
               <div
                 key={book._id}
                 style={{
-                  height: "50px",
+                  minHeight: "50px",
                 }}
-                className="p-2  mb-2 border border-success my-auto d-flex align-items-center rounded-2"
+                className="p-2  mb-2 border border-success my-auto d-md-flex align-items-center rounded-2"
               >
-                <div className="d-flex  justify-content-between w-100">
+                <div className="d-md-flex  justify-content-between w-100">
                   <Tooltip
                     title="ימים שעברו"
                     className={`${dateCulc > 1 && "bg-warning"} ${

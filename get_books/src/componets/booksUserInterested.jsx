@@ -58,7 +58,7 @@ export default function BooksUserInterested() {
   };
   return (
     <div className="container ">
-      <div className="row p-2 d-flex justify-content-center ">
+      <div className="row p-2 d-md-flex justify-content-center ">
         <p className="">ספרים שהתעניינתי</p>
         {getAllMyBooks_status === "succeeded" &&
           currentUser &&
@@ -68,16 +68,16 @@ export default function BooksUserInterested() {
                 <div
                   key={book?._id}
                   style={{
-                    height: "50px",
+                    minHeight: "50px",
                   }}
-                  className="p-2 mb-2 col-12 border border-success  d-flex align-items-center rounded-2"
+                  className="p-2 mb-2 col-md-12 border border-success  d-md-flex align-items-center rounded-2"
                 >
-                  <div className="d-flex justify-content-between align-items-center w-100">
+                  <div className="d-md-flex justify-content-between align-items-center w-100">
                     <div
                     className="">
                       <Link
                         to={`/fullBook/${book._id}`}
-                        className="text-decoration-none text-body  fs-6 fw-semibold  "
+                        className="text-decoration-none text-body  fs-md-6 fw-semibold  "
                       >
                         { book.name}
                          
