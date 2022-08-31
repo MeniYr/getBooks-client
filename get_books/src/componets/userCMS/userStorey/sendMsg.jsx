@@ -35,17 +35,22 @@ export default function SendMsg({ id, bookId, msgClose }) {
   const toUserId = params.userId;
   // const [closeMsgBtn, setCloseMsgBtn] = useState(true)
 
-//   useEffect(() => {
-    // return () => {
-    //   dispatch(findBook(bookId || id));
-    // };
-//   }, [sendBookMassage_status, msg_status]);
+  //   useEffect(() => {
+  // return () => {
+  //   dispatch(findBook(bookId || id));
+  // };
+  //   }, [sendBookMassage_status, msg_status]);
 
   const onSub = (_dataBody) => {
-    console.log(bookId);
     let msg = {
       fromUserId: user._id,
       toUserId: toUserId || bookId,
+      msg: _dataBody.msg,
+    };
+    let msgToId = {
+      fromUserId: user._id,
+      toUserId: id,
+      msg: _dataBody.msg,
     };
 
     let bookMsg = {
@@ -54,9 +59,9 @@ export default function SendMsg({ id, bookId, msgClose }) {
       msg: _dataBody.msg,
     };
     toUserId && dispatch(sendMassage(msg));
-
+    id && dispatch(sendMassage(msgToId));
     bookId && dispatch(sendBookMassage(bookMsg));
-    id?msgClose(false):nav(-1)
+    id ? msgClose(false) : nav(-1);
   };
 
   useEffect(() => {
@@ -75,16 +80,18 @@ export default function SendMsg({ id, bookId, msgClose }) {
   }, [msg_status]);
 
   return (
-    <div className={`modal d-flex align-items-center d-block`}>
+    <div
+      className={`modal ${styles.modal} d-flex align-items-center justify-content-center d-block`}
+    >
       <div
         style={{
-          width: "fit-content",
+          width: "auto",
         }}
-        className="modal-dialog"
+        className="modal-dialog "
       >
-        <div className="modal-content">
+        <div className="modal-content ">
           <button
-            onClick={() => id?msgClose(false):nav(-1) }
+            onClick={() => (id ? msgClose(false) : nav(-1))}
             className="p-3 btn btn-close"
           ></button>
           <div className="modal-header">

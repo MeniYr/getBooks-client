@@ -19,7 +19,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "@mui/material";
 import { booksS, getBooks, srchBooks } from "../redux/features/bookSlice";
-import { MdHome } from "react-icons/md";
+import {
+  MdBook,
+  MdBookmarks,
+  MdHome,
+  MdOutlineBookmarks,
+} from "react-icons/md";
 import {
   getUser,
   getUsersSlice,
@@ -32,6 +37,7 @@ import { AuthWithToken } from "../redux/features/tokenSlice";
 import ReactConfetti from "react-confetti";
 import NotifyMsgNavbar from "../components/notifyMsgNavbar";
 import moment from "moment";
+import { GrBook } from "react-icons/gr";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -69,7 +75,7 @@ export default function PrimarySearchAppBar() {
   const dispatch = useDispatch();
   const srchRef = React.useRef(null);
   const { token, userName, id } = useSelector((state) => state.token);
-  const { userNotify, countNotify, currentUser } = useSelector(getUsersSlice);
+  const { userNotify, userMsg, countNotify, countMsg, currentUser, readMsg_status } = useSelector(getUsersSlice);
   const {
     getBooks_status,
     userOnDeliveryBooks,
@@ -92,7 +98,8 @@ export default function PrimarySearchAppBar() {
 
   React.useEffect(() => {
     currentUser && dispatch(getUser());
-    console.log(countNotify);
+    console.log("countNotify",countNotify);
+    console.log("countMsg",countMsg);
     console.log(
       getAllMyBooks_status,
       userBooks,
@@ -106,7 +113,9 @@ export default function PrimarySearchAppBar() {
     changeUserToDeliver_status,
     refresh,
     msgRefresh,
+    readMsg_status,
     swichHide_status,
+
   ]);
 
   // run search resault
@@ -138,12 +147,12 @@ export default function PrimarySearchAppBar() {
 
   const handleMsgMenuOpen = (event) => {
     setMsgRefresh(!refresh);
-    // dispatch(getUser(currentUser?._id));
+    dispatch(getUser(currentUser?._id));
     setMsgEl(event.currentTarget);
   };
 
-  const handlePersonalAriaMenuOpen = (event) => {
-    nav("/myAccount");
+  const handleMyBooksMenuOpen = (event) => {
+    nav("/myBooks");
     setAnchorEl(event.currentTarget);
   };
 
@@ -260,7 +269,7 @@ export default function PrimarySearchAppBar() {
       open={isMsgMenuOpen}
       onClose={handleMsgMenuClose}
     >
-      {currentUser?.msg?.map((item) => {
+      {userMsg?.map((item) => {
         return (
           <MenuItem
             sx={{
@@ -269,8 +278,8 @@ export default function PrimarySearchAppBar() {
             key={item?._id}
             onClick={() => {
               item?.isRead === false && dispatch(readMassage(item?._id));
-              setOpenMsgModal(true);
               setMSg(item);
+              setOpenMsgModal(true);
               handleMsgMenuClose();
             }}
           >
@@ -279,8 +288,7 @@ export default function PrimarySearchAppBar() {
                 item?.isRead === false ? "opacity-100" : "opacity-50"
               }`}
             >
-              {moment(item?.date).format("DD-MM-YYYY, HH:mm")}{" "}
-              <br/>
+              {moment(item?.date).format("DD-MM-YYYY, HH:mm")} <br />
               {item.fromUserId?.name}
             </p>
           </MenuItem>
@@ -314,14 +322,19 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       {/* Messages */}
-      <MenuItem>
+      <MenuItem
+        onClick={handleMsgMenuOpen}>
+        <IconButton
         
-        <IconButton onClick={handleMsgMenuOpen} size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          size="large"
+          aria-label="show 4 new mails"
+          color="inherit"
+        >
+          <Badge badgeContent={countMsg} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p className="my-auto">הודעות</p>
       </MenuItem>
       {/* Notifications */}
       <MenuItem>
@@ -335,42 +348,37 @@ export default function PrimarySearchAppBar() {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-
-      {/* home */}
-      <MenuItem
-        //TODO ICON HOME
-        className="d-flex justify-content-center"
-      >
-        <Link
-          className="btn w-100 btn d-md-inline-flex align-items-center"
-          to={"/"}
-        >
-          בית
-        </Link>
+        <p className="my-auto">התראות</p>
       </MenuItem>
 
       {/* myAccount */}
       <MenuItem
-        onClick={handlePersonalAriaMenuOpen}
+      className="d-flex"
+        onClick={handleMyBooksMenuOpen}
         sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
       >
         <IconButton
           size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          // aria-haspopup="true"
+          aria-label="show 17 new notifications"
           color="inherit"
+   
         >
-          <AccountCircle />
-          <p>איזור אישי</p>
+          <MdOutlineBookmarks />
         </IconButton>
+        <p>הספרים שלי</p>
       </MenuItem>
 
       {/* login */}
-      <MenuItem className="d-flex justify-content-center">
-        <p>{currentUser?.name}</p>
+      <MenuItem className=" p-0 m-0 h-100">
+        <p className="badge text-black bg-info shadow  h-25 m-0 p-1 mx-auto">
+          {currentUser?.name}
+        </p>
+      </MenuItem>
+      <MenuItem
+        className={`d-md-flex justify-content-center ${
+          window.innerWidth < 768 && "d-block"
+        }`}
+      >
         {token === null ? (
           <Link
             className="btn w-100 btn-success d-md-inline-flex align-items-center"
@@ -395,7 +403,7 @@ export default function PrimarySearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       {openModal && <Delivery toOpenModal={setOpenModal} note={notify} />}
-      {openMsgModal && <NotifyMsgNavbar toOpenModal={setOpenMsgModal} msg={msg} />}
+      {openMsgModal &&   <NotifyMsgNavbar toOpenModal={setOpenMsgModal} msg={msg} />}
       <AppBar position="static">
         <Toolbar>
           {/* menu */}
@@ -489,7 +497,7 @@ export default function PrimarySearchAppBar() {
                   color="inherit"
                   onClick={handleMsgMenuOpen}
                 >
-                  <Badge badgeContent={4} color="error">
+                  <Badge badgeContent={countMsg} color="error">
                     <Tooltip title="הודעות">
                       <MailIcon />
                     </Tooltip>
@@ -518,11 +526,11 @@ export default function PrimarySearchAppBar() {
                   aria-label="account of current user"
                   aria-controls={menuId}
                   aria-haspopup="true"
-                  onClick={() => nav("/myAccount")}
+                  onClick={handleMyBooksMenuOpen}
                   color="inherit"
                 >
-                  <Tooltip title="אזור אישי">
-                    <AccountCircle />
+                  <Tooltip title="הספרים שלי">
+                    <MdOutlineBookmarks />
                   </Tooltip>
                 </IconButton>
               </>

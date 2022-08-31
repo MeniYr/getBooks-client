@@ -45,7 +45,7 @@ export default function Delivery({ toOpenModal, note }) {
 
   return (
     <div>
-      {note.fromUserId._id !== note.bookID.userID && note?.isForDeliver!==true && (
+      {note?.fromUserId?._id !== note?.bookID?.userID && note?.isForDeliver!==true && (
         <div className={`modal  d-block`} tabIndex="-1">
           <div className="modal-dialog ">
             <div className="modal-content d-flex justify-content-center">
@@ -62,9 +62,9 @@ export default function Delivery({ toOpenModal, note }) {
                   <Link
                     onClick={() => toOpenModal(false)}
                     className="text-decoration-none navbar-text"
-                    to={`/fullBook/${note.bookID._id}`}
+                    to={`/fullBook/${note?.bookID?._id}`}
                   >
-                    {note.bookID.name}
+                    {note?.bookID?.name}
                   </Link>
                 </h5>
               </div>
@@ -72,7 +72,7 @@ export default function Delivery({ toOpenModal, note }) {
                 <div className=" d-md-flex p-2 ">
                   <div className="p-2 ">
                     <img
-                      src={note.bookID.image}
+                      src={note?.bookID?.image}
                       className="shadow rounded-1"
                       alt="book pic"
                       width={109}
@@ -80,9 +80,9 @@ export default function Delivery({ toOpenModal, note }) {
                     />
                   </div>
                   <div className="text-wrap p-2">
-                    {note.bookID.description.length > 200
-                      ? note.bookID.description.substring(0, 200) + "..."
-                      : note.bookID.description}
+                    {note?.bookID?.description?.length > 200
+                      ? note?.bookID?.description?.substring(0, 200) + "..."
+                      : note?.bookID?.description}
                   </div>
                 </div>
                 <hr />

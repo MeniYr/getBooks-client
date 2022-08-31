@@ -40,7 +40,11 @@ export default function Home() {
   // }, [id]);
 
   return (
-    <div style={{}} className=" shadow p-2 bg-gradient m-2 mt-3  d-block">
+    <div style={{}} className={` ${window.innerWidth>768 && "shadow"} p-2 bg-gradient m-2 mt-3  d-block`}>
+     {window.innerWidth<768 && <div>
+      <h1 className="display-1 fw-bolder shadow w-75 text-center p-2 mx-auto rounded-circle" style={{color:"#557EC7"}}>Get Books</h1>
+      </div>
+      }
       <div className={`${style_css.recently} p-2`}>
         <RecentlyAdded />
       </div>

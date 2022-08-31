@@ -100,9 +100,7 @@ export default function BooksOnDeliver() {
                     to={`/fullBook/${book._id}`}
                     className="text-decoration-none text-body my-auto fs-6 fw-semibold col-7 "
                   >
-                    {book.name.length > 10
-                      ? book.name.substring(0, 10) + "..."
-                      : book.name}
+                    {book.name}
                   </Link>
                   <button
                     onClick={() => {
@@ -126,7 +124,7 @@ export default function BooksOnDeliver() {
                 )}
               </div>
             );
-          })}
+          })}                     
       </div>
       {book.length === 0 && (
         <p className="d-flex justify-content-center text-center">

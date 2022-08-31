@@ -1,8 +1,12 @@
 label{
 overflow-y:auto ;
 }
+.modal{
+    background: rgba(0, 0, 0, 0.4)
+}
 
-/* .modal
+
+/* 
 
     /* background: red;
     color: red; */

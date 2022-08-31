@@ -56,17 +56,7 @@ const addCatRef = useRef()
    
   };
 
-  const addCat = async() =>{
-    try {
-      let data = await (await doApiMethod(`${CAT}/add`, "POST", addCatRef)).data
-      console.log(data)
-     onEntering()
-  }
-  catch (err) {
-    console.log(err);
-      throw err?.response?.data[0]?.message
-  }
-  }
+
 
   useEffect(() => {
     onEntering();
@@ -231,11 +221,7 @@ const addCatRef = useRef()
             <button className="btn btn-info mt-3">הוסף</button>
           )}
         </form>
-         {user_id?.role==="admin"&& <div className='d-flex py-2'>
-            <label >הוסף קטגוריה</label>
-            <input ref={addCatRef} className='ms-2 border mx-2' />
-            <button onClick={addCat}>הוסף</button>
-          </div>}
+
       </div>
     </div>
   );

@@ -164,13 +164,17 @@ const usersSlice = createSlice({
     currentUser: null,
     users: [],
     userNotify: [],
+    userMsg: [],
     countNotify: 0,
+    countMsg: 0,
     status: "idle",
     getUser_status: "idle",
     getUsers_status: "idle",
     signUp_status: "idle",
     addNote_status: "idle",
     msg_status: "idle",
+    readNotify_status:"idle",
+    readMsg_status:"idle",
     userNotifyAlready: false,
     error: null,
   },
@@ -235,14 +239,28 @@ const usersSlice = createSlice({
           // state.users.push(action.payload)
           state.getUser_status = "succeeded";
           state.currentUser = action.payload;
+
+
           state.userNotify = action.payload.notifications.sort(
             (a, b) => moment(b.date) - moment(a.date)
           );
-          let count = 0;
+          let countNOte = 0;
           action.payload.notifications.forEach((note) => {
-            if (note.isRead === false) count++;
+            if (note.isRead === false) countNOte++;
           });
-          state.countNotify = count;
+          state.countNotify = countNOte;
+
+
+
+          state.userMsg = action.payload.msg.sort(
+            (a, b) => moment(b.date) - moment(a.date)
+          );
+          let countMsg = 0;
+          action.payload.msg.forEach((msg) => {
+            if (msg.isRead === false) countMsg++;
+            console.log(msg.isRead);
+          });
+          state.countMsg = countMsg;
           console.log(state.status);
           console.log(state.currentUser);
         }
@@ -344,7 +362,7 @@ const usersSlice = createSlice({
         console.log(state.addNote_status);
       })
       .addCase(readNotify.pending, (state, action) => {
-        state.readNotify = "loading";
+        state.readNotify_status = "loading";
         console.log(state.readNotify);
       })
 
@@ -352,16 +370,16 @@ const usersSlice = createSlice({
         console.log(action.payload);
 
         if (action.payload.modifiedCount === 1) {
-          state.readNotify = "succeeded";
+          state.readNotify_status = "succeeded";
           console.log(state.readNotify);
         }
       })
 
       .addCase(readNotify.rejected, (state, action) => {
         state.error = action.error?.message;
-        state.readNotify = "failed";
+        state.readNotify_status = "failed";
         console.log(state.error);
-        console.log(state.readNotify);
+        console.log(state.readNotify_status);
       })
       .addCase(readMassage.pending, (state, action) => {
         state.readMsg_status = "loading";

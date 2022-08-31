@@ -66,13 +66,23 @@ id!==currentUser?._id  && dispatch(getUser())
           >
             <IconButton
               onClick={() => nav("/addBook")}
-              sx={{
+              
+                sx={window.innerWidth>768 ?{
                 // border:"2px solid black",
                 position: "fixed",
                 left: "300px",
-                bottom: "50px",
+                bottom: "100px",
                 zIndex: "99",
-              }}
+              }:{
+                // border:"2px solid black",
+                position: "fixed",
+                left: "30px",
+                bottom: "100px",
+                zIndex: "99",
+              }
+            
+            }
+            
               aria-label="add"
               className={`${style_css.addBtn}`}
             >

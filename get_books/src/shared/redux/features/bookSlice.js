@@ -97,6 +97,7 @@ const booksSlice = createSlice({
     srchBooks_status: "idle",
     sendBookMassage_status: "idle",
     getAllMyBooks_status: "idle",
+    swichHide_status:"idle" ,
     currentBook_status: "idle",
     error: null,
   },
