@@ -127,7 +127,7 @@ export default function Search() {
             srchRes?.map((item, i) => {
               return (
                 <div key={item._id}>
-                  <div className="d-md-flex flex-wrap  justify-content-center p-2 ">
+                  <div className="d-md-flex flex-wrap   p-2 ">
                     {/* right */}
                     <div className="d-md-flex flex-wrap justify-content-center">
                       {/* img */}

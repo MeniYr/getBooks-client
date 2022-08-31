@@ -111,7 +111,7 @@ export default function PrimarySearchAppBar() {
           console.log("interval");
           dispatch(getUser());
         }
-      }, 600000);
+      }, 6000);
     };
 
     notifyCheck();
@@ -421,22 +421,7 @@ export default function PrimarySearchAppBar() {
       )}
       <AppBar position="static">
         <Toolbar>
-          {/* menu */}
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{
-              ml: 1,
-              display: { xs: "none", md: "block" },
-            }}
-            onClick={handleProfileMenuOpen}
-          >
-            <MenuIcon />
-          </IconButton> */}
 
-          {/* logo */}
           <Typography
             variant="h6"
             // noWrap
