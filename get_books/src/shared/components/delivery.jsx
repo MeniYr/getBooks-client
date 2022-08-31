@@ -12,6 +12,8 @@ import { getAllBooks, getAllMyBooks, getBooks, swichHide } from "../redux/featur
 import { changeUserToDeliver, delivery } from "../redux/features/deliverySlice";
 import { myStore } from "../redux/globalStore/store";
 import BooksOnDeliver from "../../componets/booksOnDeliver";
+import { doApiMethod } from "../services/apiService";
+import { DELIVERY } from "../constants/globalinfo/URL`S";
 
 export default function Delivery({ toOpenModal, note }) {
   const [openMsg, setOpenMsg] = useState(false);
@@ -19,6 +21,8 @@ export default function Delivery({ toOpenModal, note }) {
   const [notify, setNotify] = useState({});
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
+  const { changeUserToDeliver_status} =
+    useSelector(delivery);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,6 +32,13 @@ export default function Delivery({ toOpenModal, note }) {
   useEffect(() => {
     notify?.bookID && onDeliverClick();
   }, [notify]);
+  useEffect(() => {
+    let toSend = {
+      bookId: notify.bookID,
+      userId: currentUser._id
+    }
+    doApiMethod(`${DELIVERY}/ifNotDeliverd`, "PUT",toSend )
+  }, [changeUserToDeliver_status]);
 
 
   const onDeliverClick = () => {

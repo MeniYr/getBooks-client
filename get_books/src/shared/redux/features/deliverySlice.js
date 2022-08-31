@@ -260,6 +260,8 @@ const deliverySlice = createSlice({
           state.error = null;
           console.log(action.payload);
           console.log(state.changeUserToDeliver_status);
+
+          
         }
       })
 

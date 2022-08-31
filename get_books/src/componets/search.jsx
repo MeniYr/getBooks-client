@@ -95,11 +95,10 @@ export default function Search() {
   useEffect(() => {
     // (getUsers());
     dispatch(getBooks());
- 
   }, []);
 
   const onClickInterested = (note) => {
-    // console.log(exist.loading);
+    console.log("onClickInterested");
     // console.log(exist.error);
     // exist.error && toast.info("נא התחבר");
     if (currentUser !== null) {
@@ -249,6 +248,7 @@ export default function Search() {
                               onClick={() => {
                                 // error&&toast.info("נא התחבר")&&
                                 // nav("/login")
+                                console.log("onClick");
                                 let notify = {
                                   fromUserId: currentUser?._id,
                                   toUserId: item?.userID?._id,

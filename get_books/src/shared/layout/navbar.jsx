@@ -103,20 +103,21 @@ export default function PrimarySearchAppBar() {
   const [msgRefresh, setMsgRefresh] = React.useState(false);
 
   const nav = useNavigate();
-
-  useEffect(() => {
+  React.useEffect(() => {
+    // console.log("layout");
     const notifyCheck = () => {
       setInterval(() => {
-        if (currentUser) {
+        if (currentUser!==null) {
           console.log("interval");
           dispatch(getUser());
         }
-      }, 6000);
+      }, 3000);
     };
 
     notifyCheck();
-    return () => clearInterval(notifyCheck);
-  }, []);
+    return () => clearInterval(notifyCheck());
+  },[]);
+
 
   React.useEffect(() => {
     currentUser && dispatch(getUser());

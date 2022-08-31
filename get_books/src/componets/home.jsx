@@ -18,7 +18,7 @@ import {
   user_from_token,
   user_name,
 } from "../shared/redux/features/tokenSlice";
-import { getUsersSlice } from "../shared/redux/features/usersSlice";
+import { getUser, getUsersSlice } from "../shared/redux/features/usersSlice";
 import RecentlyAdded from "./userCMS/bookStory/recentlyAdded";
 import style_css from "../shared/layout/layoutCss.module.css";
 import HighRetes from "./userCMS/bookStory/highRatingBooks";
@@ -32,12 +32,15 @@ export default function Home() {
   const { bookJustLoaded } = useSelector(booksS);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const { currentUser } = useSelector(getUsersSlice);
 
   // useEffect(() => {
   // id!==""&&dispatch(AuthWithToken())
   // currentUser?._id && dispatch(myBooks(id))
   // currentUser?._id && dispatch(myBooks(id));
   // }, [id]);
+
+
 
   return (
     <div style={{}} className={` ${window.innerWidth>768 && "shadow"} p-2 bg-gradient m-2 mt-3  d-block`}>
