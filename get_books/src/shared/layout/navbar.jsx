@@ -18,7 +18,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "@mui/material";
-import { booksS, getBooks, srchBooks } from "../redux/features/bookSlice";
+import { booksS, getAllBooks, getBooks, srchBooks } from "../redux/features/bookSlice";
 import {
   MdBook,
   MdBookmarks,
@@ -28,17 +28,19 @@ import {
 import {
   getUser,
   getUsersSlice,
+  logOutFromUsers,
   readMassage,
   readNotify,
 } from "../redux/features/usersSlice";
 import Delivery from "../components/delivery";
 import { delivery } from "../redux/features/deliverySlice";
-import { AuthWithToken } from "../redux/features/tokenSlice";
+import { AuthWithToken, logOutFromToken } from "../redux/features/tokenSlice";
 import ReactConfetti from "react-confetti";
 import NotifyMsgNavbar from "../components/notifyMsgNavbar";
 import moment from "moment";
 import { GrBook } from "react-icons/gr";
 import { useEffect } from "react";
+import Logout from "../auth/logOut";
 
 // search style
 const Search = styled("div")(({ theme }) => ({
@@ -83,6 +85,7 @@ export default function PrimarySearchAppBar() {
     countMsg,
     currentUser,
     readMsg_status,
+    getUser_status
   } = useSelector(getUsersSlice);
   const {
     getBooks_status,
@@ -103,20 +106,7 @@ export default function PrimarySearchAppBar() {
   const [msgRefresh, setMsgRefresh] = React.useState(false);
 
   const nav = useNavigate();
-  React.useEffect(() => {
-    // console.log("layout");
-    const notifyCheck = () => {
-      setInterval(() => {
-        if (currentUser!==null) {
-          console.log("interval");
-          dispatch(getUser());
-        }
-      }, 3000);
-    };
 
-    notifyCheck();
-    return () => clearInterval(notifyCheck());
-  },[]);
 
 
   React.useEffect(() => {

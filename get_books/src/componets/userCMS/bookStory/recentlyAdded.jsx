@@ -18,8 +18,8 @@ export default function RecentlyAdded() {
       let array = [...books];
       return array.splice(0, 7);
     };
-    q();
-    setNewBooks(q());
+    
+    books&&setNewBooks(q());
   }, [addBook_status]);
 
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)

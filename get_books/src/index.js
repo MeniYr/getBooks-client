@@ -27,21 +27,9 @@ export const reset = async () => {
   persistor.pause()
   await persistor.flush()
  await persistor.purge();
-//  persistor.pause()
-//  pause()
 };
-// export const register = async () => {
-//  await persistor.getState()
-// };
-// export const re = async () => {
-
-//   //  pause()
-
-// };
-export const pause = async () => {
 
 
-};
 
 root.render(
   // <React.StrictMode>

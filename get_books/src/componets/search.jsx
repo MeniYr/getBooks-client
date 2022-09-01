@@ -214,8 +214,8 @@ export default function Search() {
                         )}
 
                         {/* favs */}
-                        <div className="d-flex align-items-center justify-content-between">
-                          <Tooltip
+                         <div className="d-flex align-items-center justify-content-between">
+                          {/* <Tooltip
                             title="הוספה למועדפים"
                             placement="bottom-end"
                           >
@@ -225,11 +225,11 @@ export default function Search() {
                                 cursor: "pointer",
                               }}
                             >
-                              {/* &nbsp; */}
-                              {/* <GrFavorite /> */}
-                              {/* <MdOutlineFavorite /> */}
-                            </p>
-                          </Tooltip>
+                              &nbsp;
+                              <GrFavorite />
+                              <MdOutlineFavorite />
+                            </p> 
+                          </Tooltip> */}
                           <br />
 
                           {currentUser?._id !== item.userID._id && (

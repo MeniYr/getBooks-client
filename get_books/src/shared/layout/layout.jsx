@@ -1,5 +1,5 @@
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -11,9 +11,17 @@ import style_css from "./layoutCss.module.css";
 import BooksOnDeliver from "../../componets/booksOnDeliver";
 import BooksUserInterested from "../../componets/booksUserInterested";
 import PrimarySearchAppBar from "./navbar";
-import { getUser, getUsersSlice } from "../redux/features/usersSlice";
+import {
+  getUser,
+  getUsersSlice,
+  logOutFromUsers,
+} from "../redux/features/usersSlice";
 import { booksS, getBooks } from "../redux/features/bookSlice";
-import { AuthWithToken, user_from_token } from "../redux/features/tokenSlice";
+import {
+  AuthWithToken,
+  logOutFromToken,
+  user_from_token,
+} from "../redux/features/tokenSlice";
 import Footer from "./footer";
 import { re, register, reset } from "../..";
 import { toast } from "react-toastify";
@@ -21,41 +29,55 @@ import { toast } from "react-toastify";
 export default function Layout() {
   const nav = useNavigate();
   const { token, logINStatus, id } = useSelector(user_from_token);
-  const { currentUser } = useSelector(getUsersSlice);
-  const [width, setWidth] = useState(window.innerWidth)
-
+  const { currentUser, getUser_status } = useSelector(getUsersSlice);
+  const [width, setWidth] = useState(window.innerWidth);
+  const currentUserCheck = useRef();
   const {
     getBooks_status,
     userOnDeliveryBooks,
     getAllMyBooks_status,
     userBooks,
     swichHide_status,
-    changeUserToDeliver_status
+    changeUserToDeliver_status,
   } = useSelector(booksS);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log("start layout effect");
 
+    const interval = setInterval(() => {
+      console.log(currentUser);
+      currentUserCheck.current && dispatch(getUser());
+    }, 60000);
+    return () => {
+      clearTimeout(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    currentUserCheck.current = currentUser;
+  }, [currentUser]);
 
   useEffect(() => {
     token && !currentUser && dispatch(AuthWithToken());
   }, [currentUser, token]);
-  useEffect(() => { 
+  useEffect(() => {
     console.log(window.innerWidth);
 
-    window.addEventListener('resize',()=> setWidth(window.innerWidth));
-    return () => window.removeEventListener('resize', setWidth(window.innerWidth))
-   
-  },[]);
+    window.addEventListener("resize", () => setWidth(window.innerWidth));
+    return () =>
+      window.removeEventListener("resize", setWidth(window.innerWidth));
+  }, []);
 
   useEffect(() => {
     logINStatus === "succeeded" && !currentUser && dispatch(getUser());
-  }, [logINStatus, currentUser,]);
+  }, [logINStatus, currentUser]);
   useEffect(() => {
     id !== currentUser?._id && dispatch(getUser());
   }, [id]);
   useEffect(() => {
-     dispatch(getUser());
-  }, [    changeUserToDeliver_status  ]);
+    dispatch(getUser());
+  }, [changeUserToDeliver_status]);
 
   return (
     <div className="container-fluid">
@@ -79,11 +101,8 @@ export default function Layout() {
             >
               <IconButton
                 onClick={() => {
-                  if(currentUser)
-                  nav("/addBook");
-                  else
-                  toast.info("נא התחבר") && nav("/login")
-
+                  if (currentUser) nav("/addBook");
+                  else toast.info("נא התחבר") && nav("/login");
                 }}
                 sx={
                   window.innerWidth > 768
