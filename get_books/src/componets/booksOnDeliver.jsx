@@ -43,8 +43,11 @@ export default function BooksOnDeliver() {
   const dateRef = useRef();
 
   useEffect(() => {
-    if (currentUser) dispatch(getUser());
-    dispatch(getAllMyBooks());
+    if (currentUser) {
+      dispatch(getUser());
+      dispatch(getAllMyBooks());
+    }
+    
   }, [refresh, swichHide_status, userOnDeliveryBooks, changeOwner_status,logINStatus]);
 
   useEffect(() => {

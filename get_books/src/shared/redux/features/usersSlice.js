@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { AuthWithToken, userID } from "./tokenSlice";
 import { USER_ByID_INFO, USER_INFO } from "../../constants/globalinfo/strings";
 import moment from "moment";
+import { PURGE } from "redux-persist";
 
 const USERS_URL = `${API_URL}/users`;
 
@@ -187,6 +188,11 @@ const usersSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+    .addCase(PURGE, (state) => {
+      console.log("here");
+      state.userByID = "";
+      state.currentUser = null;
+    })
       .addCase(getUsers.pending, (state, action) => {
         state.getUsers_status = "loading";
         console.log(state.getUsers_status);

@@ -12,7 +12,7 @@ import { user_from_token } from "../shared/redux/features/tokenSlice";
 import { getUsersSlice } from "../shared/redux/features/usersSlice";
 
 export default function BooksUserInterested() {
-  const dispatch = useDispatch(getDeliveries());
+  const dispatch = useDispatch();
   const { id, error, logINStatus } = useSelector(user_from_token);
   const { deliveries, addInterestedID_status } = useSelector(delivery);
   const { addNote_status, currentUser } = useSelector(getUsersSlice);
@@ -28,12 +28,16 @@ export default function BooksUserInterested() {
 
   useEffect(() => {
     // dispatch(getBooks())
+    if(currentUser)
     a();
   }, [deliveries]);
 
   useEffect(() => {
-    dispatch(getDeliveries());
+    if(currentUser){
+          dispatch(getDeliveries());
     a();
+    }
+
   }, [
     addNote_status,
     getAllMyBooks_status,

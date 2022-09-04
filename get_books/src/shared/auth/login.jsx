@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { REHYDRATE } from "redux-persist";
-import { persist, re, reset } from "../..";
+import { onLogin, persist, re, reset } from "../..";
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, {
   AuthWithToken,
@@ -31,28 +31,21 @@ export default function Login() {
   } = useForm();
 
   useEffect(() => {
-    // reset()
     clicked && logINStatus === "failed" && toast.error("email or user wrong");
     console.log(logINStatus);
   }, [error, logINStatus]);
 
-  // useEffect(() => {
-  //   if (userName != "" && clicked) toast.success(`ברוך הבא ${userName}`);
-  // }, [userName, clicked]);
-
   useEffect(() => {
     return () => {
       localStorage[TOKEN_NAME] && dispatch(getUser());
-      // token &&register();
     };
   }, [clicked, closeBtn, logINStatus]);
 
   useEffect(() => {
-    clicked &&
-      logINStatus === "succeeded" &&
-      setCloseBtn(false) &&
-      toast.success(`ברוך הבא ${userName}`);
-    !closeBtn && nav("/");
+    console.log(closeBtn, clicked, logINStatus);
+    clicked && logINStatus === "succeeded" && setCloseBtn(false);
+
+    if (!closeBtn) nav("/");
   }, [closeBtn, logINStatus]);
 
   const onSub = (_dataBody) => {

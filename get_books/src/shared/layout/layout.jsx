@@ -23,7 +23,7 @@ import {
   user_from_token,
 } from "../redux/features/tokenSlice";
 import Footer from "./footer";
-import { re, register, reset } from "../..";
+import { onLogin, re, register, reset } from "../..";
 import { toast } from "react-toastify";
 
 export default function Layout() {
@@ -44,9 +44,12 @@ export default function Layout() {
 
   useEffect(() => {
     console.log("start layout effect");
-
+// if(currentUser)
+// {
+//   onLogin()
+// }
     const interval = setInterval(() => {
-      console.log(currentUser);
+      // console.log(currentUserCheck.current);
       currentUserCheck.current && dispatch(getUser());
     }, 60000);
     return () => {
@@ -59,8 +62,9 @@ export default function Layout() {
   }, [currentUser]);
 
   useEffect(() => {
-    token && !currentUser && dispatch(AuthWithToken());
-  }, [currentUser, token]);
+    if (token && !currentUser) dispatch(AuthWithToken());
+  }, []);
+
   useEffect(() => {
     console.log(window.innerWidth);
 
@@ -70,14 +74,17 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
-    logINStatus === "succeeded" && !currentUser && dispatch(getUser());
+    if (logINStatus === "succeeded" && !currentUser) dispatch(getUser());
   }, [logINStatus, currentUser]);
   useEffect(() => {
-    id !== currentUser?._id && dispatch(getUser());
+    if (currentUser) {
+      id !== currentUser?._id && dispatch(getUser());
+    }
   }, [id]);
-  useEffect(() => {
-    dispatch(getUser());
-  }, [changeUserToDeliver_status]);
+  // useEffect(() => {
+  //   console.log("get user turn on");
+  //   dispatch(getUser());
+  // }, [changeUserToDeliver_status]);
 
   return (
     <div className="container-fluid">

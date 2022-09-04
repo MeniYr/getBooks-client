@@ -14,13 +14,16 @@ export default function RecentlyAdded() {
 
   useEffect(() => {
     dispatch(getBooks());
+  }, []);
+
+  useEffect(() => {
     const q = () => {
       let array = [...books];
       return array.splice(0, 7);
     };
-    
-    books&&setNewBooks(q());
-  }, [addBook_status]);
+
+    books && setNewBooks(q());
+  }, [addBook_status, getBooks_status]);
 
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
   return (

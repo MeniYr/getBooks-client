@@ -14,16 +14,17 @@ export default function HighRetes() {
 
   useEffect(() => {
     dispatch(getBooks());
+  }, []);
+
+  useEffect(() => {
     const q = () => {
       let array = [...books];
-      array = array.filter((item) => 
-        (item?.rate / item.rateQuanity) > 3
-      );
+      array = array.filter((item) => item?.rate / item.rateQuanity > 3);
       return array.splice(0, 7);
     };
     q();
     setNewBooks(q());
-  }, [addBook_status]);
+  }, [addBook_status, getBooks_status]);
 
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
   return (

@@ -23,7 +23,7 @@ const persistConfig = {
 };
 
 const persistedReducer_tokenSlice = persistReducer(persistConfig, tokenSlice);
-// const persistedReducer_usersSlice = persistReducer(persistConfig, usersSlice);
+const persistedReducer_usersSlice = persistReducer(persistConfig, usersSlice);
 const persistedReducer_booksSlice = persistReducer(persistConfig, booksSlice);
 const persistedReducer_deliverySlice = persistReducer(
   persistConfig,
@@ -32,7 +32,7 @@ const persistedReducer_deliverySlice = persistReducer(
 
 export const myStore = configureStore({
   reducer: {
-    users: usersSlice,
+    users: persistedReducer_usersSlice,
     token: persistedReducer_tokenSlice,
     books: persistedReducer_booksSlice,
     delivery: persistedReducer_deliverySlice,

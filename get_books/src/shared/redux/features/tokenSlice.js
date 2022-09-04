@@ -3,8 +3,8 @@ import {
   createSlice,
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
-import { PURGE } from "redux-persist";
-import { persistor, register, reset } from "../../..";
+import { FLUSH, PURGE } from "redux-persist";
+import { onLogin, persistor, register, reset } from "../../..";
 import {
   API_URL,
   doApiGet,
@@ -35,7 +35,7 @@ export const login = createAsyncThunk("token/login", async (_dataBody) => {
     let data = await (
       await doApiMethod(`${API_URL}/users/login`, "POST", _dataBody)
     ).data;
-    console.log(data);
+    console.log("data.expiredAt: ",data.expiredAt);
     if (data.token) {
       console.log(data.token);
       localStorage.setItem(TOKEN_NAME, data.token);
@@ -93,14 +93,14 @@ const tokenSlice = createSlice({
           console.log(action.payload);
           state.authStatus = "succeeded";
           state.role = action.payload.role;
-          // console.log(state.token)
         }
       })
-
+      
       .addCase(AuthWithToken.rejected, (state, action) => {
         state.authStatus = "failed";
         state.error = action.error;
         console.log("AuthWithToken.rejected", state.error);
+        window.location.assign("http://localhost:3001/logOut")
         // localStorage.removeItem(TOKEN_NAME)
         state.id = ""
         // state.token = null
@@ -115,7 +115,7 @@ const tokenSlice = createSlice({
         // console.log(state.token)
       })
 
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, async (state, action) => {
         if (action.payload) {
           console.log(action.payload);
           state.logINStatus = "succeeded";
@@ -124,7 +124,6 @@ const tokenSlice = createSlice({
           state.role = action.payload.user.role;
           state.id = action.payload.user.userID;
           state.userName = action.payload.user.name;
-// register()
           console.log(action.payload.token);
           console.log(state.id);
           console.log(action.payload);

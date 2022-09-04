@@ -111,15 +111,15 @@ export default function PrimarySearchAppBar() {
 
   React.useEffect(() => {
     currentUser && dispatch(getUser());
-    console.log("countNotify", countNotify);
-    console.log("countMsg", countMsg);
-    console.log(
-      getAllMyBooks_status,
-      userBooks,
-      changeUserToDeliver_status,
-      refresh,
-      swichHide_status
-    );
+    // console.log("countNotify", countNotify);
+    // console.log("countMsg", countMsg);
+    // console.log(
+    //   getAllMyBooks_status,
+    //   userBooks,
+    //   changeUserToDeliver_status,
+    //   refresh,
+    //   swichHide_status
+    // );
   }, [
     getAllMyBooks_status,
     userBooks,

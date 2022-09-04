@@ -146,7 +146,7 @@ const booksSlice = createSlice({
       // get
       .addCase(getBooks.pending, (state, action) => {
         state.getBooks_status = "loading";
-        console.log(state.getBooks_status);
+        // console.log(state.getBooks_status);
       })
 
       .addCase(getBooks.fulfilled, (state, action) => {
@@ -156,7 +156,7 @@ const booksSlice = createSlice({
           state.books = action.payload;
 
           console.log(action.payload);
-          console.log(state.getBooks_status);
+          // console.log(state.getBooks_status);
         }
       })
 

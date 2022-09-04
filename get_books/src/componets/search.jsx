@@ -56,7 +56,7 @@ export default function Search() {
 
   // rating func
   const rating = async (obj) => {
-    console.log(obj.e);
+    console.log(typeof(obj.e),obj.e);
     let isInt = Number.isInteger(obj.e);
     let num = Number(obj.e);
     if (!isInt && Math.ceil(num) > num) {
@@ -165,7 +165,7 @@ export default function Search() {
                           onChange={(e) =>
                             currentUser !== null && rating({ item, e })
                           }
-                          value={item?.rate / item?.rateQuanity}
+                          value={ item?.rate / item?.rateQuanity}
                           a11y={false}
                           isHalf={false}
                           edit={
