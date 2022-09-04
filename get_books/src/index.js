@@ -28,12 +28,6 @@ export const reset = async () => {
   await persistor.flush()
  await persistor.purge();
 };
-// export const onLogin = async () => {
-
-  // persistor.pause()
-  //  persistor.getState()
-//  await persistor.purge();
-// };
 
 
 
