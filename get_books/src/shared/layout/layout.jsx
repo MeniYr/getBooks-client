@@ -16,7 +16,7 @@ import {
   getUsersSlice,
   logOutFromUsers,
 } from "../redux/features/usersSlice";
-import { booksS, getBooks } from "../redux/features/bookSlice";
+import { booksS, getAllMyBooks, getBooks } from "../redux/features/bookSlice";
 import {
   AuthWithToken,
   logOutFromToken,
@@ -25,10 +25,11 @@ import {
 import Footer from "./footer";
 import { onLogin, re, register, reset } from "../..";
 import { toast } from "react-toastify";
+import { getDeliveries } from "../redux/features/deliverySlice";
 
 export default function Layout() {
   const nav = useNavigate();
-  const { token, logINStatus, id } = useSelector(user_from_token);
+  const { token, logINStatus, id,authStatus } = useSelector(user_from_token);
   const { currentUser, getUser_status } = useSelector(getUsersSlice);
   const [width, setWidth] = useState(window.innerWidth);
   const currentUserCheck = useRef();
@@ -46,7 +47,8 @@ export default function Layout() {
     console.log("start layout effect");
 // if(currentUser)
 // {
-//   onLogin()
+  dispatch(getAllMyBooks())
+  dispatch(getDeliveries())
 // }
     const interval = setInterval(() => {
       // console.log(currentUserCheck.current);
@@ -59,6 +61,7 @@ export default function Layout() {
 
   useEffect(() => {
     currentUserCheck.current = currentUser;
+ 
   }, [currentUser]);
 
   useEffect(() => {
@@ -74,8 +77,8 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
-    if (logINStatus === "succeeded" && !currentUser) dispatch(getUser());
-  }, [logINStatus, currentUser]);
+    if ((logINStatus === "succeeded" || authStatus=== "succeeded") && !currentUser) dispatch(getUser());
+  }, [logINStatus, currentUser,authStatus]);
   useEffect(() => {
     if (currentUser) {
       id !== currentUser?._id && dispatch(getUser());

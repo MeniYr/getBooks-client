@@ -20,14 +20,13 @@ import {
   getUsersSlice,
 } from "../shared/redux/features/usersSlice";
 import Confetti from "react-confetti";
-import { useRef } from "react";
 import moment from "moment";
 import { Tooltip } from "@mui/material";
 import { current } from "@reduxjs/toolkit";
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector(getUsersSlice);
+  const { currentUser,getUser_status } = useSelector(getUsersSlice);
   const {
     userOnDeliveryBooks,
     getAllMyBooks_status,
@@ -40,22 +39,36 @@ export default function BooksOnDeliver() {
   const [dateCulc, setDateCulc] = useState("");
   const [deliverClicked, setDeliverClicked] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const dateRef = useRef();
 
   useEffect(() => {
-    if (currentUser) {
-      dispatch(getUser());
       dispatch(getAllMyBooks());
-    }
-    
-  }, [refresh, swichHide_status, userOnDeliveryBooks, changeOwner_status,logINStatus]);
+  }, [    refresh,
+    swichHide_status,
+   userOnDeliveryBooks,
+   changeOwner_status,
+   logINStatus,]);
+
+  // useEffect(() => {
+  //   setDeliverClicked(false);
+  //   if (currentUser !== null) {
+  //     dispatch(getUser());
+  //     dispatch(getAllMyBooks());
+  //   }
+  // }, [
+
+  // ]);
 
   useEffect(() => {
+    console.log(deliverClicked);
     let array = [];
     if (userBooks.length > 0) {
       array = [...userBooks];
       console.log(array);
-      setBook(array.filter((item) => item.hide === true));
+      setBook(
+        array.filter(
+          (item) =>  item.hide === true
+        )
+      );
     }
 
     culcDays();
@@ -69,9 +82,9 @@ export default function BooksOnDeliver() {
   ]);
 
   const culcDays = () => {
-    let first = new Date(moment(book?.created_at)).getUTCDate();
+    let first = new Date(moment(book?.hide_date)).getUTCDate();
     let now = new Date().getUTCDate();
-
+    console.log(now, first);
     setDateCulc(now - first);
   };
 
@@ -116,9 +129,9 @@ export default function BooksOnDeliver() {
                     נמסר
                   </button>
                 </div>
-                {deliverClicked && (
+                {deliverClicked === true && (
                   <Confetti
-                  className="position-fixed"
+                    className="position-fixed"
                     numberOfPieces={700}
                     recycle={false}
                     // width="500px"
@@ -127,7 +140,7 @@ export default function BooksOnDeliver() {
                 )}
               </div>
             );
-          })}                     
+          })}
       </div>
       {book.length === 0 && (
         <p className="d-flex justify-content-center text-center">

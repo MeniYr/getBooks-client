@@ -115,7 +115,7 @@ const tokenSlice = createSlice({
         // console.log(state.token)
       })
 
-      .addCase(login.fulfilled, async (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         if (action.payload) {
           console.log(action.payload);
           state.logINStatus = "succeeded";

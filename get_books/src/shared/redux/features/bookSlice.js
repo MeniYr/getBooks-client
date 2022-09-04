@@ -3,6 +3,7 @@ import {
   createSlice,
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 import { BOOKS } from "../../constants/globalinfo/URL`S";
 
 import { doApiGet, doApiMethod, TOKEN_NAME } from "../../services/apiService";
@@ -113,14 +114,21 @@ const booksSlice = createSlice({
       state.currentBook_status = "succeeded";
       console.log("getBooks work");
     },
-    logOutFromBooks: (state, action) => {
+    logOutFromBooks: (state) => {
       state.userBooks = [];
       state.userOnDeliveryBooks = [];
     },
   },
 
   extraReducers(builder) {
+
     builder
+    .addCase(PURGE, (state) => {
+      console.log("here");
+      state.userBooks = [];
+      state.userOnDeliveryBooks = [];
+    })
+
       // add
       .addCase(addBook.pending, (state, action) => {
         state.addBook_status = "loading";

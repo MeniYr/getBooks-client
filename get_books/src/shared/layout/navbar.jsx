@@ -111,15 +111,6 @@ export default function PrimarySearchAppBar() {
 
   React.useEffect(() => {
     currentUser && dispatch(getUser());
-    // console.log("countNotify", countNotify);
-    // console.log("countMsg", countMsg);
-    // console.log(
-    //   getAllMyBooks_status,
-    //   userBooks,
-    //   changeUserToDeliver_status,
-    //   refresh,
-    //   swichHide_status
-    // );
   }, [
     getAllMyBooks_status,
     userBooks,
@@ -511,6 +502,7 @@ export default function PrimarySearchAppBar() {
                 {/* { <ReactConfetti numberOfPieces={10} recycle={false} width="500px" height="500px" />} */}
 
                 {/* personal aria */}
+                <Tooltip title="הספרים שלי">
                 <IconButton
                   size="large"
                   edge="end"
@@ -520,10 +512,9 @@ export default function PrimarySearchAppBar() {
                   onClick={handleMyBooksMenuOpen}
                   color="inherit"
                 >
-                  <Tooltip title="הספרים שלי">
                     <MdOutlineBookmarks />
-                  </Tooltip>
                 </IconButton>
+                  </Tooltip>
               </>
             )}
             {/* {openLogin&&<Login />} */}

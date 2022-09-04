@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { REHYDRATE } from "redux-persist";
-import { onLogin, persist, re, reset } from "../..";
+import { onLoading, onLogin, persist, re, reset } from "../..";
 // import { ClientContext } from '../../context/clientContext';
 import tokenSlice, {
   AuthWithToken,
@@ -44,7 +44,8 @@ export default function Login() {
   useEffect(() => {
     console.log(closeBtn, clicked, logINStatus);
     clicked && logINStatus === "succeeded" && setCloseBtn(false);
-
+    if(clicked && logINStatus === "succeeded")
+    // onLoading()
     if (!closeBtn) nav("/");
   }, [closeBtn, logINStatus]);
 

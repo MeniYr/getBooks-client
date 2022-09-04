@@ -41,7 +41,7 @@ export default function AddBook() {
   const [clicked, setClicked] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
   const [cat, setCat] = useState([]);
-  const addCatRef = useRef();
+
   // get category list
   const onEntering = async () => {
     if (user_id?._id.length > 0)
@@ -62,7 +62,6 @@ export default function AddBook() {
     if (!currentUser) {
       toast.info("נא התחבר") && nav("login");
     } else onEntering();
-    // console.log(saveOnRefresh);
   }, []);
 
   useEffect(() => {

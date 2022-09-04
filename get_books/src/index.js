@@ -29,6 +29,11 @@ export const reset = async () => {
  await persistor.purge();
 };
 
+export const onLoading = () => {
+
+  persistor.persist()
+};
+
 
 
 root.render(

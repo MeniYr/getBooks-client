@@ -146,9 +146,9 @@ export default function FullBook() {
           </div>
           <div className="col-md-9">
             <hr />
-            <p className="overflow-auto text-center mx-auto w-75  rounded-2 ">
-              {currentBook?.description.length > 1000
-                ? currentBook?.description.substring(0, 1000) + "..."
+            <p className="overflow-auto  mx-auto w-75  ">
+              {currentBook?.description.length > 300
+                ? currentBook?.description.substring(0, 300) + "..."
                 : currentBook?.description}
             </p>
             {currentBook?.description.length > 300 && (
@@ -160,8 +160,8 @@ export default function FullBook() {
                   {!readMore ? "קרא עוד" : "סגור "}
                 </button>
                 {readMore && (
-                  <p className="p-4">
-                    {currentBook?.description.substring(300)}
+                  <p className="  mx-auto w-75">
+                    {currentBook?.description.substring(300,1500)}
                   </p>
                 )}
               </div>

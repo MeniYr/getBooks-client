@@ -28,15 +28,14 @@ export default function BooksUserInterested() {
 
   useEffect(() => {
     // dispatch(getBooks())
-    if(currentUser)
-    a();
-  }, [deliveries]);
+    currentUser&& a();
+  }, [deliveries,currentUser]);
 
   useEffect(() => {
-    if(currentUser){
+    // if(currentUser){
           dispatch(getDeliveries());
     a();
-    }
+    // }
 
   }, [
     addNote_status,
@@ -46,6 +45,7 @@ export default function BooksUserInterested() {
   ]);
   const a = () => {
     let array = [];
+    console.log(deliveries?.length);
     if (deliveries?.length > 0) {
       console.log(deliveries);
       array = [...deliveries];

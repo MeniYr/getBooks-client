@@ -17,7 +17,7 @@ import { DELIVERY } from "../constants/globalinfo/URL`S";
 
 export default function Delivery({ toOpenModal, note }) {
   const [openMsg, setOpenMsg] = useState(false);
-  const [deliverClicked, setDliverClicked] = useState(false);
+  const [refrash, setRifrash] = useState(false);
   const [notify, setNotify] = useState({});
   const { addNote_status, currentUser, userNotifyAlready, users } =
     useSelector(getUsersSlice);
@@ -27,18 +27,21 @@ export default function Delivery({ toOpenModal, note }) {
 
   useEffect(() => {
     dispatch(getAllMyBooks());
-  }, [deliverClicked]);
+  }, [refrash]);
   
   useEffect(() => {
     notify?.bookID && onDeliverClick();
   }, [notify]);
-  useEffect(() => {
-    let toSend = {
-      bookId: notify.bookID,
-      userId: currentUser._id
-    }
-    doApiMethod(`${DELIVERY}/ifNotDeliverd`, "PUT",toSend )
-  }, [changeUserToDeliver_status]);
+
+
+  //  server timer for one week, if not delivered: return searchable, deliverd: nothing
+  // useEffect(() => {
+  //   let toSend = {
+  //     bookId: notify.bookID,
+  //     userId: currentUser._id
+  //   }
+  //   doApiMethod(`${DELIVERY}/ifNotDeliverd`, "PUT",toSend )
+  // }, [changeUserToDeliver_status]);
 
 
   const onDeliverClick = () => {
@@ -48,9 +51,16 @@ export default function Delivery({ toOpenModal, note }) {
       idBook: notify?.bookID,
       idUser: notify?.toUserId,
     };
+    console.log(new Date().getSeconds());
     dispatch(changeUserToDeliver(userToDeliver));
+    console.log(new Date().getSeconds());
+
     dispatch(addNotify(notify));
+    console.log(new Date().getSeconds());
+
     dispatch(swichHide(note?.bookID._id));
+    console.log(new Date().getSeconds());
+
     toOpenModal(false);
   };
 
@@ -155,7 +165,7 @@ export default function Delivery({ toOpenModal, note }) {
                     setNotify(notifyObj);
                     // onDeliverClick();
 
-                    setDliverClicked(!deliverClicked);
+                    setRifrash(!refrash);
                     // 
                   }}
                   type="button"
