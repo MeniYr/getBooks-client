@@ -53,6 +53,7 @@ export default function Layout() {
     const interval = setInterval(() => {
       // console.log(currentUserCheck.current);
       currentUserCheck.current && dispatch(getUser());
+      
     }, 60000);
     return () => {
       clearTimeout(interval);
@@ -66,7 +67,7 @@ export default function Layout() {
 
   useEffect(() => {
     if (token && !currentUser) dispatch(AuthWithToken());
-  }, []);
+  }, [token,currentUser]);
 
   useEffect(() => {
     console.log(window.innerWidth);
