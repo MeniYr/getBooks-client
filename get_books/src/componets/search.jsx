@@ -97,11 +97,7 @@ export default function Search() {
   }, []);
 
   const onClickInterested = (note) => {
-    console.log("onClickInterested");
-    // console.log(exist.error);
-    // exist.error && toast.info("נא התחבר");
     if (currentUser !== null) {
-      console.log(note);
       dispatch(addNotify(note));
       dispatch(addInterestedID(note?.bookID));
       setNotifyClicked(!notifyClicked);

@@ -131,7 +131,7 @@ export default function FullBook() {
               <span className="fw-bolder"> הועלה בתאריך: </span>{" "}
               {moment(currentBook?.created_at).format("DD/MM/YYYY")}
             </p>
-            <div className="">
+            {currentUser&&<div>
               <span className="fw-bolder">משתמש:</span>{" "}
               {currentBook?.userID.name}
               <button
@@ -142,7 +142,7 @@ export default function FullBook() {
               >
                 הודעה
               </button>
-            </div>
+            </div>}
           </div>
           <div className="col-md-9">
             <hr />

@@ -44,8 +44,6 @@ export default function Login() {
   useEffect(() => {
     console.log(closeBtn, clicked, logINStatus);
     clicked && logINStatus === "succeeded" && setCloseBtn(false);
-    if(clicked && logINStatus === "succeeded")
-    // onLoading()
     if (!closeBtn) nav("/");
   }, [closeBtn, logINStatus]);
 
