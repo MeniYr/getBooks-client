@@ -41,7 +41,8 @@ export const getDeliveries = createAsyncThunk(
   "delivery/getDeliveries",
   async () => {
     try {
-      let data = await (await doApiGet(DELIVERY)).data;
+      let data = await (await doApiGet(`${DELIVERY}/all`)).data;
+      console.log(data);
       return data;
     } catch (err) {
       throw err?.response?.data[0]?.message;
@@ -170,13 +171,13 @@ const deliverySlice = createSlice({
       })
 
       .addCase(getDeliveries.fulfilled, (state, action) => {
-        if (action.payload) {
+        if (action.payload?.length>0) {
           state.getDeliveries_status = "succeeded";
           state.error = null;
           state.deliveries = [];
           state.deliveries = action.payload;
 
-          // console.log(action.payload)
+          console.log(action.payload)
           console.log(state.getDeliveries_status);
         }
       })
