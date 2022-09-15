@@ -29,6 +29,10 @@ export default function Signup() {
 
   }, [getStatus])
 
+  useEffect(() => {
+    if (!close) nav("/");
+  }, [close])
+
   const onSub = async (_dataBody) => {
     delete _dataBody.password2;
       dispatch(addUser(_dataBody))
@@ -38,13 +42,13 @@ export default function Signup() {
 
   return (
     <div
-      className={`modal ${close ? "d-block" : "none"}`}
+      className={`modal ${style.signUp_modal} ${close ? "d-block" : "none"}`}
     >
       <div className='modal-dialog'>
         <div className="modal-content">
           <button onClick={() => setClose(false)} className="p-3 btn btn-close"></button>
           <div className="modal-header">
-            <h1 className='display-5  mb-4 fw-bolder w-100 text-danger text-md-center'>הרשמה</h1>
+            <h1 className='display-5  mb-4 fw-bolder w-100 text-danger text-center'>הרשמה</h1>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit(onSub)} >

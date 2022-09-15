@@ -161,6 +161,9 @@ export default function PrimarySearchAppBar() {
     nav("/myBooks");
     setAnchorEl(event.currentTarget);
   };
+  // const handleLogInOpen = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const handleMobileMenuOpen = (event) => {
     // console.log("here");
@@ -388,20 +391,23 @@ export default function PrimarySearchAppBar() {
         className={`d-md-flex justify-content-center ${
           window.innerWidth < 768 && "d-block"
         }`}
+      
       >
         {token === null ? (
           <Link
             className="btn w-100 btn-success d-md-inline-flex align-items-center"
             color={"white"}
             to={"/login"}
+            onClick={handleMobileMenuClose}
           >
-            החחברות
+            התחברות
           </Link>
         ) : (
           <Link
             className="btn btn-outline-warning d-md-inline-flex align-items-center w-100"
             color={"white"}
             to={"/logOut"}
+            onClick={handleMobileMenuClose}
           >
             יציאה
           </Link>
