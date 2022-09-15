@@ -18,7 +18,12 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "@mui/material";
-import { booksS, getAllBooks, getBooks, srchBooks } from "../redux/features/bookSlice";
+import {
+  booksS,
+  getAllBooks,
+  getBooks,
+  srchBooks,
+} from "../redux/features/bookSlice";
 import {
   MdBook,
   MdBookmarks,
@@ -85,7 +90,7 @@ export default function PrimarySearchAppBar() {
     countMsg,
     currentUser,
     readMsg_status,
-    getUser_status
+    getUser_status,
   } = useSelector(getUsersSlice);
   const {
     getBooks_status,
@@ -106,8 +111,6 @@ export default function PrimarySearchAppBar() {
   const [msgRefresh, setMsgRefresh] = React.useState(false);
 
   const nav = useNavigate();
-
-
 
   React.useEffect(() => {
     currentUser && dispatch(getUser());
@@ -324,51 +327,63 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       {/* Messages */}
-      <MenuItem onClick={handleMsgMenuOpen}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={countMsg} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p className="my-auto">הודעות</p>
-      </MenuItem>
+      {token !== null && (
+        <MenuItem onClick={handleMsgMenuOpen}>
+          <IconButton
+            size="large"
+            aria-label="show 4 new mails"
+            color="inherit"
+          >
+            <Badge badgeContent={countMsg} color="error">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <p className="my-auto">הודעות</p>
+        </MenuItem>
+      )}
       {/* Notifications */}
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-          onClick={handleNoteMenuOpen}
-        >
-          <Badge badgeContent={countNotify} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p className="my-auto">התראות</p>
-      </MenuItem>
+      {token !== null && (
+        <MenuItem>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+            onClick={handleNoteMenuOpen}
+          >
+            <Badge badgeContent={countNotify} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <p className="my-auto">התראות</p>
+        </MenuItem>
+      )}
 
-      {/* myAccount */}
-      <MenuItem
-        className="d-flex"
-        onClick={handleMyBooksMenuOpen}
-        sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
-      >
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
+      {/* myBooks */}
+      {token !== null && (
+        <MenuItem
+          className="d-flex"
+          onClick={handleMyBooksMenuOpen}
+          sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
         >
-          <MdOutlineBookmarks />
-        </IconButton>
-        <p>הספרים שלי</p>
-      </MenuItem>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+          >
+            <MdOutlineBookmarks />
+          </IconButton>
+          <p>הספרים שלי</p>
+        </MenuItem>
+      )}
 
       {/* login */}
-      <MenuItem className=" p-0 m-0 h-100">
-        <p className="badge text-black bg-info shadow  h-25 m-0 p-1 mx-auto">
-          {currentUser?.name}
-        </p>
-      </MenuItem>
+      {token !== null && (
+        <MenuItem className=" p-0 m-0 h-100">
+          <p className="badge text-black bg-info shadow  h-25 m-0 p-1 mx-auto">
+            {currentUser?.name}
+          </p>
+        </MenuItem>
+      )}
       <MenuItem
         className={`d-md-flex justify-content-center ${
           window.innerWidth < 768 && "d-block"
@@ -403,12 +418,13 @@ export default function PrimarySearchAppBar() {
       )}
       <AppBar position="static">
         <Toolbar>
-
           <Typography
             variant="h6"
             // noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "none", md: "none", lg:"block" } }} //style
+            sx={{
+              display: { xs: "none", sm: "none", md: "none", lg: "block" },
+            }} //style
           >
             <Link
               className="text-white fst-italic fs-2 fw-semibold text-decoration-none"
@@ -421,7 +437,9 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             // noWrap
             component="div"
-            sx={{ display: { xs: "block", sm: "block", md: "block", lg:"none" } }} //style
+            sx={{
+              display: { xs: "block", sm: "block", md: "block", lg: "none" },
+            }} //style
           >
             <Link
               className="text-white fst-italic fs-4 fw-semibold text-decoration-none ps-3"
@@ -503,18 +521,18 @@ export default function PrimarySearchAppBar() {
 
                 {/* personal aria */}
                 <Tooltip title="הספרים שלי">
-                <IconButton
-                  size="large"
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleMyBooksMenuOpen}
-                  color="inherit"
-                >
+                  <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleMyBooksMenuOpen}
+                    color="inherit"
+                  >
                     <MdOutlineBookmarks />
-                </IconButton>
-                  </Tooltip>
+                  </IconButton>
+                </Tooltip>
               </>
             )}
             {/* {openLogin&&<Login />} */}

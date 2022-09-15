@@ -125,7 +125,7 @@ export default function Search() {
                     {/* right */}
                     <div className="d-md-flex flex-wrap justify-content-center">
                       {/* img */}
-                      <div className="ps-3">
+                      <div className={`ps-md-3 ${window.innerWidth<786?"pb-3":0} d-flex justify-content-center`}>
                         <Link
                           className="text-body text-decoration-none"
                           to={`/fullBook/${item._id}`}
@@ -170,17 +170,17 @@ export default function Search() {
                               : false
                           }
                         />
-                        <article className="d-flex">
-                          <p className="border-start border-opacity-50 ps-1 border-dark">
+                        <article className="d-flex ">
+                          <p className="border-start  d-flex align-items-center border-opacity-50 justify-content-center px-2 border-dark">
                             {item.cat_id.category}
                           </p>
-                          <p className="border-start border-opacity-50 px-1 border-dark">
+                          <p className="border-start d-flex align-items-center justify-content-center border-opacity-50 px-2 border-dark">
                             {item.publishing_year}
                           </p>
-                          <p className="border-start border-opacity-50 px-1 border-dark">
+                          <p className="border-start  d-flex align-items-center justify-content-center border-opacity-50 px-2 border-dark">
                             {item.pages} עמודים{" "}
                           </p>
-                          <p className="pe-1">
+                          <p className="px-2  d-flex align-items-center justify-content-center">
                             הועלה {moment(item.created_at).format("DD/MM/YYYY")}
                           </p>
                         </article>
