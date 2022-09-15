@@ -2,7 +2,7 @@ import React from 'react'
 import myStyle from "./layoutCss.module.css"
 export default function Footer() {
   return (
-    <div className='container-fluid shadow'>
+    <div className='shadow'>
       <div style={{
         backgroundColor:"#1976d2"
       }} className='d-flex rounded-2 border border-black justify-content-center align-items-md-center  px-3'>

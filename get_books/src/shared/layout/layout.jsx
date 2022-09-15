@@ -91,7 +91,7 @@ export default function Layout() {
   // }, [changeUserToDeliver_status]);
 
   return (
-    <div className="container-fluid">
+    <div >
       <div>
         <PrimarySearchAppBar />
         <div className={`${width > 1920 && "container"} d-md-flex`}>

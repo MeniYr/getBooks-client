@@ -28,13 +28,13 @@ export default function HighRetes() {
 
   // const {loading,error,books,hasMore} = UseBookPerPage(pageNumber)
   return (
-    <div className="container">
+    <div className={`${window.innerWidth>768?"container":0} text-center text-lg-end`}>
       <h3 className="pt-2 ">דירוג גבוה</h3>
       {newBooks && (
-        <div style={{ overflowY: "scroll" }} className=" d-md-flex   ">
+        <div style={{ overflowY: "scroll" }} className=" d-flex   ">
           {newBooks?.map((item) => {
             return (
-              <div className="p-2 col-md-3" key={item._id}>
+              <div className="p-2 d-flex justify-content-center  col-md-3" key={item._id}>
                 <Book book={item} />
               </div>
             );

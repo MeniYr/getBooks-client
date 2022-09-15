@@ -48,7 +48,7 @@ export default function Book(props) {
             width: "207px",
             height: "380px"
         }} >
-            <div className='p-2  d-grid h-100'>
+            <div className='p-2 text-center d-grid h-100'>
                 <Link to={`/fullBook/${book._id}`}>
                     <img
                         className={`shadow ${myStyle.book}`}
@@ -59,7 +59,7 @@ export default function Book(props) {
 
                 </Link>
 
-                <h4 className='fs-5 p-2 text-md-end '>{book.name}</h4>
+                <h4 className='fs-5 p-2 pb-0 mb-0 text-md-end '>{book.name}</h4>
                 <div className='text-md-end my-auto'>
                     {/* <span className='fw-bolder'>מחבר: </span>{book.author} */}
                     {/* <br />  */}
