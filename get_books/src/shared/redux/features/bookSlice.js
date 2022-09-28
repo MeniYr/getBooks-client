@@ -23,7 +23,7 @@ export const addBook = createAsyncThunk("books/addBook", async (_dataBody) => {
 export const getBooks = createAsyncThunk("books/getBooks", async () => {
   try {
     let data = await (await doApiGet(BOOKS)).data;
-    // console.log(data);
+    console.log(data);
     return data;
   } catch (err) {
     throw err?.response?.data[0]?.message;
@@ -110,6 +110,7 @@ const booksSlice = createSlice({
       console.log(action.payload);
   
       let res = state.books.find((item) => item._id === book_ID);
+      console.log(res.name);
       state.currentBook = res;
       state.currentBook_status = "succeeded";
       console.log("getBooks work");

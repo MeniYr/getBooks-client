@@ -32,17 +32,22 @@ export default function FullBook() {
 
   useEffect(() => {
     dispatch(getBooks());
-  }, [currentBook, sendBookMassage_status]);
+  }, []);
 
   useEffect(() => {
     dispatch(findBook(bookId));
-    console.log(bookId);
   }, [bookId, openMsg, sendBookMassage_status, msg_status, currentBook_status]);
+  useEffect(() => {
+    console.log(bookId);
+    currentBook&&console.log(currentBook);
+  }, [currentBook_status]);
+
+
 
   const rating = async (rate_num) => {
     // console.log(rate_num);
-    let isInt = Number.isInteger(rate_num);
-    let num = Number(rate_num);
+    let isInt = Number.isInteger(rate_num)||0;
+    let num = Number(rate_num)||0;
     if (!isInt && Math.ceil(num) > num) {
       num = Math.floor(num) + 0.5;
     }
@@ -54,8 +59,8 @@ export default function FullBook() {
   };
 
   return (
-    <div>
-      <div
+  <div>
+       {currentBook?._id&& <div
         style={{
           position: "relative",
           width: "100%",
@@ -85,7 +90,7 @@ export default function FullBook() {
               className=" shadow"
               width="185"
               height={`250`}
-              src={currentBook?.image}
+              src={currentBook?.image ||"https://images.unsplash.com/photo-1576872381149-7847515ce5d8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2536&q=80"}
               alt={currentBook?.name}
             />
           </div>
@@ -255,7 +260,17 @@ export default function FullBook() {
               })}
           </div>
         </div>
+      </div>}
+      {!currentBook?._id&&
+      <div  style={{
+        height:"100vh"
+      }}>
+      <div className="d-flex justify-content-center h-100 align-items-center bg-dark text-white">
+        Link broken
       </div>
+
+      </div>
+      }
     </div>
   );
 }

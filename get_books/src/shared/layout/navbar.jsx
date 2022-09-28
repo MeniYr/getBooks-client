@@ -346,12 +346,15 @@ export default function PrimarySearchAppBar() {
       )}
       {/* Notifications */}
       {token !== null && (
-        <MenuItem>
+        <MenuItem
+             onClick={handleNoteMenuOpen}
+        >
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
-            onClick={handleNoteMenuOpen}
+       
+
           >
             <Badge badgeContent={countNotify} color="error">
               <NotificationsIcon />
@@ -489,9 +492,10 @@ export default function PrimarySearchAppBar() {
 
           {/* on web-desktop=> social menu, conection button */}
           <Box
+          className="d-inline-flex"
             sx={{
               mr: "auto",
-              display: { xs: "none", md: "inline-flex", lg: "inline-flex" },
+              // display: { xs: "block", md: "inline-flex", lg: "inline-flex" },
             }}
           >
             {/* massages */}
@@ -526,7 +530,8 @@ export default function PrimarySearchAppBar() {
                 {/* { <ReactConfetti numberOfPieces={10} recycle={false} width="500px" height="500px" />} */}
 
                 {/* personal aria */}
-                <Tooltip title="הספרים שלי">
+                {window.innerWidth>768&&<Tooltip 
+                title="הספרים שלי">
                   <IconButton
                     size="large"
                     edge="end"
@@ -538,12 +543,13 @@ export default function PrimarySearchAppBar() {
                   >
                     <MdOutlineBookmarks />
                   </IconButton>
-                </Tooltip>
+                </Tooltip>}
               </>
             )}
             {/* {openLogin&&<Login />} */}
             {/* <button onClick={()=>setOpenLogin(true)}>לחץ</button> */}
-            {token === null ? (
+           
+             {window.innerWidth>768&&token === null? (
               <Link
                 className="text-bolder  text-decoration-none d-md-inline-flex align-items-center badge"
                 color={"white"}
@@ -551,7 +557,7 @@ export default function PrimarySearchAppBar() {
               >
                 החחברות
               </Link>
-            ) : (
+            ) : window.innerWidth>768&&(
               <Tooltip title="יציאה">
                 <Link
                   className="text-warning text-decoration-none d-md-inline-flex align-items-center "
@@ -562,6 +568,8 @@ export default function PrimarySearchAppBar() {
                 </Link>
               </Tooltip>
             )}
+           
+           
           </Box>
 
           {/* my account icon / more`s button  */}

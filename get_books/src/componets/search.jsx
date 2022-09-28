@@ -49,7 +49,6 @@ export default function Search() {
   const [notify, setNotify] = useState({});
   const [readMore, setReadMore] = useState(false);
 
-  //
   // HooksMade
   // const getNotify = UseNotify(notify);
 
@@ -95,6 +94,11 @@ export default function Search() {
     // (getUsers());
     dispatch(getBooks());
   }, []);
+  // useEffect(() => {
+  //   // (getUsers());
+  //   console.log("window.navigator");
+  //   dispatch(getBooks());
+  // }, []);
 
   const onClickInterested = (note) => {
     if (currentUser !== null) {
@@ -306,8 +310,10 @@ export default function Search() {
                 </div>
               );
             })}
+       
           {srchBooks_status === "loading" && <div>Loading...</div>}
           {srchBooks_status === "failed" && <div>server problem try again</div>}
+          {srchBooks_status === "idle" && nav("/")}
         </div>
       </div>
     </div>
