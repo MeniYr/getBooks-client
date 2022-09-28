@@ -159,14 +159,18 @@ export default function PrimarySearchAppBar() {
 
   const handleMyBooksMenuOpen = (event) => {
     nav("/myBooks");
-    setAnchorEl(event.currentTarget);
+    handleMobileMenuClose();
   };
-  // const handleLogInOpen = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const handleMyInterestedMenuOpen = (event) => {
+    nav("/interestedBooks");
+    handleMobileMenuClose();
+  };
+  const handleMyDeliveresMenuOpen = (event) => {
+    nav("/booksOnDeliver");
+    handleMobileMenuClose();
+  };
 
   const handleMobileMenuOpen = (event) => {
-    // console.log("here");
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
@@ -329,38 +333,35 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* Messages */}
-      {token !== null && (
-        <MenuItem onClick={handleMsgMenuOpen}>
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <Badge badgeContent={countMsg} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p className="my-auto">הודעות</p>
-        </MenuItem>
-      )}
-      {/* Notifications */}
+      {/* books that user interested */}
       {token !== null && (
         <MenuItem
-             onClick={handleNoteMenuOpen}
+          className="d-flex"
+          onClick={handleMyInterestedMenuOpen}
+          sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
+        >
+          <IconButton size="large" color="inherit">
+            <MdOutlineBookmarks />
+          </IconButton>
+          <p className="my-auto">ספרים שהתעניינתי</p>
+        </MenuItem>
+      )}
+
+      {/* books on deliver */}
+      {token !== null && (
+        <MenuItem
+          className="d-flex"
+          onClick={handleMyDeliveresMenuOpen}
+          sx={{ display: { xs: "block", sm: "block", md: "none", lg: "none" } }}
         >
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
-       
-
           >
-            <Badge badgeContent={countNotify} color="error">
-              <NotificationsIcon />
-            </Badge>
+            <MdOutlineBookmarks />
           </IconButton>
-          <p className="my-auto">התראות</p>
+          <p className="my-auto">ספרים במסירה</p>
         </MenuItem>
       )}
 
@@ -378,7 +379,7 @@ export default function PrimarySearchAppBar() {
           >
             <MdOutlineBookmarks />
           </IconButton>
-          <p>הספרים שלי</p>
+          <p className="my-auto">הספרים שלי</p>
         </MenuItem>
       )}
 
@@ -394,7 +395,6 @@ export default function PrimarySearchAppBar() {
         className={`d-md-flex justify-content-center ${
           window.innerWidth < 768 && "d-block"
         }`}
-      
       >
         {token === null ? (
           <Link
@@ -492,7 +492,7 @@ export default function PrimarySearchAppBar() {
 
           {/* on web-desktop=> social menu, conection button */}
           <Box
-          className="d-inline-flex"
+            className="d-inline-flex"
             sx={{
               mr: "auto",
               // display: { xs: "block", md: "inline-flex", lg: "inline-flex" },
@@ -530,26 +530,27 @@ export default function PrimarySearchAppBar() {
                 {/* { <ReactConfetti numberOfPieces={10} recycle={false} width="500px" height="500px" />} */}
 
                 {/* personal aria */}
-                {window.innerWidth>768&&<Tooltip 
-                title="הספרים שלי">
-                  <IconButton
-                    size="large"
-                    edge="end"
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    onClick={handleMyBooksMenuOpen}
-                    color="inherit"
-                  >
-                    <MdOutlineBookmarks />
-                  </IconButton>
-                </Tooltip>}
+                {window.innerWidth > 768 && (
+                  <Tooltip title="הספרים שלי">
+                    <IconButton
+                      size="large"
+                      edge="end"
+                      aria-label="account of current user"
+                      aria-controls={menuId}
+                      aria-haspopup="true"
+                      onClick={handleMyBooksMenuOpen}
+                      color="inherit"
+                    >
+                      <MdOutlineBookmarks />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </>
             )}
             {/* {openLogin&&<Login />} */}
             {/* <button onClick={()=>setOpenLogin(true)}>לחץ</button> */}
-           
-             {window.innerWidth>768&&token === null? (
+
+            {window.innerWidth > 768 && token === null ? (
               <Link
                 className="text-bolder  text-decoration-none d-md-inline-flex align-items-center badge"
                 color={"white"}
@@ -557,19 +558,19 @@ export default function PrimarySearchAppBar() {
               >
                 החחברות
               </Link>
-            ) : window.innerWidth>768&&(
-              <Tooltip title="יציאה">
-                <Link
-                  className="text-warning text-decoration-none d-md-inline-flex align-items-center "
-                  color={"white"}
-                  to={"/logOut"}
-                >
-                  {currentUser?.name}{" "}
-                </Link>
-              </Tooltip>
+            ) : (
+              window.innerWidth > 768 && (
+                <Tooltip title="יציאה">
+                  <Link
+                    className="text-warning text-decoration-none d-md-inline-flex align-items-center "
+                    color={"white"}
+                    to={"/logOut"}
+                  >
+                    {currentUser?.name}{" "}
+                  </Link>
+                </Tooltip>
+              )
             )}
-           
-           
           </Box>
 
           {/* my account icon / more`s button  */}

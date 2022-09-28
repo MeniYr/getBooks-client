@@ -71,6 +71,7 @@ export default function AppRoutes() {
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/fullBook/:bookId" element={<FullBook />} />
           <Route path="/booksOnDeliver" element={<BooksOnDeliver />} />
+          <Route path="/interestedBooks" element={<BooksUserInterested />} />
         </Route>
 
         {/*  <Route path="/logout" element={<Logout />} />

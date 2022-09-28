@@ -26,7 +26,7 @@ import { current } from "@reduxjs/toolkit";
 
 export default function BooksOnDeliver() {
   const dispatch = useDispatch();
-  const { currentUser,getUser_status } = useSelector(getUsersSlice);
+  const { currentUser, getUser_status } = useSelector(getUsersSlice);
   const {
     userOnDeliveryBooks,
     getAllMyBooks_status,
@@ -41,12 +41,14 @@ export default function BooksOnDeliver() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-      dispatch(getAllMyBooks());
-  }, [    refresh,
+    dispatch(getAllMyBooks());
+  }, [
+    refresh,
     swichHide_status,
-   userOnDeliveryBooks,
-   changeOwner_status,
-   logINStatus,]);
+    userOnDeliveryBooks,
+    changeOwner_status,
+    logINStatus,
+  ]);
 
   // useEffect(() => {
   //   setDeliverClicked(false);
@@ -64,11 +66,7 @@ export default function BooksOnDeliver() {
     if (userBooks.length > 0) {
       array = [...userBooks];
       console.log(array);
-      setBook(
-        array.filter(
-          (item) =>  item.hide === true
-        )
-      );
+      setBook(array.filter((item) => item.hide === true));
     }
 
     culcDays();
@@ -91,7 +89,7 @@ export default function BooksOnDeliver() {
   return (
     <div className="container position-relative">
       <div className="row p-2 d-md-flex  justify-content-center text-center">
-        <p className="">בתהליך מסירה</p>
+        <p className="text-center">בתהליך מסירה</p>
         {getAllMyBooks_status === "succeeded" &&
           currentUser &&
           book?.map((book) => {
@@ -103,7 +101,7 @@ export default function BooksOnDeliver() {
                 }}
                 className="p-2  mb-2 border border-success my-auto d-md-flex align-items-center rounded-2"
               >
-                <div className="d-md-flex  justify-content-between w-100">
+                <div className="d-flex  justify-content-evenly w-100">
                   <Tooltip
                     title="ימים שעברו"
                     className={`${dateCulc > 1 && "bg-warning"} ${
@@ -118,16 +116,18 @@ export default function BooksOnDeliver() {
                   >
                     {book.name}
                   </Link>
-                  <button
-                    onClick={() => {
-                      dispatch(changeOwner(book._id));
-                      setDeliverClicked(true);
-                      setRefresh(!refresh);
-                    }}
-                    className="btn btn-warning badge  my-auto"
-                  >
-                    נמסר
-                  </button>
+                  <Tooltip title="לחץ להעברה סופית">
+                    <button
+                      onClick={() => {
+                        dispatch(changeOwner(book._id));
+                        setDeliverClicked(true);
+                        setRefresh(!refresh);
+                      }}
+                      className="btn btn-warning badge  my-auto"
+                    >
+                      נמסר
+                    </button>
+                  </Tooltip>
                 </div>
                 {deliverClicked === true && (
                   <Confetti

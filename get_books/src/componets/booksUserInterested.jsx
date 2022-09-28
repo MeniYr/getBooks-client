@@ -62,8 +62,8 @@ export default function BooksUserInterested() {
   };
   return (
     <div className="container ">
-      <div className="row p-2 d-md-flex justify-content-center ">
-        <p className="">ספרים שהתעניינתי</p>
+      <div className="row p-2 d-flex justify-content-center ">
+        <p className="text-center">ספרים שהתעניינתי</p>
         {getAllMyBooks_status === "succeeded" &&
           currentUser &&
           books?.map((book) => {
@@ -74,9 +74,9 @@ export default function BooksUserInterested() {
                   style={{
                     minHeight: "50px",
                   }}
-                  className="p-2 mb-2 col-md-12 border border-success  d-md-flex align-items-center rounded-2"
+                  className="p-2 mb-2 col-12 border border-success  d-flex align-items-center rounded-2"
                 >
-                  <div className="d-md-flex justify-content-between align-items-center w-100">
+                  <div className="d-flex justify-content-between align-items-center w-100">
                     <div
                     className="">
                       <Link
