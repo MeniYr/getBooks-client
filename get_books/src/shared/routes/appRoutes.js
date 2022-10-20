@@ -57,7 +57,6 @@ export default function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/user/:idUser" element={<UserByID />} /> */}
           <Route path="/editUser/:id" element={<EditUser />} />
           <Route path="/msg" element={<Msg />} />
           <Route path="/sendMsg/:userId" element={<SendMsg />} />

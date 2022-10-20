@@ -100,7 +100,7 @@ const tokenSlice = createSlice({
         state.authStatus = "failed";
         state.error = action.error;
         console.log("AuthWithToken.rejected", state.error);
-        window.location.assign("http://localhost:3001/logOut")
+        window.location.assign(`${API_URL}/logOut`)
         // localStorage.removeItem(TOKEN_NAME)
         state.id = ""
         // state.token = null
